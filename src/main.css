@@ -99,16 +99,17 @@ button,
 /* ---- layout ---- */
 .main-container {
   --sidebar-width: clamp(350px, 50vw, 400px);
+  --sidebar-width-collapsed: 2rem;
   display: grid;
-  grid-template-columns: 0 1fr;
+  grid-template-columns: var(--sidebar-width) 1fr;
   grid-template-rows: 100dvh;
   grid-template-areas: "sidebar cesium-container";
   overflow: hidden;
   transition: grid-template-columns 0.3s ease-in-out;
 }
 
-.main-container.sidebar-is-open {
-  grid-template-columns: var(--sidebar-width) 1fr;
+.main-container.sidebar-is-collapsed {
+  grid-template-columns: var(--sidebar-width-collapsed) 1fr;
 }
 
 /* ---- cesium ---- */
