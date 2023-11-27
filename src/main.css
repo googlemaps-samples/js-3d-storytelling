@@ -1,0 +1,154 @@
+/* ---- import other css files here ---- */
+@import "./styles/sidebar.css";
+
+/* ---- css vars ---- */
+:root {
+  /* ---- text colors ---- */
+  --text-color-primary: #3c4043;
+  --text-color-secondary: #5f6368;
+  --text-color-map: #fff;
+  --accent-color: #1a73e8;
+
+  --text-color-heading: #202124;
+  --text-color-paragraph: var(--text-color-primary);
+
+  /* ---- background colors ---- */
+  --background-color: #fff;
+  --background-color-reduced: rgba(0, 0, 0, 0.54);
+  --background-color-reduced-hover: rgba(0, 0, 0, 0.8);
+
+  /* ---- fonts ---- */
+  --font-family: "Google Sans", Roboto, sans-serif;
+
+  --font-size-small: 0.625rem;
+  --font-size-medium: 0.875rem;
+  --font-size-large: 1rem;
+  --font-size-extra-large: 1.25rem;
+
+  /* ---- spacing ---- */
+  --spacing-extra-small: 0.375rem;
+  --spacing-small: 0.5rem;
+  --spacing-medium: 1rem;
+  --spacing-medium-large: 1.5rem;
+  --spacing-large: 2rem;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-medium);
+  line-height: 1.25rem;
+  letter-spacing: 0.0015em;
+  color: var(--text-color-primary);
+  background-color: var(--background-color);
+}
+
+h1 {
+  color: var(--text-color-heading);
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+h2 {
+  color: var(--text-color-heading);
+  font-size: var(--font-size-extra-large);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.1px;
+}
+
+h3 {
+  color: var(--text-color-heading);
+  font-size: var(--font-size-large);
+  font-weight: 400;
+}
+
+p {
+  color: var(--text-color-paragraph);
+  font-size: var(--font-size-medium);
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.0015em;
+}
+
+/* Link styles */
+a {
+  color: var(--accent-color);
+  font-size: 1rem;
+  line-height: 1.5;
+  outline: none;
+}
+
+/* Button styles */
+button,
+.button {
+  all: unset;
+}
+
+/* ---- layout ---- */
+.main-container {
+  --sidebar-width: clamp(350px, 50vw, 400px);
+  display: grid;
+  grid-template-columns: 0 1fr;
+  grid-template-rows: 100dvh;
+  grid-template-areas: "sidebar cesium-container";
+  overflow: hidden;
+  transition: grid-template-columns 0.3s ease-in-out;
+}
+
+.main-container.sidebar-is-open {
+  grid-template-columns: var(--sidebar-width) 1fr;
+}
+
+/* ---- cesium ---- */
+#cesium-container {
+  grid-area: cesium-container;
+  position: relative;
+}
+
+.cesium-credit-logoContainer {
+  display: none !important;
+}
+
+.cesium-credit-expand-link {
+  display: none !important;
+}
+
+.cesium-attribution-container {
+  z-index: 1;
+  position: absolute;
+  right: var(--spacing-medium);
+  bottom: var(--spacing-extra-small);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: var(--font-size-small);
+  color: var(--text-color-map);
+}
+
+.cesium-logo__image {
+  width: 100px;
+}
+
+.cesium-viewer-bottom {
+  width: calc(100% - 230px);
+}
+
+.cesium-viewer-bottom .cesium-widget-credits {
+  margin-left: var(--spacing-medium);
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+}
