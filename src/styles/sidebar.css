@@ -1,4 +1,48 @@
 #sidebar {
+  z-index: 3;
   grid-area: sidebar;
-  overflow: hidden;
+  position: relative;
+}
+
+#sidebar::after {
+  z-index: 3;
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 100%;
+  box-shadow: 4px 0px 6px -1px rgba(60, 64, 67, 0.15);
+}
+
+.sidebar-collapse-toggle {
+  --sidebar-toggle-width: 0.75rem;
+  z-index: 1;
+  all: unset;
+  position: relative;
+  top: 50%;
+  right: calc(-1 * var(--sidebar-toggle-width));
+  width: var(--sidebar-toggle-width);
+  height: 2rem;
+  position: absolute;
+  background-color: var(--background-color);
+  border-radius: 0 4px 4px 0;
+}
+
+.sidebar-collapse-toggle::after {
+  content: "";
+  position: absolute;
+  background-image: url("../assets/icons/toggle-sidebar-arrow-icon.svg");
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.main-container.sidebar-is-collapsed .sidebar-collapse-toggle::after {
+  transform: rotate(180deg);
+}
+
+.sidebar-collapse-toggle:not(:disabled):hover {
+  cursor: pointer;
 }
