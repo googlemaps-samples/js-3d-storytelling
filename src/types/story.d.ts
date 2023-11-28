@@ -7,7 +7,7 @@ type CesiumCameraOptions = {
 };
 
 // Define the type for the Segment
-type Segment = {
+type Location = {
   title: string; // Title of the segment
   imageUrl: string; // URL for the segment's image (google or custom)
   imageCredit: string; // Credit for the segment's image
