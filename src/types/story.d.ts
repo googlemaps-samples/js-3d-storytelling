@@ -19,7 +19,7 @@ type Location = {
 };
 
 // Define the NeighbourhoodStory as an array of Segments
-interface NeighbourhoodStory {
+interface Story {
   segments: Segment[];
   storyTitle: string;
   createdBy: string;
