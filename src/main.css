@@ -9,6 +9,7 @@
   --text-color-map: #fff;
   --accent-color: #1a73e8;
 
+  --color-light-grey: #e8eaed;
   --text-color-heading: #202124;
   --text-color-paragraph: var(--text-color-primary);
 
@@ -55,8 +56,8 @@ body {
 
 h1 {
   color: var(--text-color-heading);
-  font-size: 1.25rem;
-  font-weight: 400;
+  font-size: var(--spacing-medium-large);
+  font-weight: 500;
   line-height: 1.4;
 }
 
@@ -99,7 +100,7 @@ button,
 /* ---- layout ---- */
 .main-container {
   --sidebar-width: clamp(350px, 50vw, 400px);
-  --sidebar-width-collapsed: 2rem;
+  --sidebar-width-collapsed: 2.5rem;
   display: grid;
   grid-template-columns: var(--sidebar-width) 1fr;
   grid-template-rows: 100dvh;

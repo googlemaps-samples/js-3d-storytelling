@@ -13,8 +13,26 @@
   </head>
   <body>
     <main class="main-container sidebar-is-collapsed">
-      <aside id="sidebar">
-        <button class="sidebar-collapse-toggle" />
+      <aside id="sidebar" class="content-grid">
+        <button
+          class="sidebar-collapse-toggle"
+          aria-label="Toggle Sidebar"
+        ></button>
+        <img
+          class="google-maps-icon"
+          src="./assets/icons/google-maps-icon.svg"
+          alt="Google Maps Platform"
+        />
+        <div class="storytelling-intro full-width">
+          <img
+            class="google-maps-platform-text"
+            src="./assets/google-maps-platform-text.svg"
+            alt="Google Maps Platform Logo"
+          />
+          <h1>3D Storytelling Demo</h1>
+          <p>Explore the demo with the default data oder add your owns.</p>
+        </div>
+        <div class="storytelling-configuration"></div>
       </aside>
       <div id="cesium-container"></div>
     </main>

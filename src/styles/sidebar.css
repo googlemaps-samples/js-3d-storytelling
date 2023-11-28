@@ -1,7 +1,11 @@
 #sidebar {
-  z-index: 3;
+  --gap: var(--spacing-medium);
+  --gap-large: var(--spacing-medium-large);
   grid-area: sidebar;
+  z-index: 3;
+  display: grid;
   position: relative;
+  grid-template-rows: auto 1fr;
 }
 
 #sidebar::after {
@@ -45,4 +49,86 @@
 
 .sidebar-collapse-toggle:not(:disabled):hover {
   cursor: pointer;
+}
+
+.content-grid,
+.full-width {
+  display: grid;
+  grid-template-columns:
+    [full-width-start] var(--gap-large)
+    [content-start] var(--gap) [indented-start] auto
+    [indented-end] var(--gap) [content-end] var(--gap-large)
+    [full-width-end];
+}
+
+.content-grid > *:not(.breakout, .full-width, button),
+.full-width > *:not(.breakout, .full-width, button) {
+  grid-column: content;
+}
+
+.content-grid > .content {
+  grid-column: content;
+}
+
+.content-grid > .indented {
+  grid-column: breakout;
+}
+
+.content-grid > .full-width {
+  grid-column: full-width;
+}
+
+.main-container #sidebar > div {
+  transition: translate 0.3s ease-in-out;
+}
+
+.main-container.sidebar-is-collapsed #sidebar div {
+  translate: calc(-1 * var(--sidebar-width));
+}
+
+.main-container.sidebar-is-collapsed #sidebar {
+  display: block;
+}
+
+.google-maps-platform-text {
+  height: var(--spacing-medium-large);
+  margin-bottom: var(--spacing-medium);
+}
+
+.storytelling-intro {
+  position: relative;
+  background-color: rgba(248, 249, 250, 1);
+  width: 100%;
+  border-bottom: 1px solid var(--color-light-grey);
+  padding-block: var(--gap);
+}
+
+.storytelling-intro h1 {
+  padding-bottom: var(--spacing-small);
+}
+
+.google-maps-icon {
+  background-image: url("../assets/icons/google-maps-icon.svg");
+  display: none;
+  margin-top: var(--gap);
+  margin-left: var(--spacing-small);
+}
+
+.main-container.sidebar-is-collapsed .google-maps-icon {
+  display: block;
+}
+
+.storytelling-intro. h1 {
+  margin-bottom: var(--spacing-small);
+}
+
+.storytelling-intro p {
+  color: var(--text-color-secondary);
+}
+
+.maps-platform-intro {
+  display: flex;
+  align-items: center;
+  height: 1.5rem;
+  color: var(--text-color-secondary);
 }
