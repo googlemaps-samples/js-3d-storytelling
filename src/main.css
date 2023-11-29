@@ -1,5 +1,6 @@
 /* ---- import other css files here ---- */
 @import "./styles/sidebar.css";
+@import "./styles/chapters.css";
 
 /* ---- css vars ---- */
 :root {
@@ -19,9 +20,8 @@
   --background-color-reduced-hover: rgba(0, 0, 0, 0.8);
 
   /* ---- fonts ---- */
-  --font-family: "Google Sans", Roboto, sans-serif;
-  --font-family-new-york: New York Extra Large;
-
+  --font-family-base: "Google Sans", Roboto, sans-serif;
+  --font-family-serif: "New York Medium", serif;
   --font-size-small: 0.625rem;
   --font-size-medium: 0.875rem;
   --font-size-large: 1rem;
@@ -47,7 +47,7 @@
 }
 
 body {
-  font-family: var(--font-family);
+  font-family: var(--font-family-base);
   font-size: var(--font-size-medium);
   line-height: 1.25rem;
   letter-spacing: 0.0015em;
@@ -105,7 +105,7 @@ button,
   display: grid;
   grid-template-columns: var(--sidebar-width) 1fr;
   grid-template-rows: 100dvh;
-  grid-template-areas: "sidebar cesium-container";
+  grid-template-areas: "sidebar map";
   overflow: hidden;
   transition: grid-template-columns 0.3s ease-in-out;
 }
@@ -114,10 +114,14 @@ button,
   grid-template-columns: var(--sidebar-width-collapsed) 1fr;
 }
 
+.map-container {
+  position: relative;
+}
+
 /* ---- cesium ---- */
 #cesium-container {
-  grid-area: cesium-container;
   position: relative;
+  height: 100%;
 }
 
 .cesium-credit-logoContainer {
@@ -149,7 +153,7 @@ button,
 }
 
 .cesium-viewer-bottom .cesium-widget-credits {
-  margin-left: var(--spacing-medium);
+  margin: var(--spacing-extra-small) var(--spacing-medium-large);
   display: flex !important;
   align-items: center;
   justify-content: flex-start;
@@ -179,14 +183,14 @@ button,
 
 .chapter-detail .story-title {
   color: rgba(255, 255, 255, 0.8);
-  font-family: var(--font-family-new-york);
+  font-family: var(--font-family-serif);
   font-size: var(--font-size-medium);
   line-height: var(--spacing-large);
 }
 
 .chapter-detail h2 {
   color: #fff;
-  font-family: var(--font-family-new-york);
+  font-family: var(--font-family-serif);
   font-size: 2rem;
   margin: var(--spacing-medium) 0;
 }
@@ -207,7 +211,7 @@ button,
 
 .chapter-detail .description {
   color: rgba(255, 255, 255, 0.8);
-  font-family: var(--font-family);
+  font-family: var(--font-family-base);
   font-size: var(--font-size-medium);
   line-height: var(--spacing-medium-large);
   letter-spacing: 0.1px;
@@ -217,7 +221,7 @@ button,
 .chapter-detail .attribution {
   color: #80868b;
   align-self: flex-end;
-  font-family: var(--font-family);
+  font-family: var(--font-family-base);
   font-size: 0.75rem;
   line-height: var(--spacing-medium-large);
   letter-spacing: 0.2px;
