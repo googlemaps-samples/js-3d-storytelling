@@ -65,3 +65,15 @@
   opacity: 0.9;
 }
 
+.story-intro > h1 {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-medium);
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-family: var(--font-family-serif);
+  font-size: 1.125rem;
+  line-height: 1.375rem;
+}

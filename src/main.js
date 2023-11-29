@@ -21,6 +21,10 @@ const story = {
       dateTime: "Spring 1967",
     },
   ],
+  properties: {
+    title: "1967 My Story Title",
+    imageUrl: "https://picsum.photos/144/112",
+  },
 };
 
 async function main() {
