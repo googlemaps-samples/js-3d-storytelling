@@ -171,7 +171,7 @@ summary::after {
 .field-wrapper input {
   border: 1px solid var(--color-light-grey);
   color: var(--text-color-heading);
-  font-family: var(--font-family);
+  font-family: var(--font-family-base);
   padding: var(--spacing-small) var(--spacing-medium);
   border-radius: 4px;
   width: 100%;

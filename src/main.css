@@ -1,5 +1,6 @@
 /* ---- import other css files here ---- */
 @import "./styles/sidebar.css";
+@import "./styles/chapters.css";
 
 /* ---- css vars ---- */
 :root {
@@ -19,7 +20,8 @@
   --background-color-reduced-hover: rgba(0, 0, 0, 0.8);
 
   /* ---- fonts ---- */
-  --font-family: "Google Sans", Roboto, sans-serif;
+  --font-family-base: "Google Sans", Roboto, sans-serif;
+  --font-family-serif: "New York Medium", serif;
 
   --font-size-small: 0.625rem;
   --font-size-medium: 0.875rem;
@@ -46,7 +48,7 @@
 }
 
 body {
-  font-family: var(--font-family);
+  font-family: var(--font-family-base);
   font-size: var(--font-size-medium);
   line-height: 1.25rem;
   letter-spacing: 0.0015em;
@@ -104,7 +106,7 @@ button,
   display: grid;
   grid-template-columns: var(--sidebar-width) 1fr;
   grid-template-rows: 100dvh;
-  grid-template-areas: "sidebar cesium-container";
+  grid-template-areas: "sidebar map";
   overflow: hidden;
   transition: grid-template-columns 0.3s ease-in-out;
 }
@@ -113,10 +115,14 @@ button,
   grid-template-columns: var(--sidebar-width-collapsed) 1fr;
 }
 
+.map-container {
+  position: relative;
+}
+
 /* ---- cesium ---- */
 #cesium-container {
-  grid-area: cesium-container;
   position: relative;
+  height: 100%;
 }
 
 .cesium-credit-logoContainer {
@@ -148,7 +154,7 @@ button,
 }
 
 .cesium-viewer-bottom .cesium-widget-credits {
-  margin-left: var(--spacing-medium);
+  margin: var(--spacing-extra-small) var(--spacing-medium-large);
   display: flex !important;
   align-items: center;
   justify-content: flex-start;

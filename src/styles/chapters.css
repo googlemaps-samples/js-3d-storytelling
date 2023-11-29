@@ -1,0 +1,67 @@
+#chapters-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  gap: var(--spacing-medium-large);
+  margin: 2.5rem var(--spacing-medium-large);
+}
+
+.card {
+  --card-background-color: var(--background-color);
+  --card-text-color: var(--text-color-primary);
+  position: relative;
+  width: 9rem;
+  height: 7rem;
+  border: 4px solid var(--card-background-color);
+  border-radius: 16px;
+  overflow: hidden;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+}
+
+.card.selected {
+  --card-background-color: #000;
+  --card-text-color: #fff;
+}
+
+.card > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chapter .date {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0.1875rem 0.3125rem;
+  padding: 0 var(--spacing-small);
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 1em;
+  color: #fff;
+  font-size: inherit;
+}
+
+.chapter > h2 {
+  z-index: 1;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3.5em;
+  padding: 0.3125rem;
+  color: var(--card-text-color);
+  font-size: inherit;
+  line-height: 0.875rem;
+}
+
+.chapter > h2::before {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  inset: 0;
+  background: var(--card-background-color);
+  opacity: 0.9;
+}
+
