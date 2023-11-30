@@ -245,16 +245,12 @@ summary::after {
   align-items: center;
 }
 
-.location-tile > * {
-  flex-shrink: 0;
-  flex-grow: 0;
-}
-
 .location-tile > p {
   margin-left: calc(2rem + var(--custom-margin-left));
 }
 
 .location-tile > button {
+  opacity: 0;
   height: var(--spacing-medium-large);
   cursor: pointer;
   margin-inline: auto var(--spacing-medium-large);
@@ -270,6 +266,10 @@ summary::after {
 
 .location-tile:hover {
   background-color: var(--background-color-grey);
+}
+
+.location-tile:hover button {
+  opacity: 1;
 }
 
 .location-tile:hover::after {
