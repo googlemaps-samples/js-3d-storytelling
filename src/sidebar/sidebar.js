@@ -33,3 +33,20 @@ export async function initAutoComplete() {
     const { location } = selectedPlace.geometry;
   });
 }
+
+const toggleDetailsSection = (event) => {
+  if (event.newState === "open") {
+    const details = document.querySelectorAll(
+      `details:not(#${event.target.id})`
+    );
+
+    details.forEach((detail) => (detail.open = false));
+  }
+};
+
+// Add event listener to all details elements in the sidebar
+const details = document.querySelectorAll("#sidebar > details");
+
+details.forEach((section) => {
+  section.addEventListener("toggle", toggleDetailsSection);
+});
