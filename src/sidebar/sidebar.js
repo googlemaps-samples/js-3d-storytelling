@@ -11,6 +11,10 @@ export function addSidebarToggleHandler() {
   });
 }
 
+/**
+ * Initializes the autocomplete functionality for the location input field.
+ * @returns {Promise<void>} A promise that resolves when the autocomplete is initialized.
+ */
 export async function initAutoComplete() {
   const locationInput = document.querySelector(".locations-container input");
 
@@ -34,6 +38,11 @@ export async function initAutoComplete() {
   });
 }
 
+/**
+ * Toggles the details section based on the event's new state.
+ * Closes all other details sections except the one with the specified target ID.
+ * @param {Event} event - The event object containing the new state and target ID.
+ */
 const toggleDetailsSection = (event) => {
   if (event.newState === "open") {
     const details = document.querySelectorAll(
