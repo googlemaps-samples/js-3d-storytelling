@@ -1,7 +1,11 @@
 import { initializeCesiumViewer } from "./utils/cesium.js";
 import { loadConfig } from "./utils/config.js";
-import { addSidebarToggleHandler } from "./sidebar/sidebar.js";
+import {
+  addSidebarToggleHandler,
+  initAutoComplete,
+} from "./sidebar/sidebar.js";
 import { addChaptersBar } from "./chapters/chapters.js";
+import { initGoogleMaps } from "./utils/places.js";
 
 // TODO: get data from config
 const story = {
@@ -40,6 +44,8 @@ export const config = await loadConfig("config.json");
 async function main() {
   try {
     await initializeCesiumViewer();
+    await initGoogleMaps();
+    await initAutoComplete();
 
     addSidebarToggleHandler();
     addChaptersBar(story);
