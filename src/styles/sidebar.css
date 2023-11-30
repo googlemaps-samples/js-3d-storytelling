@@ -3,14 +3,14 @@
   --gap-large: var(--spacing-medium-large);
   --custom-border-radius: 4px;
   grid-area: sidebar;
-  z-index: 3;
+  z-index: 1;
   display: grid;
   position: relative;
   grid-template-rows: [intro-start] min-content [intro-end] min-content [details-end] 1fr [story-end] min-content [download-end];
+  overflow: visible;
 }
 
 #sidebar::after {
-  z-index: 3;
   content: "";
   position: absolute;
   top: 0;
@@ -142,7 +142,6 @@
   position: absolute;
   top: 6rem;
   bottom: 0;
-  overflow: scroll;
   width: 100%;
 }
 
@@ -155,7 +154,6 @@
 
 details {
   position: relative;
-  overflow: hidden;
 }
 
 details > summary {
@@ -243,6 +241,74 @@ summary::after {
   gap: var(--spacing-small);
   padding-block: var(--spacing-small);
   align-items: center;
+  overflow: visible;
+}
+
+.location-tile dialog[open] {
+  z-index: 1000;
+  position: absolute;
+  top: 0;
+  right: -40px;
+  border: none;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  max-width: 140px;
+  border-radius: var(--custom-border-radius);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.location-tile input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.location-tile dialog fieldset {
+  all: unset;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.location-tile dialog button {
+  background-color: red;
+}
+
+.location-tile label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  line-height: 1rem;
+  padding-block: 4px;
+  padding: var(--spacing-small) var(--spacing-medium);
+  gap: var(--spacing-small);
+}
+
+.location-tile label:hover {
+  background-color: var(--background-color-grey);
+}
+
+.location-tile label:before {
+  height: 1rem;
+}
+
+.location-tile label[for="move-up"]:before {
+  content: url("../assets/icons/move-up-icon.svg");
+}
+
+.location-tile label[for="move-down"]:before {
+  content: url("../assets/icons/move-down-icon.svg");
+}
+
+.location-tile label[for="edit"]:before {
+  content: url("../assets/icons/edit-icon.svg");
+}
+
+.location-tile label[for="delete"]:before {
+  content: url("../assets/icons/delete-icon.svg");
 }
 
 .location-tile > p {
