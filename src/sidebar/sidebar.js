@@ -10,3 +10,26 @@ export function addSidebarToggleHandler() {
     main.classList.toggle("sidebar-is-collapsed");
   });
 }
+
+export async function initAutoComplete() {
+  const locationInput = document.querySelector(".locations-container input");
+
+  // Todo: get correct fields
+  const options = { fields: ["geometry"] };
+  const autocomplete = new google.maps.places.Autocomplete(
+    locationInput,
+    options
+  );
+
+  // Listen to location changes
+  autocomplete.addListener("place_changed", () => {
+    const selectedPlace = autocomplete.getPlace();
+
+    // Catch user pressed enter key without selecting a place in the list
+    if (!selectedPlace.geometry) {
+      return;
+    }
+    // Todo: do something with the location
+    const { location } = selectedPlace.geometry;
+  });
+}
