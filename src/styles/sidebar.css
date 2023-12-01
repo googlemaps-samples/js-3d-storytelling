@@ -244,6 +244,10 @@ summary::after {
   overflow: visible;
 }
 
+.location-tile:active {
+  pointer-events: none;
+}
+
 .location-tile dialog[open] {
   z-index: 1000;
   position: absolute;
@@ -315,14 +319,18 @@ summary::after {
   margin-left: calc(2rem + var(--custom-margin-left));
 }
 
-.location-tile > button {
+.location-tile button {
   opacity: 0;
-  height: var(--spacing-medium-large);
+  pointer-events: all;
   cursor: pointer;
+}
+
+.location-tile > button:not(:first-child) {
+  height: var(--spacing-medium-large);
   margin-inline: auto var(--spacing-medium-large);
 }
 
-.location-tile::before {
+.location-tile::after {
   content: url("../assets/icons/location-marker-icon.svg");
   position: absolute;
   left: var(--custom-margin-left);
@@ -332,6 +340,24 @@ summary::after {
 
 .location-tile:hover {
   background-color: var(--background-color-grey);
+}
+
+.location-tile.dragging:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.location-tile:hover:before {
+  opacity: 1;
+}
+
+.location-tile:before {
+  opacity: 0;
+  height: 1.5rem;
+  content: url("../assets/icons/draggable-icon.svg");
+  position: absolute;
+  left: var(--spacing-medium);
+  cursor: move;
+  pointer-events: all;
 }
 
 .location-tile:hover button {
@@ -412,4 +438,8 @@ summary::after {
 
 input:focus::placeholder {
   opacity: 0;
+}
+
+.location-tile.dragging {
+  opacity: 0.5;
 }
