@@ -36,6 +36,12 @@ export async function initAutoComplete() {
     // Todo: do something with the location
     const { location } = selectedPlace.geometry;
   });
+
+  // Disable form submission button when the input field is empty
+  locationInput.addEventListener("input", () => {
+    const locationSubmitButton = document.querySelector(".add-location-button");
+    locationSubmitButton.disabled = locationInput.value === "";
+  });
 }
 
 /**
