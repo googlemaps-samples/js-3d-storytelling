@@ -108,7 +108,11 @@
             </div>
           </form>
         </details>
-        <details class="locations-container full-width" id="locations">
+        <details
+          class="locations-container full-width"
+          id="locations"
+          data-mode=""
+        >
           <summary><h2>Locations:</h2></summary>
 
           <div class="location-input">
@@ -121,128 +125,7 @@
               Add to the Story
             </button>
           </div>
-          <ul class="location-tiles">
-            <li class="location-tile" draggable="true">
-              <p>Location 123456 Wonderland</p>
-              <dialog>
-                <form>
-                  <fieldset>
-                    <input
-                      type="radio"
-                      id="move-up"
-                      name="location-edit"
-                      value="move-up"
-                    />
-                    <label for="move-up">Move up</label>
-                    <input
-                      type="radio"
-                      id="move-down"
-                      name="location-edit"
-                      value="move-down"
-                    />
-                    <label for="move-down">Move Down</label>
-                    <input
-                      type="radio"
-                      id="edit"
-                      name="location-edit"
-                      value="edit"
-                    />
-                    <label for="edit">Edit</label>
-                    <input
-                      type="radio"
-                      id="delete"
-                      name="location-delete"
-                      value="delete"
-                    />
-                    <label for="delete">Delete</label>
-                  </fieldset>
-                </form>
-              </dialog>
-              <button aria-label="Open Settings">
-                <img src="./assets/icons/location-tile-hover.svg" alt="" />
-              </button>
-            </li>
-            <li class="location-tile" draggable="true">
-              <p>Location</p>
-              <dialog>
-                <form>
-                  <fieldset>
-                    <input
-                      type="radio"
-                      id="move-up"
-                      name="location-edit"
-                      value="move-up"
-                    />
-                    <label for="move-up">Move up</label>
-                    <input
-                      type="radio"
-                      id="move-down"
-                      name="location-edit"
-                      value="move-down"
-                    />
-                    <label for="move-down">Move Down</label>
-                    <input
-                      type="radio"
-                      id="edit"
-                      name="location-edit"
-                      value="edit"
-                    />
-                    <label for="edit">Edit</label>
-                    <input
-                      type="radio"
-                      id="delete"
-                      name="location-delete"
-                      value="delete"
-                    />
-                    <label for="delete">Delete</label>
-                  </fieldset>
-                </form>
-              </dialog>
-              <button aria-label="Open Settings">
-                <img src="./assets/icons/location-tile-hover.svg" alt="" />
-              </button>
-            </li>
-            <li class="location-tile" draggable="true">
-              <p>Location 456789 Antartica</p>
-              <dialog>
-                <form>
-                  <fieldset>
-                    <input
-                      type="radio"
-                      id="move-up"
-                      name="location-edit"
-                      value="move-up"
-                    />
-                    <label for="move-up">Move up</label>
-                    <input
-                      type="radio"
-                      id="move-down"
-                      name="location-edit"
-                      value="move-down"
-                    />
-                    <label for="move-down">Move Down</label>
-                    <input
-                      type="radio"
-                      id="edit"
-                      name="location-edit"
-                      value="edit"
-                    />
-                    <label for="edit">Edit</label>
-                    <input
-                      type="radio"
-                      id="delete"
-                      name="location-delete"
-                      value="delete"
-                    />
-                    <label for="delete">Delete</label>
-                  </fieldset>
-                </form>
-              </dialog>
-              <button aria-label="Open Settings">
-                <img src="./assets/icons/location-tile-hover.svg" alt="" />
-              </button>
-            </li>
-          </ul>
+          <ul class="location-tiles"></ul>
         </details>
         <div class="download-config-button-container full-width">
           <button class="download-config-button">

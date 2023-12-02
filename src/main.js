@@ -3,6 +3,7 @@ import { loadConfig } from "./utils/config.js";
 import {
   addSidebarToggleHandler,
   initAutoComplete,
+  updatePlaces,
 } from "./sidebar/sidebar.js";
 import { addChaptersBar } from "./chapters/chapters.js";
 import { initGoogleMaps } from "./utils/places.js";
@@ -46,6 +47,7 @@ async function main() {
     await initializeCesiumViewer();
     await initGoogleMaps();
     await initAutoComplete();
+    updatePlaces();
 
     addSidebarToggleHandler();
     addChaptersBar(story);
