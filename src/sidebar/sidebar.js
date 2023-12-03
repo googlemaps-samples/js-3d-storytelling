@@ -1,14 +1,12 @@
 /**
  * Options for radio buttons in the sidebar.
- * @typedef {Object} RadioOptions
+ * @typedef {Object} LocationMenuOptions
  * @property {string} moveUp - Option for moving up.
  * @property {string} moveDown - Option for moving down.
  * @property {string} edit - Option for editing.
  * @property {string} delete - Option for deleting.
  */
 const locationMenuOptions = {
-  moveUp: "move-up",
-  moveDown: "move-down",
   edit: "edit",
   delete: "delete",
 };
@@ -93,6 +91,7 @@ function createLocationTile(chapter) {
 
     label.htmlFor = uniqueId;
     label.textContent = option.charAt(0).toUpperCase() + option.slice(1);
+    label.setAttribute("data-type-edit", option);
 
     fieldset.appendChild(input);
     fieldset.appendChild(label);
@@ -142,14 +141,14 @@ export async function initAutoComplete() {
 
   // Disable form submission button when the input field is empty
   locationInput.addEventListener("input", () => {
-    const locationSubmitButton = document.querySelector(".add-location-button");
+    const locationSubmitButton = document.querySelector(".add-location");
     locationSubmitButton.disabled = locationInput.value === "";
   });
 }
 // A reference to the currently open dialog
 let currentDialog = null;
 // A reference to the abort controller used to cancel the events on dialog close
-let dialogEventController;
+let locationMenuEventController;
 
 /**
  * Initializes the sidebar functionality.
@@ -316,8 +315,11 @@ function addChangeEventListener(chapters) {
 
         // The dialog element is automatically closed when the form is submitted
         // so we need to abort the event listeners here
-        dialogEventController.abort();
+        locationMenuEventController.abort();
         currentDialog = null;
+
+        // Reset the form
+        form.reset();
       }
     });
 
@@ -329,39 +331,27 @@ function addChangeEventListener(chapters) {
       ).value;
 
       // Get which chapter the form belongs to
-      const selectedChapter = form.getAttribute("key");
+      const selectedChapterKey = form.getAttribute("key");
 
-      const chapterIndex = chapters.findIndex(
-        (chapter) => selectedChapter === chapter.title
+      const selectedChapter = chapters.find(
+        (chapter) => selectedChapterKey === chapter.title
       );
 
-      handleFormDialogSubmit(selectedAction, chapterIndex);
+      handleFormDialogSubmit(selectedAction, selectedChapter);
     });
   });
 }
 
-function handleFormDialogSubmit(action, chapterIndex) {
+function handleFormDialogSubmit(action, selectedChapter) {
   switch (action) {
     case locationMenuOptions.edit:
-      console.log("Edit");
-
-      const container = document.querySelector(".locations-container");
-
-      // Add custom data-attribute to the container
-      container.setAttribute("data-mode", locationMenuOptions.edit);
+      // Code for handling edit option
+      handleEditAction(selectedChapter);
 
       break;
     case locationMenuOptions.delete:
       console.log("Delete");
       // Code for handling delete option
-      break;
-    case locationMenuOptions.moveUp:
-      console.log("Move up");
-      // Code for handling moveUp option
-      break;
-    case locationMenuOptions.moveDown:
-      console.log("Move down");
-      // Code for handling moveDown option
       break;
     default:
       console.warn("Invalid option type");
@@ -369,4 +359,35 @@ function handleFormDialogSubmit(action, chapterIndex) {
       break;
   }
   return null;
+}
+
+function handleEditAction(chapter) {
+  const container = document.querySelector(".locations-container");
+
+  // Add custom data-attribute to the container
+  container.setAttribute("data-mode", locationMenuOptions.edit);
+
+  const form = document.querySelector(".chapter-form.edit");
+
+  // Fill the form inputs with the chapter data
+  form.querySelector('input[name="title"]').value = chapter.title;
+  form.querySelector('input[name="description"]').value = chapter.content;
+  form.querySelector('input[name="author"]').value = chapter.imageCredit;
+  form.querySelector('input[name="date"]').value = chapter.dateTime;
+  form.querySelector(".url-input input").value = chapter.imageUrl;
+  form.querySelector(".image-credit-container input").value =
+    chapter.imageCredit;
+
+  // Code for edit-from submission
+  const editForm = document.querySelector(".chapter-form.edit");
+  editForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    // Todo: update chapter data
+    const formData = new FormData(editForm);
+
+    // Close edit form
+    editForm.reset();
+    container.setAttribute("data-mode", "");
+  });
 }
