@@ -26,6 +26,11 @@ export function addSidebarToggleHandler() {
   });
 }
 
+/**
+ * Updates the places in the sidebar based on the given chapters.
+ *
+ * @param {Array} chapters - The chapters containing location information.
+ */
 export function updatePlaces(chapters) {
   const tilesContainer = document.querySelector(".location-tiles");
   tilesContainer.innerHTML = "";
@@ -44,7 +49,7 @@ export function updatePlaces(chapters) {
   initializeLocationDialog();
 
   // Enable the form submission when a radio button is selected
-  addChangeEventListener();
+  addChangeEventListener(chapters);
 }
 
 /**
@@ -280,9 +285,12 @@ function getDragAfterElement(container, y) {
   ).element;
 }
 
-// Add event listener to the form to submit the form when a radio button is selected
-// Every click on a radio button will submit the form and close the dialog (no submit button needed)
-function addChangeEventListener() {
+/**
+ * Adds a change event listener to each form element with the method attribute set to "dialog".
+ * When a radio input is changed, the form is submitted and the dialog is closed.
+ * @param {Array} chapters - An array of chapter objects.
+ */
+function addChangeEventListener(chapters) {
   var forms = document.querySelectorAll('form[method="dialog"]');
   forms.forEach(function (form) {
     // Attach a change event listener to each form
@@ -311,7 +319,7 @@ function addChangeEventListener() {
       // Get which chapter the form belongs to
       const selectedChapter = form.getAttribute("key");
 
-      const chapterIndex = places.chapters.findIndex(
+      const chapterIndex = chapters.findIndex(
         (chapter) => selectedChapter === chapter.title
       );
 
