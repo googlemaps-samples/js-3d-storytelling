@@ -2,6 +2,22 @@
 @import "./styles/sidebar.css";
 @import "./styles/chapters.css";
 
+@font-face {
+  font-display: swap;
+  font-family: "New York Medium";
+  src: url("../assets/fonts/New-York.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Inter";
+  src: url("../assets/fonts/Inter-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
 /* ---- css vars ---- */
 :root {
   /* ---- text colors ---- */
@@ -23,6 +39,7 @@
   /* ---- fonts ---- */
   --font-family-base: "Google Sans", Roboto, sans-serif;
   --font-family-serif: "New York Medium", serif;
+  --font-family-inter: "Inter", sans-serif;
   --font-size-small: 0.625rem;
   --font-size-medium: 0.875rem;
   --font-size-large: 1rem;
