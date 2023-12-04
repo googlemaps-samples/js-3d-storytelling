@@ -116,3 +116,68 @@ function closeDialog(dialog) {
   locationMenuEventController.abort();
   currentDialog = null;
 }
+
+/**
+ * Initializes the draggable location tiles functionality.
+ */
+export function initDraggableTiles() {
+  // Represents the collection of draggable location tiles.
+  const draggableTiles = document.querySelectorAll(".location-tile");
+
+  // Represents the container of the location tiles.
+  const tilesContainer = document.querySelector(".location-tiles");
+
+  // Add event listeners to all draggable tiles
+  draggableTiles.forEach((draggable) => {
+    draggable.addEventListener("dragstart", () => {
+      draggable.classList.add("dragging");
+    });
+
+    draggable.addEventListener("dragend", () => {
+      draggable.classList.remove("dragging");
+    });
+  });
+
+  //
+  tilesContainer.addEventListener("dragover", (event) => {
+    event.preventDefault();
+
+    const nextElement = getDragAfterElement(tilesContainer, event.clientY);
+    const draggable = document.querySelector(".dragging");
+    if (nextElement == null) {
+      tilesContainer.appendChild(draggable);
+    } else {
+      tilesContainer.insertBefore(draggable, nextElement);
+    }
+  });
+}
+
+/**
+ * Finds the element after which a dragged element should be inserted on the y-coordinate of the event.
+ *
+ * @param {HTMLElement} container - The container element that holds the draggable elements.
+ * @param {number} draggedElementPositionY - The vertical position of the dragged element.
+ * @returns {HTMLElement} - The element after which the dragged element should be inserted.
+ */
+function getDragAfterElement(container, draggedElementPositionY) {
+  const draggableElements = [
+    ...container.querySelectorAll(".location-tile:not(.dragging)"),
+  ];
+
+  // Find the element that is closest to the dragged element
+  // by comparing the vertical position of the dragged element to the vertical position of the other elements.
+  // The element with the smallest offset is the closest element.
+  return draggableElements.reduce(
+    (closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offset = draggedElementPositionY - box.top - box.height / 2;
+      if (offset < 0 && offset > closest.offset) {
+        return { offset: offset, element: child };
+      } else {
+        return closest;
+      }
+    },
+    // Set initial offset to negative infinity to ensure that the offset is always smaller than the initial value
+    { offset: Number.NEGATIVE_INFINITY }
+  ).element;
+}
