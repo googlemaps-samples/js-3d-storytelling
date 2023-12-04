@@ -96,6 +96,10 @@ p {
   letter-spacing: 0.0015em;
 }
 
+fieldset {
+  border: none;
+}
+
 /* Link styles */
 a {
   color: var(--accent-color);
