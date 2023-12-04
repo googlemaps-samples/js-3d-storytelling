@@ -33,7 +33,6 @@ export function addSidebarToggleHandler() {
  */
 export function updatePlaces(chapters) {
   const tilesContainer = document.querySelector(".location-tiles");
-  tilesContainer.innerHTML = "";
   chapters.forEach((chapter) => {
     const tile = createLocationTile(chapter);
     tilesContainer.appendChild(tile);
