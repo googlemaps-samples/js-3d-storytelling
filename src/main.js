@@ -3,6 +3,7 @@ import { loadConfig } from "./utils/config.js";
 import {
   addSidebarToggleHandler,
   initAutoComplete,
+  updatePlaces,
   initDraggableTiles,
 } from "./sidebar/sidebar.js";
 import { addChaptersBar } from "./chapters/chapters.js";
@@ -42,11 +43,14 @@ const story = {
 // You could also implement your (dynamic) configuration loading function here.
 export const config = await loadConfig("config.json");
 
+const { chapters } = config;
+
 async function main() {
   try {
     await initCesiumViewer();
     await initGoogleMaps();
     await initAutoComplete();
+    updatePlaces(chapters);
 
     addSidebarToggleHandler();
     initDraggableTiles();

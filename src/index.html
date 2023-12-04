@@ -106,7 +106,7 @@
         <details class="story-details-container full-width" id="story-details">
           <summary><h2>Story Details:</h2></summary>
 
-          <form>
+          <form class="chapter-form">
             <fieldset>
               <div class="field-wrapper">
                 <input type="text" name="title" placeholder="Add a title" />
@@ -175,135 +175,79 @@
               onkeyup="event.preventDefault()"
               placeholder="Search for a new place"
             />
-            <button class="add-location-button" disabled>
+            <button class="button add-location" disabled>
               Add to the Story
             </button>
           </div>
-          <ul class="location-tiles">
-            <li class="location-tile" draggable="true">
-              <p>Location 123456 Wonderland</p>
-              <dialog>
-                <form>
-                  <fieldset>
-                    <input
-                      type="radio"
-                      id="move-up"
-                      name="location-edit"
-                      value="move-up"
-                    />
-                    <label for="move-up">Move up</label>
-                    <input
-                      type="radio"
-                      id="move-down"
-                      name="location-edit"
-                      value="move-down"
-                    />
-                    <label for="move-down">Move Down</label>
-                    <input
-                      type="radio"
-                      id="edit"
-                      name="location-edit"
-                      value="edit"
-                    />
-                    <label for="edit">Edit</label>
-                    <input
-                      type="radio"
-                      id="delete"
-                      name="location-delete"
-                      value="delete"
-                    />
-                    <label for="delete">Delete</label>
-                  </fieldset>
-                </form>
-              </dialog>
-              <button aria-label="Open Settings">
-                <img src="./assets/icons/location-tile-hover.svg" alt="" />
+          <ul class="location-tiles"></ul>
+          <form class="edit chapter-form">
+            <fieldset>
+              <div class="field-wrapper">
+                <input type="text" name="title" placeholder="Add a title" />
+                <div class="field-placeholder">
+                  <span class="label">Title</span>
+                </div>
+              </div>
+              <div class="field-wrapper">
+                <input
+                  type="text"
+                  name="description"
+                  placeholder="Add a description"
+                />
+                <div class="field-placeholder">
+                  <span class="label">Description</span>
+                </div>
+              </div>
+              <div class="field-wrapper">
+                <input type="text" name="author" placeholder="Add an author" />
+                <div class="field-placeholder">
+                  <span class="label">Author</span>
+                </div>
+              </div>
+              <div class="field-wrapper">
+                <input
+                  type="text"
+                  name="date"
+                  placeholder="Add a date or time"
+                />
+                <div class="field-placeholder">
+                  <span class="label">Date or Time</span>
+                </div>
+              </div>
+              <div class="field-wrapper url-input">
+                <input
+                  type="text"
+                  name="date"
+                  placeholder="Image or Youtube URL"
+                />
+                <div class="field-placeholder">
+                  <span class="label">URL</span>
+                </div>
+              </div>
+              <div class="image-credit-container">
+                <img src="https://picsum.photos/300/160" alt="" />
+                <div class="field-wrapper">
+                  <input
+                    type="text"
+                    name="date"
+                    placeholder="Add an image or video credit"
+                  />
+                  <div class="field-placeholder">
+                    <span class="label">Credit</span>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="button save-camera-position">
+                Save Camera Position
               </button>
-            </li>
-            <li class="location-tile" draggable="true">
-              <p>Location</p>
-              <dialog>
-                <form>
-                  <fieldset>
-                    <input
-                      type="radio"
-                      id="move-up"
-                      name="location-edit"
-                      value="move-up"
-                    />
-                    <label for="move-up">Move up</label>
-                    <input
-                      type="radio"
-                      id="move-down"
-                      name="location-edit"
-                      value="move-down"
-                    />
-                    <label for="move-down">Move Down</label>
-                    <input
-                      type="radio"
-                      id="edit"
-                      name="location-edit"
-                      value="edit"
-                    />
-                    <label for="edit">Edit</label>
-                    <input
-                      type="radio"
-                      id="delete"
-                      name="location-delete"
-                      value="delete"
-                    />
-                    <label for="delete">Delete</label>
-                  </fieldset>
-                </form>
-              </dialog>
-              <button aria-label="Open Settings">
-                <img src="./assets/icons/location-tile-hover.svg" alt="" />
+              <button type="submit" class="button leave-edit-mode">
+                Leave edit mode
               </button>
-            </li>
-            <li class="location-tile" draggable="true">
-              <p>Location 456789 Antartica</p>
-              <dialog>
-                <form>
-                  <fieldset>
-                    <input
-                      type="radio"
-                      id="move-up"
-                      name="location-edit"
-                      value="move-up"
-                    />
-                    <label for="move-up">Move up</label>
-                    <input
-                      type="radio"
-                      id="move-down"
-                      name="location-edit"
-                      value="move-down"
-                    />
-                    <label for="move-down">Move Down</label>
-                    <input
-                      type="radio"
-                      id="edit"
-                      name="location-edit"
-                      value="edit"
-                    />
-                    <label for="edit">Edit</label>
-                    <input
-                      type="radio"
-                      id="delete"
-                      name="location-delete"
-                      value="delete"
-                    />
-                    <label for="delete">Delete</label>
-                  </fieldset>
-                </form>
-              </dialog>
-              <button aria-label="Open Settings">
-                <img src="./assets/icons/location-tile-hover.svg" alt="" />
-              </button>
-            </li>
-          </ul>
+            </fieldset>
+          </form>
         </details>
-        <div class="download-config-button-container full-width">
-          <button class="download-config-button">
+        <div class="download-config-container full-width">
+          <button class="download-config">
             <img src="./assets/icons/download-button-icon.svg" alt="" />
             Download Config
           </button>
