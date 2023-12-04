@@ -200,7 +200,7 @@ const toggleDetailsSection = (event) => {
  * @param {HTMLElement} dialog - The dialog element to be closed.
  */
 function createDialogCloseListeners(dialog) {
-  dialogEventController = new AbortController();
+  locationMenuEventController = new AbortController();
 
   document.addEventListener(
     "keydown",
@@ -210,7 +210,7 @@ function createDialogCloseListeners(dialog) {
         closeDialog(dialog);
       }
     },
-    { signal: dialogEventController.signal }
+    { signal: locationMenuEventController.signal }
   );
 
   document.addEventListener(
@@ -221,18 +221,21 @@ function createDialogCloseListeners(dialog) {
         closeDialog(dialog);
       }
     },
-    { signal: dialogEventController.signal }
+    { signal: locationMenuEventController.signal }
   );
 }
 
 // Helper function to close the dialog and aborts any ongoing event listeners
 function closeDialog(dialog) {
   dialog.close();
-  dialogEventController.abort();
+  locationMenuEventController.abort();
   currentDialog = null;
 }
 
-function initializeDraggableTiles() {
+/**
+ * Initializes the draggable location tiles functionality.
+ */
+export function initDraggableTiles() {
   // Represents the collection of draggable location tiles.
   const draggableTiles = document.querySelectorAll(".location-tile");
 
@@ -250,36 +253,46 @@ function initializeDraggableTiles() {
     });
   });
 
-  // Add event listener to the tiles container to handle the dragover event
-  tilesContainer.addEventListener("dragover", (e) => {
-    e.preventDefault();
-    const afterElement = getDragAfterElement(tilesContainer, e.clientY);
+  //
+  tilesContainer.addEventListener("dragover", (event) => {
+    event.preventDefault();
+
+    const nextElement = getDragAfterElement(tilesContainer, event.clientY);
     const draggable = document.querySelector(".dragging");
-    if (afterElement == null) {
+    if (nextElement == null) {
       tilesContainer.appendChild(draggable);
     } else {
-      tilesContainer.insertBefore(draggable, afterElement);
+      tilesContainer.insertBefore(draggable, nextElement);
     }
   });
 }
 
-// Helper function to get the element after the dragged element
-function getDragAfterElement(container, y) {
+/**
+ * Finds the element after which a dragged element should be inserted on the y-coordinate of the event.
+ *
+ * @param {HTMLElement} container - The container element that holds the draggable elements.
+ * @param {number} draggedElementPositionY - The vertical position of the dragged element.
+ * @returns {HTMLElement} - The element after which the dragged element should be inserted.
+ */
+function getDragAfterElement(container, draggedElementPositionY) {
   const draggableElements = [
     ...container.querySelectorAll(".location-tile:not(.dragging)"),
   ];
 
+  // Find the element that is closest to the dragged element
+  // by comparing the vertical position of the dragged element to the vertical position of the other elements.
+  // The element with the smallest offset is the closest element.
   return draggableElements.reduce(
     (closest, child) => {
       const box = child.getBoundingClientRect();
-      const offset = y - box.top - box.height / 2;
+      const offset = draggedElementPositionY - box.top - box.height / 2;
       if (offset < 0 && offset > closest.offset) {
         return { offset: offset, element: child };
       } else {
         return closest;
       }
     },
-    // Set initial value to negative infinity to ensure that the offset is always smaller than the initial value
+    // Set initial offset to negative infinity to ensure that the offset is always smaller than the initial value
     { offset: Number.NEGATIVE_INFINITY }
   ).element;
 }
