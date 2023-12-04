@@ -162,7 +162,7 @@ function getDragAfterElement(container, y) {
         return closest;
       }
     },
-    // Set initial value to negative infinity to ensure that the offset is always smaller than the initial value
+    // Set initial offset to negative infinity to ensure that the offset is always smaller than the initial value
     { offset: Number.NEGATIVE_INFINITY }
   ).element;
 }
