@@ -20,6 +20,7 @@
           <div class="date">Spring 1967</div>
           <div class="place">635 Ashbury, San Francisco</div>
           <h2>The Jimmy Hendrix Experience</h2>
+          storyProperties.title
         </header>
 
         <div class="description">
@@ -98,7 +99,17 @@
       </aside>
       <div class="map-container">
         <div id="cesium-container"></div>
-        <div id="chapters-bar"></div>
+        <div id="chapters-bar">
+          <button
+            class="navigation-button previous"
+            aria-label="Show previous cards"
+          ></button>
+          <div class="cards"></div>
+          <button
+            class="navigation-button next"
+            aria-label="Show next cards"
+          ></button>
+        </div>
       </div>
     </main>
     <script type="module" src="./main.js"></script>
