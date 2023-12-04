@@ -56,8 +56,8 @@ const toggleDetailsSection = (event) => {
 // Add event listener to all details elements in the sidebar
 const details = document.querySelectorAll("#sidebar > details");
 
-// A reference to the abort controller used to cancel the events on dialog close
-let dialogEventController;
+// A reference to the abort controller used to remove event listeners after a menu event is triggered
+let locationMenuEventController;
 let currentDialog = null;
 
 details.forEach((section) => {
@@ -85,7 +85,7 @@ dialogShowButtons.forEach((button) => {
  * @param {HTMLElement} dialog - The dialog element to be closed.
  */
 function createDialogCloseListeners(dialog) {
-  dialogEventController = new AbortController();
+  locationMenuEventController = new AbortController();
 
   document.addEventListener(
     "keydown",
@@ -95,7 +95,7 @@ function createDialogCloseListeners(dialog) {
         closeDialog(dialog);
       }
     },
-    { signal: dialogEventController.signal }
+    { signal: locationMenuEventController.signal }
   );
 
   document.addEventListener(
@@ -106,13 +106,13 @@ function createDialogCloseListeners(dialog) {
         closeDialog(dialog);
       }
     },
-    { signal: dialogEventController.signal }
+    { signal: locationMenuEventController.signal }
   );
 }
 
 // Helper function to close the dialog and aborts any ongoing event listeners
 function closeDialog(dialog) {
   dialog.close();
-  dialogEventController.abort();
+  locationMenuEventController.abort();
   currentDialog = null;
 }
