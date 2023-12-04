@@ -140,7 +140,7 @@
 
 .location-tiles {
   position: absolute;
-  top: 6rem;
+  top: 8rem;
   bottom: 0;
   width: 100%;
 }
@@ -197,6 +197,12 @@ summary::after {
   padding-inline: var(--spacing-medium-large);
 }
 
+.locations-container {
+  --custom-margin-left: calc(
+    var(--spacing-medium) + var(--spacing-medium-large)
+  );
+}
+
 .locations-container > ul {
   margin-top: 1rem;
   display: flex;
@@ -206,9 +212,11 @@ summary::after {
 .location-input {
   position: relative;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   pointer-events: all;
   flex-grow: 1;
+  gap: var(--spacing-medium);
 }
 
 .location-input::before {
@@ -232,9 +240,6 @@ summary::after {
 }
 
 .location-tile {
-  --custom-margin-left: calc(
-    var(--spacing-medium) + var(--spacing-medium-large)
-  );
   flex-shrink: 0;
   display: flex;
   position: relative;
@@ -316,7 +321,7 @@ summary::after {
 }
 
 .location-tile > p {
-  margin-left: calc(2rem + var(--custom-margin-left));
+  margin-left: calc(var(--spacing-medium-large) + var(--custom-margin-left));
 }
 
 .location-tile button {
@@ -333,7 +338,7 @@ summary::after {
 .location-tile::after {
   content: url("../assets/icons/location-marker-icon.svg");
   position: absolute;
-  left: var(--custom-margin-left);
+  left: calc(var(--custom-margin-left) - 4px);
   pointer-events: none;
   height: var(--spacing-medium-large);
 }
@@ -442,4 +447,29 @@ input:focus::placeholder {
 
 .location-tile.dragging {
   opacity: 0.5;
+}
+
+.add-location-button {
+  --background: #d2e3fc;
+  cursor: pointer;
+  display: flex;
+  height: 1rem;
+  border-radius: 40px;
+  background: var(--background);
+  color: var(--accent-color);
+  font-weight: 500;
+  padding: var(--spacing-small) var(--spacing-medium);
+  align-items: center;
+  gap: 8px;
+  border-radius: 24px;
+}
+
+.add-location-button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.add-location-button:before {
+  height: 1rem;
+  content: url("../assets/icons/add-icon.svg");
 }
