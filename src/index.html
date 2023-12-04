@@ -22,7 +22,6 @@
             <div class="place">635 Ashbury, San Francisco</div>
             <h2>The Jimmy Hendrix Experience</h2>
           </header>
-
           <div class="description">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
             faucibus faucibus nisl id ultricies. Sed faucibus venenatis
@@ -255,7 +254,17 @@
       </aside>
       <div class="map-container">
         <div id="cesium-container"></div>
-        <div id="chapters-bar"></div>
+        <div id="chapters-bar">
+          <button
+            class="navigation-button previous"
+            aria-label="Show previous cards"
+          ></button>
+          <div class="cards"></div>
+          <button
+            class="navigation-button next"
+            aria-label="Show next cards"
+          ></button>
+        </div>
       </div>
     </main>
     <script type="module" src="./main.js"></script>
