@@ -42,10 +42,10 @@ export function updatePlaces(chapters) {
   // Here we initialize the sidebar functionality.
 
   // Enable the drag and drop functionality for the location tiles
-  initializeDraggableTiles();
+  initDraggableTiles();
 
   // Enable the edit menu for the each location tile
-  initializeLocationDialog();
+  initLocationDialog();
 
   // Enable the form submission when a radio button is selected
   addChangeEventListener(chapters);
@@ -154,7 +154,7 @@ let dialogEventController;
 /**
  * Initializes the sidebar functionality.
  */
-function initializeLocationDialog() {
+function initLocationDialog() {
   // Add event listener to all details elements in the sidebar
   const details = document.querySelectorAll("#sidebar > details");
 
