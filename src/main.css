@@ -16,6 +16,7 @@
 
   /* ---- background colors ---- */
   --background-color: #fff;
+  --background-color-grey: rgba(248, 249, 250, 1);
   --background-color-reduced: rgba(0, 0, 0, 0.54);
   --background-color-reduced-hover: rgba(0, 0, 0, 0.8);
 
@@ -41,9 +42,20 @@
   box-sizing: border-box;
 }
 
+ul,
+ol {
+  list-style: none;
+}
+
 * {
   margin: 0;
   padding: 0;
+}
+
+html,
+body {
+  height: 100dvh;
+  width: 100vw;
 }
 
 body {
