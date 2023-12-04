@@ -1,4 +1,4 @@
-import { initializeCesiumViewer } from "./utils/cesium.js";
+import { initCesiumViewer } from "./utils/cesium.js";
 import { loadConfig } from "./utils/config.js";
 import {
   addSidebarToggleHandler,
@@ -43,7 +43,7 @@ export const config = await loadConfig("config.json");
 
 async function main() {
   try {
-    await initializeCesiumViewer();
+    await initCesiumViewer();
     await initGoogleMaps();
     await initAutoComplete();
 
