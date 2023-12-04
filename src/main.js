@@ -42,12 +42,14 @@ const story = {
 // You could also implement your (dynamic) configuration loading function here.
 export const config = await loadConfig("config.json");
 
+const { chapters } = config;
+
 async function main() {
   try {
     await initializeCesiumViewer();
     await initGoogleMaps();
     await initAutoComplete();
-    updatePlaces();
+    updatePlaces(chapters);
 
     addSidebarToggleHandler();
     addChaptersBar(story);

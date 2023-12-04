@@ -1,66 +1,3 @@
-// Todo: Replace the dummy data with content from the config file
-const places = {
-  properties: {
-    imageUrl: "https://picsum.photos/300/160",
-    title: "Summer of Love",
-    date: "1967",
-    description:
-      "The Summer of Love was a social phenomenon that occurred during the summer of 1967 when as many as 100,000 people, mostly young people sporting hippie fashions, converged in San Francisco's neighborhood of Haight-Ashbury.",
-    createdBy: "Hunter S. Thompson",
-    startButtonText: "Start exploring the Summer of Love",
-  },
-  chapters: [
-    {
-      title: "The Jimmy Hendrix Experience",
-      imageUrl: "",
-      imageCredit: "Hunter",
-      content:
-        "On June 21, 1967, a large crowd gathered at Golden Gate Park for a summer solstice celebration to mark the official start of the season.  Bands that played included The Grateful Dead, Jefferson Airplane, The Who, Janis Joplin, among other legendary music icons from the Summer of Love.  The enormous crowd kept a large ball, painted to represent a world globe, in the air.",
-      dateTime: "Aug 10-12 1967",
-      coords: { lat: 50, lng: 10 },
-      address: "The Filmore | 1805 Geary Blvd",
-      cameraOptions: {
-        position: 0,
-        heading: 0,
-        pitch: 0,
-        roll: 0,
-      },
-    },
-    {
-      title: "Summer of Love Solstice Celebration",
-      imageUrl: "",
-      imageCredit: "Hunter",
-      content:
-        "On June 21, 1967, a large crowd gathered at Golden Gate Park for a summer solstice celebration to mark the official start of the season.  Bands that played included The Grateful Dead, Jefferson Airplane, The Who, Janis Joplin, among other legendary music icons from the Summer of Love.  The enormous crowd kept a large ball, painted to represent a world globe, in the air.",
-      dateTime: "Jun 21-23 1967",
-      coords: { lat: 50, lng: 10 },
-      address: "Golden Gate Park Polo Fields",
-      cameraOptions: {
-        position: 0,
-        heading: 0,
-        pitch: 0,
-        roll: 0,
-      },
-    },
-    {
-      title: "Janis Joplin moves to the Haight-Ashbury neighborhood.",
-      imageUrl: "",
-      imageCredit: "Hunter",
-      content:
-        "A four-story pink Victorian that was once the home of singer Janis Joplin. The house was built in 1905 and is located in the Haight-Ashbury neighborhood. It was one of several residences Joplin had in the Haight.  The house has a pink facade and is located just off the corner of Haight and Ashbury. It's a well-maintained 8-unit apartment building.",
-      dateTime: "Spring 1967",
-      coords: { lat: 50, lng: 10 },
-      address: "635 Ashbury St, San Francisco",
-      cameraOptions: {
-        position: 0,
-        heading: 0,
-        pitch: 0,
-        roll: 0,
-      },
-    },
-  ],
-};
-
 /**
  * Options for radio buttons in the sidebar.
  * @typedef {Object} RadioOptions
@@ -89,10 +26,10 @@ export function addSidebarToggleHandler() {
   });
 }
 
-export function updatePlaces() {
+export function updatePlaces(chapters) {
   const tilesContainer = document.querySelector(".location-tiles");
   tilesContainer.innerHTML = "";
-  places.chapters.forEach((chapter) => {
+  chapters.forEach((chapter) => {
     const tile = createLocationTile(chapter);
     tilesContainer.appendChild(tile);
   });
