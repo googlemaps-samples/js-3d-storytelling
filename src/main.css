@@ -7,7 +7,7 @@
   /* ---- text colors ---- */
   --text-color-primary: #3c4043;
   --text-color-secondary: #5f6368;
-  --text-color-map: #fff;
+  --text-color-white: #fff;
   --accent-color: #1a73e8;
 
   --color-light-grey: #e8eaed;
@@ -29,7 +29,7 @@
   --font-size-extra-large: 1.25rem;
 
   /* ---- spacing ---- */
-  --spacing-extra-small: 0.375rem;
+  --spacing-extra-small: 0.25rem;
   --spacing-small: 0.5rem;
   --spacing-medium: 1rem;
   --spacing-medium-large: 1.5rem;
@@ -153,7 +153,7 @@ button,
   align-items: center;
   gap: 9px;
   font-size: var(--font-size-small);
-  color: var(--text-color-map);
+  color: var(--text-color-white);
 }
 
 .cesium-logo__image {
@@ -180,17 +180,20 @@ button,
   position: absolute;
   display: flex;
   width: 350px;
-  padding: var(--spacing-medium) var(--spacing-medium-large) 0px
-    var(--spacing-medium-large);
   flex-direction: column;
   align-items: flex-start;
-  border-top-right-radius: var(--spacing-medium);
-  border-top-left-radius: var(--spacing-medium);
+  border-radius: var(--spacing-medium);
   background: rgba(0, 0, 0, 0.8);
   z-index: 1;
   top: var(--spacing-medium-large);
   right: var(--spacing-medium-large);
   font-weight: 400;
+  overflow: hidden;
+}
+
+.chapter-detail .section-padding {
+  padding: var(--spacing-medium) var(--spacing-medium-large) 0px
+    var(--spacing-medium-large);
 }
 
 .chapter-detail .story-title {
@@ -204,7 +207,7 @@ button,
   color: #fff;
   font-family: var(--font-family-serif);
   font-size: 2rem;
-  margin: var(--spacing-medium) 0;
+  margin: var(--spacing-small) 0;
 }
 
 .chapter-detail .date,
@@ -237,4 +240,49 @@ button,
   font-size: 0.75rem;
   line-height: var(--spacing-medium-large);
   letter-spacing: 0.2px;
+}
+
+.chapter-detail nav {
+  display: none;
+  width: 100%;
+  padding: var(--spacing-medium);
+  justify-content: end;
+}
+
+.chapter-detail nav.active {
+  display: inline-flex;
+}
+
+.chapter-detail .intro-navigation #start-button {
+  border-radius: var(--spacing-medium);
+  background-color: var(--accent-color);
+  color: var(--text-color-white);
+  display: inline-flex;
+  gap: var(--spacing-extra-small);
+  padding: var(--spacing-extra-small) var(--spacing-medium);
+  padding-right: var(--spacing-extra-small);
+  align-items: center;
+}
+
+.chapter-detail .intro-navigation {
+  background-color: unset;
+}
+
+.chapter-detail .detail-navigation {
+  background-color: var(--background-color);
+  justify-content: space-between;
+}
+
+.chapter-detail .detail-navigation .controls-container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-medium-large);
+  color: var(--accent-color);
+}
+.chapter-detail .detail-navigation button {
+  height: 24px;
+}
+
+.chapter-detail .detail-navigation #chapter-forward {
+  rotate: 180deg;
 }

@@ -1,8 +1,9 @@
-import { initializeCesiumViewer } from "./utils/cesium.js";
+import { initCesiumViewer } from "./utils/cesium.js";
 import { loadConfig } from "./utils/config.js";
 import {
   addSidebarToggleHandler,
   initAutoComplete,
+  initDraggableTiles,
 } from "./sidebar/sidebar.js";
 import { addChaptersBar } from "./chapters/chapters.js";
 import { initGoogleMaps } from "./utils/places.js";
@@ -43,11 +44,12 @@ export const config = await loadConfig("config.json");
 
 async function main() {
   try {
-    await initializeCesiumViewer();
+    await initCesiumViewer();
     await initGoogleMaps();
     await initAutoComplete();
 
     addSidebarToggleHandler();
+    initDraggableTiles();
     addChaptersBar(story);
   } catch (error) {
     console.error(error);

@@ -18,7 +18,7 @@ export let cesiumViewer;
  * configuring its default camera position and orientation, and adding both a 3D
  * tileset and attribution to the viewer.
  */
-export async function initializeCesiumViewer() {
+export async function initCesiumViewer() {
   // Set the default access token to null to prevent the CesiumJS viewer from requesting an access token
   Cesium.Ion.defaultAccessToken = null;
 
