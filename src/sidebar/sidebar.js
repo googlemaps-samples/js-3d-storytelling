@@ -6,7 +6,7 @@
  * @property {string} edit - Option for editing.
  * @property {string} delete - Option for deleting.
  */
-const radioOptions = {
+const locationMenuOptions = {
   moveUp: "move-up",
   moveDown: "move-down",
   edit: "edit",
@@ -77,7 +77,7 @@ function createLocationTile(chapter) {
   form.dataset.name = chapter.title;
   form.setAttribute("key", chapter.title);
 
-  Object.values(radioOptions).forEach((option, index) => {
+  Object.values(locationMenuOptions).forEach((option, index) => {
     const input = document.createElement("input");
     const label = document.createElement("label");
 
@@ -329,24 +329,24 @@ function addChangeEventListener(chapters) {
 
 function handleFormDialogSubmit(action, chapterIndex) {
   switch (action) {
-    case radioOptions.edit:
+    case locationMenuOptions.edit:
       console.log("Edit");
 
       const container = document.querySelector(".locations-container");
 
       // Add custom data-attribute to the container
-      container.setAttribute("data-mode", radioOptions.edit);
+      container.setAttribute("data-mode", locationMenuOptions.edit);
 
       break;
-    case radioOptions.delete:
+    case locationMenuOptions.delete:
       console.log("Delete");
       // Code for handling delete option
       break;
-    case radioOptions.moveUp:
+    case locationMenuOptions.moveUp:
       console.log("Move up");
       // Code for handling moveUp option
       break;
-    case radioOptions.moveDown:
+    case locationMenuOptions.moveDown:
       console.log("Move down");
       // Code for handling moveDown option
       break;
