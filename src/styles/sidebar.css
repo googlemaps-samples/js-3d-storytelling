@@ -410,6 +410,7 @@ summary::after {
 }
 
 .field-wrapper .field-placeholder {
+  height: 1rem;
   position: absolute;
   pointer-events: none;
   bottom: var(--spacing-small);
@@ -433,7 +434,7 @@ summary::after {
 }
 .field-wrapper input:not([disabled]):focus ~ .field-placeholder,
 .field-wrapper input:not(:placeholder-shown) ~ .field-placeholder {
-  transform: scale(0.75) translateY(-20px) translateX(-8px);
+  transform: scale(0.75) translateY(-26px) translateX(-8px);
 }
 
 .field-wrapper input:not([disabled]):focus ~ .field-placeholder span.label,
@@ -472,4 +473,36 @@ input:focus::placeholder {
 .add-location-button:before {
   height: 1rem;
   content: url("../assets/icons/add-icon.svg");
+}
+
+.field-wrapper.url-input:before {
+  content: url("../assets/icons/url-icon.svg");
+  position: absolute;
+  left: var(--spacing-medium);
+  top: var(--spacing-extra-small);
+}
+
+.field-wrapper.url-input input {
+  padding-left: 3rem;
+}
+
+.image-credit-container {
+  --image-size: 4rem;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
+  margin-top: var(--spacing-medium);
+  padding-bottom: var(--spacing-medium);
+}
+
+.image-credit-container > img {
+  width: var(--image-size);
+  height: var(--image-size);
+  border-radius: var(--custom-border-radius);
+  object-fit: cover;
+}
+
+.image-credit-container .field-wrapper {
+  margin-bottom: 0;
+  flex: 1;
 }
