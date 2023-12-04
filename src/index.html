@@ -14,22 +14,58 @@
   <body>
     <main class="main-container sidebar-is-collapsed">
       <section class="chapter-detail">
-        <div class="story-title">1967 Summer of Love</div>
-        <img class="hero" src="https://picsum.photos/300/160" />
-        <header>
-          <div class="date">Spring 1967</div>
-          <div class="place">635 Ashbury, San Francisco</div>
-          <h2>The Jimmy Hendrix Experience</h2>
-        </header>
+        <div class="section-padding">
+          <div class="story-title">1967 Summer of Love</div>
+          <img class="hero" src="https://picsum.photos/300/160" />
+          <header>
+            <div class="date">Spring 1967</div>
+            <div class="place">635 Ashbury, San Francisco</div>
+            <h2>The Jimmy Hendrix Experience</h2>
+          </header>
 
-        <div class="description">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-          faucibus faucibus nisl id ultricies. Sed faucibus venenatis
-          ullamcorper. Phasellus commodo nibh vitae rutrum consectetur. Nunc
-          aliquet gravida justo id pulvinar. Quisque faucibus faucibus nisl
-          idultricies. Sed faucibus venenatis.
+          <div class="description">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+            faucibus faucibus nisl id ultricies. Sed faucibus venenatis
+            ullamcorper. Phasellus commodo nibh vitae rutrum consectetur. Nunc
+            aliquet gravida justo id pulvinar. Quisque faucibus faucibus nisl
+            idultricies. Sed faucibus venenatis.
+          </div>
+          <div class="attribution">Image credit: John Doe</div>
         </div>
-        <div class="attribution">Image credit: John Doe</div>
+        <nav class="intro-navigation">
+          <button id="start-button">
+            Begin interactive map story
+            <img
+              src="./assets/icons/round-play-button-white.svg"
+              alt="Play Icon"
+            />
+          </button>
+        </nav>
+        <nav class="detail-navigation active">
+          <span class="controls-container">
+            <button>
+              <img
+                src="./assets/icons/chevron-left.svg"
+                alt="Back Icon"
+                id="chapter-back"
+              />
+            </button>
+            <span id="chapter-index"> 1 / 6 </span>
+            <button>
+              <img
+                src="./assets/icons/chevron-left.svg"
+                alt="Back Icon"
+                id="chapter-forward"
+              />
+            </button>
+          </span>
+          <button>
+            <img
+              src="./assets/icons/round-play-button-blue.svg"
+              alt="Play Icon"
+            />
+          </button>
+        </nav>
       </section>
       <aside id="sidebar" class="content-grid">
         <button
