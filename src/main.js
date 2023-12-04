@@ -3,6 +3,7 @@ import { loadConfig } from "./utils/config.js";
 import {
   addSidebarToggleHandler,
   initAutoComplete,
+  initDraggableTiles,
 } from "./sidebar/sidebar.js";
 import { addChaptersBar } from "./chapters/chapters.js";
 import { initGoogleMaps } from "./utils/places.js";
@@ -48,6 +49,7 @@ async function main() {
     await initAutoComplete();
 
     addSidebarToggleHandler();
+    initDraggableTiles();
     addChaptersBar(story);
   } catch (error) {
     console.error(error);
