@@ -30,7 +30,7 @@ export function addSidebarToggleHandler() {
  * @param {Array} chapters - The chapters containing location information.
  */
 export function updatePlaces(chapters) {
-  const tilesContainer = document.querySelector(".location-tiles");
+  const tilesContainer = document.querySelector(".location-list");
   chapters.forEach((chapter) => {
     const tile = createLocationTile(chapter);
     tilesContainer.appendChild(tile);
@@ -66,7 +66,7 @@ function createLocationTile(chapter) {
   const img = document.createElement("img");
 
   // Set attributes and content
-  li.className = "location-tile";
+  li.className = "location-list-item";
   li.draggable = true;
 
   p.textContent = chapter.title;
@@ -99,7 +99,7 @@ function createLocationTile(chapter) {
 
   button.setAttribute("aria-label", "Open Settings");
 
-  img.src = "./assets/icons/location-tile-hover.svg";
+  img.src = "./assets/icons/location-list-item-hover.svg";
   img.alt = "";
 
   // Append elements
@@ -236,10 +236,10 @@ function closeDialog(dialog) {
  */
 export function initDraggableTiles() {
   // Represents the collection of draggable location tiles.
-  const draggableTiles = document.querySelectorAll(".location-tile");
+  const draggableTiles = document.querySelectorAll(".location-list-item");
 
   // Represents the container of the location tiles.
-  const tilesContainer = document.querySelector(".location-tiles");
+  const tilesContainer = document.querySelector(".location-list");
 
   // Add event listeners to all draggable tiles
   draggableTiles.forEach((draggable) => {
@@ -275,7 +275,7 @@ export function initDraggableTiles() {
  */
 function getDragAfterElement(container, draggedElementPositionY) {
   const draggableElements = [
-    ...container.querySelectorAll(".location-tile:not(.dragging)"),
+    ...container.querySelectorAll(".location-list-item:not(.dragging)"),
   ];
 
   // Find the element that is closest to the dragged element
