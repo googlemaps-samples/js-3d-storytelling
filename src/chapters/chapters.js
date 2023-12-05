@@ -71,7 +71,7 @@ export function getParams() {
 export const setCustomConfig = (parameter, value) => {
   const params = getParams();
 
-  if (value) {
+  if (value !== undefined) {
     if (Array.isArray(value)) {
       // Delete array parameter values and add new array values
       params.delete(parameter);
