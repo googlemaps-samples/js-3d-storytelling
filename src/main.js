@@ -18,7 +18,7 @@ import { initGoogleMaps } from "./utils/places.js";
 // You could also implement your (dynamic) configuration loading function here.
 export const story = await loadConfig("config.json");
 
-const { chapters } = config;
+const { chapters } = story;
 
 async function main() {
   try {
