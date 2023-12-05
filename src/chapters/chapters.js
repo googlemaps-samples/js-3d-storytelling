@@ -1,3 +1,5 @@
+import { updateChapterDetail } from "../detail.js";
+
 /**
  * Returns a story intro card as HTML element.
  *
@@ -5,18 +7,23 @@
  * @returns {HTMLElement} The story intro card element
  */
 export function createStoryIntroCard(storyProperties) {
-  const storyIntroCard = document.createElement("article");
-  storyIntroCard.classList.add("card", "story-intro");
+  const card = document.createElement("article");
+  card.classList.add("card", "story-intro");
 
   const storyIntroImage = document.createElement("img");
   storyIntroImage.src = storyProperties.imageUrl;
-  storyIntroCard.appendChild(storyIntroImage);
+  card.appendChild(storyIntroImage);
 
   const storyIntroTitle = document.createElement("h1");
   storyIntroTitle.textContent = storyProperties.title;
-  storyIntroCard.appendChild(storyIntroTitle);
+  card.appendChild(storyIntroTitle);
 
-  return storyIntroCard;
+  card.addEventListener("click", (event) => {
+    setCustomConfig("chapter", "intro");
+    updateChapterDetail("intro");
+  });
+
+  return card;
 }
 
 /**
@@ -26,24 +33,62 @@ export function createStoryIntroCard(storyProperties) {
  * @returns {HTMLElement} The chapter card element
  */
 export function createChapterCard(chapter) {
-  const chapterCard = document.createElement("article");
-  chapterCard.classList.add("card", "chapter");
+  const card = document.createElement("article");
+  card.classList.add("card", "chapter");
 
   const chapterImage = document.createElement("img");
   chapterImage.src = chapter.imageUrl;
-  chapterCard.appendChild(chapterImage);
+  card.appendChild(chapterImage);
 
   const chapterDate = document.createElement("p");
   chapterDate.classList.add("date");
   chapterDate.textContent = chapter.dateTime;
-  chapterCard.appendChild(chapterDate);
+  card.appendChild(chapterDate);
 
   const chapterTitle = document.createElement("h2");
   chapterTitle.textContent = chapter.title;
-  chapterCard.appendChild(chapterTitle);
+  card.appendChild(chapterTitle);
 
-  return chapterCard;
+  card.addEventListener("click", (event) => {
+    setCustomConfig("chapter", chapter.title);
+    updateChapterDetail(chapter.title);
+  });
+
+  return card;
 }
+
+export function getParams() {
+  return new URLSearchParams(window.location.hash.replace("#", ""));
+}
+
+/**
+ * Sets overrides for the configuration data as URL hash parameters.
+ * If the passed value is `undefined`, the given parameter will be removed from the URL.
+ *
+ * @param {string} parameter - The name of the URL hash parameter to set.
+ * @param {string | number | Array<string | number> | undefined} value - The value of the URL hash parameter to set.
+ */
+export const setCustomConfig = (parameter, value) => {
+  const params = getParams();
+
+  if (value) {
+    if (Array.isArray(value)) {
+      // Delete array parameter values and add new array values
+      params.delete(parameter);
+      for (let index = 0; index < value.length; index++) {
+        params.append(parameter, value[index]);
+      }
+    } else {
+      // Override parameter value
+      params.set(parameter, value);
+    }
+  } else {
+    // Remove parameter value
+    params.delete(parameter);
+  }
+
+  window.location.hash = params;
+};
 
 /**
  * Fills the chapters bar with UI elements.
@@ -54,8 +99,7 @@ export function addChaptersBar(story) {
   const barContainer = document.querySelector("#chapters-bar");
 
   // Add card elements to the bar container
-  const cardsContainer = document.createElement("div");
-  cardsContainer.classList.add("cards");
+  const cardsContainer = barContainer.querySelector(".cards");
 
   const storyIntroCard = createStoryIntroCard(story.properties);
   cardsContainer.appendChild(storyIntroCard);
@@ -65,22 +109,12 @@ export function addChaptersBar(story) {
     cardsContainer.appendChild(chapterCard);
   }
 
-  barContainer.appendChild(cardsContainer);
-
-  // Add navigation button elements to the bar container
-  const barNavigationButton = document.createElement("button");
-  barNavigationButton.classList.add("navigation-button");
-
-  const barNavigationPreviousButton = barNavigationButton.cloneNode(true);
-  barNavigationPreviousButton.classList.add("previous");
-  barNavigationPreviousButton.ariaLabel = "Show previous cards";
-
-  const barNavigationNextButton = barNavigationButton.cloneNode(true);
-  barNavigationNextButton.classList.add("next");
-  barNavigationNextButton.ariaLabel = "Show next cards";
-
-  barContainer.appendChild(barNavigationPreviousButton);
-  barContainer.appendChild(barNavigationNextButton);
+  const barNavigationPreviousButton = barContainer.querySelector(
+    ".navigation-button.previous"
+  );
+  const barNavigationNextButton = barContainer.querySelector(
+    ".navigation-button.next"
+  );
 
   // Add click event handlers to the navigation buttons
   const cardElementWidth = cardsContainer.querySelector(".card").offsetWidth;

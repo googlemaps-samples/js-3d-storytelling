@@ -10,31 +10,6 @@ import { addChaptersBar } from "./chapters/chapters.js";
 import { initGoogleMaps } from "./utils/places.js";
 import { initChapterNavigation } from "./chapters/chapter-navigation.js";
 
-// TODO: get data from config
-const story = {
-  chapters: [
-    {
-      title: "Hello world",
-      imageUrl: "https://picsum.photos/144/112",
-      dateTime: "Jan 14 1967",
-    },
-    {
-      title: "Lorem ipsum",
-      imageUrl: "https://picsum.photos/144/112",
-      dateTime: "Feb 24 – 27 1967",
-    },
-    {
-      title: "Dolor sit amet",
-      imageUrl: "https://picsum.photos/144/112",
-      dateTime: "Spring 1967",
-    },
-  ],
-  properties: {
-    title: "1967 My Story Title",
-    imageUrl: "https://picsum.photos/144/112",
-  },
-};
-
 // Here we load the configuration.
 // The current implementation loads our local `config.json`.
 //
@@ -42,9 +17,9 @@ const story = {
 // or request some file from another host, by changing the config url parameter.
 //
 // You could also implement your (dynamic) configuration loading function here.
-export const config = await loadConfig("config.json");
+export const story = await loadConfig("config.json");
 
-const { chapters } = config;
+const { chapters } = story;
 
 async function main() {
   try {
@@ -53,9 +28,11 @@ async function main() {
     await initAutoComplete();
     updatePlaces(chapters);
 
+    //    initializeStory(story);
+
     addSidebarToggleHandler();
-    initDraggableTiles();
-    initChapterNavigation();
+    initDraggableTiles(story);
+    initChapterNavigation(story);
     addChaptersBar(story);
   } catch (error) {
     console.error(error);

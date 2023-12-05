@@ -33,7 +33,6 @@
           <div class="attribution">Image credit: John Doe</div>
         </div>
         <nav class="intro-navigation">
-          d
           <button id="start-button">
             Begin interactive map story
             <svg
@@ -256,7 +255,17 @@
       </aside>
       <div class="map-container">
         <div id="cesium-container"></div>
-        <div id="chapters-bar"></div>
+        <div id="chapters-bar">
+          <button
+            class="navigation-button previous"
+            aria-label="Show previous cards"
+          ></button>
+          <div class="cards"></div>
+          <button
+            class="navigation-button next"
+            aria-label="Show next cards"
+          ></button>
+        </div>
       </div>
     </main>
     <script type="module" src="./main.js"></script>
