@@ -3,6 +3,16 @@ import { GOOGLE_MAPS_API_KEY } from "../env.js";
 // Camera height above the target when flying to a point.
 const CAMERA_HEIGHT = 100;
 
+// Pitch 30 degrees downwards
+const BASE_PITCH = -30;
+
+// Camera heading (rotation), pitch (tilt), and range (distance) for resetting view.
+const CAMERA_OFFSET = {
+  heading: 0, // No rotation offset.
+  pitch: Cesium.Math.toRadians(BASE_PITCH),
+  range: 800, // 800 meters from the center.
+};
+
 // Todo: Replace this
 const START_COORDINATES = {
   latitude: 37.7749,
@@ -79,6 +89,7 @@ export async function performFlyTo(coords, options = {}) {
 
     // Keep the current camera heading when flying to new coordinates
     const offset = {
+      ...CAMERA_OFFSET,
       heading: cesiumViewer.camera.heading,
     };
 
