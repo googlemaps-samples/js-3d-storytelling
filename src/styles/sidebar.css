@@ -138,7 +138,8 @@
   color: var(--text-color-secondary);
 }
 
-.location-tiles {
+.location-list {
+  overflow: auto;
   font-family: var(--font-family-inter);
   position: absolute;
   top: 8rem;
@@ -198,7 +199,7 @@ summary::after {
 }
 
 .locations-container[data-mode="edit"] > .location-input,
-.locations-container[data-mode="edit"] > .location-tiles {
+.locations-container[data-mode="edit"] > .location-list {
   display: none;
 }
 
@@ -254,7 +255,7 @@ summary::after {
   border: 1px solid var(--color-light-grey);
 }
 
-.location-tile {
+.location-list-item {
   flex-shrink: 0;
   display: flex;
   position: relative;
@@ -264,11 +265,11 @@ summary::after {
   overflow: visible;
 }
 
-.location-tile:active {
+.location-list-item:active {
   pointer-events: none;
 }
 
-.location-tile dialog[open] {
+.location-list-item dialog[open] {
   pointer-events: all;
   z-index: 1000;
   position: absolute;
@@ -285,24 +286,24 @@ summary::after {
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
-.location-tile input[type="radio"] {
+.location-list-item input[type="radio"] {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
 }
 
-.location-tile dialog fieldset {
+.location-list-item dialog fieldset {
   all: unset;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.location-tile dialog button {
+.location-list-item dialog button {
   background-color: red;
 }
 
-.location-tile label {
+.location-list-item label {
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -312,47 +313,47 @@ summary::after {
   gap: var(--spacing-small);
 }
 
-.location-tile label:hover {
+.location-list-item label:hover {
   background-color: var(--background-color-grey);
 }
 
-.location-tile label:before {
+.location-list-item label:before {
   height: 1rem;
 }
 
-.location-tile label[data-type-edit="move-up"]:before {
+.location-list-item label[data-type-edit="move-up"]:before {
   content: url("../assets/icons/move-up-icon.svg");
 }
 
-.location-tile label[data-type-edit="move-down"]:before {
+.location-list-item label[data-type-edit="move-down"]:before {
   content: url("../assets/icons/move-down-icon.svg");
 }
 
-.location-tile label[data-type-edit="edit"]:before {
+.location-list-item label[data-type-edit="edit"]:before {
   content: url("../assets/icons/edit-icon.svg");
 }
 
-.location-tile label[data-type-edit="delete"]:before {
+.location-list-item label[data-type-edit="delete"]:before {
   content: url("../assets/icons/delete-icon.svg");
 }
 
-.location-tile > p {
+.location-list-item > p {
   margin-left: calc(var(--spacing-medium-large) + var(--custom-margin-left));
 }
 
-.location-tile button {
+.location-list-item button {
   padding: 0;
   opacity: 0;
   pointer-events: all;
   cursor: pointer;
 }
 
-.location-tile > button:not(:first-child) {
+.location-list-item > button:not(:first-child) {
   height: var(--spacing-medium-large);
   margin-inline: auto var(--spacing-medium-large);
 }
 
-.location-tile::after {
+.location-list-item::after {
   content: url("../assets/icons/location-marker-icon.svg");
   position: absolute;
   left: calc(var(--custom-margin-left) - 4px);
@@ -360,19 +361,19 @@ summary::after {
   height: var(--spacing-medium-large);
 }
 
-.location-tile:hover {
+.location-list-item:hover {
   background-color: var(--background-color-grey);
 }
 
-.location-tile.dragging:hover {
+.location-list-item.dragging:hover {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-.location-tile:hover:before {
+.location-list-item:hover:before {
   opacity: 1;
 }
 
-.location-tile:before {
+.location-list-item:before {
   opacity: 0;
   height: 1.5rem;
   content: url("../assets/icons/draggable-icon.svg");
@@ -382,11 +383,11 @@ summary::after {
   pointer-events: all;
 }
 
-.location-tile:hover button {
+.location-list-item:hover button {
   opacity: 1;
 }
 
-.location-tile:hover::after {
+.location-list-item:hover::after {
   display: block;
 }
 
@@ -473,7 +474,7 @@ input:focus::placeholder {
   opacity: 0;
 }
 
-.location-tile.dragging {
+.location-list-item.dragging {
   opacity: 0.5;
 }
 
