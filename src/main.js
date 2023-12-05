@@ -8,6 +8,7 @@ import {
 } from "./sidebar/sidebar.js";
 import { addChaptersBar } from "./chapters/chapters.js";
 import { initGoogleMaps } from "./utils/places.js";
+import { initChapterNavigation } from "./chapters/chapter-navigation.js";
 
 // TODO: get data from config
 const story = {
@@ -54,6 +55,7 @@ async function main() {
 
     addSidebarToggleHandler();
     initDraggableTiles();
+    initChapterNavigation();
     addChaptersBar(story);
   } catch (error) {
     console.error(error);
