@@ -28,6 +28,7 @@ async function main() {
     await initAutoComplete();
     updatePlaces(chapters);
 
+    // Create markers from chapter coordinates using chapter title as marker id
     await createMarkers(
       config.chapters.map(({ coords, title }) => ({ coords, id: title }))
     );
