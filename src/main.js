@@ -1,5 +1,6 @@
 import { initCesiumViewer } from "./utils/cesium.js";
 import { loadConfig } from "./utils/config.js";
+import createMarkers from "./utils/create-markers.js";
 import {
   addSidebarToggleHandler,
   initAutoComplete,
@@ -26,6 +27,11 @@ async function main() {
     await initGoogleMaps();
     await initAutoComplete();
     updatePlaces(chapters);
+
+    // Create markers from chapter coordinates using chapter title as marker id
+    await createMarkers(
+      config.chapters.map(({ coords, title }) => ({ coords, id: title }))
+    );
 
     //    initializeStory(story);
 
