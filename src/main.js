@@ -18,11 +18,11 @@ import { initGoogleMaps } from "./utils/places.js";
 // You could also implement your (dynamic) configuration loading function here.
 export const story = await loadConfig("config.json");
 
-const { chapters } = story;
+const { chapters, properties } = story;
 
 async function main() {
   try {
-    await initCesiumViewer();
+    await initCesiumViewer(properties);
     await initGoogleMaps();
     await initAutoComplete();
     updatePlaces(chapters);
