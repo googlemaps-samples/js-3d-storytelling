@@ -146,7 +146,7 @@ export function setSelectedMarker(marker) {
  * 1. The camera is moved to the marker position
  * 2. The clicked marker is scaled up and the previously clicked marker is scaled down
  * @param {object} click - The click event object
- * @param {google.maps.LatLngLiteral[]} coords - the current markers on the map
+ * @param {id: string; coords: google.maps.LatLngLiteral[]} markerCoords - the current markers on the map
  */
 async function handleClickOnMarker(click, coords) {
   // Raycast from click position returning intercepting object
@@ -165,9 +165,7 @@ async function handleClickOnMarker(click, coords) {
 
   const marker = primitive.id;
   const markerId = marker.id;
-  const currentMarker = coords.find(
-    ({ lat, lng }) => `${lat}${lng}` === markerId
-  );
+  const currentMarker = coords.find(({ id }) => id === markerId);
 
   // if the same marker is clicked again, set the selected marker to null and close the sidebar
   if (selectedMarkerId === markerId) {
@@ -184,9 +182,9 @@ async function handleClickOnMarker(click, coords) {
 
 /**
  * Adds an event handler to the viewer which is used to pick an object that is under the 2d context of the mouse/pointer.
- * @param {google.maps.LatLngLiteral[]} coords - the current markers on the map
+ * @param {id: string; coords: google.maps.LatLngLiteral[]} markerCoords - the current markers on the map
  */
-function createMarkerClickHandler(coords) {
+function createMarkerClickHandler(markerCoords) {
   if (markerClickHandler) {
     markerClickHandler.destroy();
   }
@@ -201,21 +199,22 @@ function createMarkerClickHandler(coords) {
 
   // Basically an onClick statement
   markerClickHandler.setInputAction((click) => {
-    handleClickOnMarker(click, coords);
+    handleClickOnMarker(click, markerCoords);
   }, Cesium.ScreenSpaceEventType.LEFT_CLICK); // This defines that we want to listen for a click event
 }
 
 /**
  * Creates markers for each coordinate and attaches them to the viewer.
- * @param {google.maps.LatLngLiteral[]} coordinates - marker coordinates.
+ * @param {id: string; coords: google.maps.LatLngLiteral[]} coordinates - marker coordinates.
  */
-async function createMarkers(coords) {
+async function createMarkers(markerCoords) {
   if (!cesiumViewer) {
     console.error("Error creating markers: `cesiumViewer` is undefined");
     return;
   }
 
-  const markerCoordinates = coords.map(({ lng, lat }) => {
+  const markerCoordinates = markerCoords.map(({ coords }) => {
+    const { lng, lat } = coords;
     return Cesium.Cartesian3.fromDegrees(lng, lat);
   });
 
@@ -226,11 +225,10 @@ async function createMarkers(coords) {
     await cesiumViewer.scene.clampToHeightMostDetailed(markerCoordinates);
 
   // iterate the coordinates
-  coordsWithAdjustedHeight.forEach(async (coord) => {
+  coordsWithAdjustedHeight.forEach(async (coord, index) => {
     // add vertical offset between marker and terrain to allow for a line to be rendered in between
     const coordWithHeightOffset = addHeightOffset(coord, 28);
-    const { lat, lng } = coord;
-    const id = `${lat}${lng}`;
+    const { id } = markerCoords[index];
     const markerSvg = await createMarkerSvg();
 
     // add the line and the marker
@@ -250,7 +248,7 @@ async function createMarkers(coords) {
   });
 
   // add a click handler to the viewer which handles the click only when clicking on a billboard (Marker) instance
-  createMarkerClickHandler(coords);
+  createMarkerClickHandler(markerCoords);
 }
 
 export default createMarkers;

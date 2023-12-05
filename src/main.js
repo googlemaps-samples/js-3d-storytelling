@@ -28,7 +28,9 @@ async function main() {
     await initAutoComplete();
     updatePlaces(chapters);
 
-    await createMarkers(config.chapters.map(({ coords }) => coords));
+    await createMarkers(
+      config.chapters.map(({ coords, title }) => ({ coords, id: title }))
+    );
 
     //    initializeStory(story);
 
