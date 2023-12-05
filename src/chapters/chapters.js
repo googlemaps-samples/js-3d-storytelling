@@ -34,7 +34,7 @@ export function createStoryIntroCard(storyProperties) {
  */
 export function createChapterCard(chapter) {
   const card = document.createElement("article");
-  card.classList.add("card", "chapter");
+  card.classList.add("card", "chapter-card");
 
   const chapterImage = document.createElement("img");
   chapterImage.src = chapter.imageUrl;

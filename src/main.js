@@ -1,5 +1,6 @@
 import { initCesiumViewer } from "./utils/cesium.js";
 import { loadConfig } from "./utils/config.js";
+import createMarkers from "./utils/create-markers.js";
 import {
   addSidebarToggleHandler,
   initAutoComplete,
@@ -19,14 +20,19 @@ import { initChapterNavigation } from "./chapters/chapter-navigation.js";
 // You could also implement your (dynamic) configuration loading function here.
 export const story = await loadConfig("config.json");
 
-const { chapters } = story;
+const { chapters, properties } = story;
 
 async function main() {
   try {
-    await initCesiumViewer();
+    await initCesiumViewer(properties);
     await initGoogleMaps();
     await initAutoComplete();
     updatePlaces(chapters);
+
+    // Create markers from chapter coordinates using chapter title as marker id
+    await createMarkers(
+      story.chapters.map(({ coords, title }) => ({ coords, id: title }))
+    );
 
     //    initializeStory(story);
 
