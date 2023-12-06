@@ -14,15 +14,12 @@ export function initChapterNavigation(story) {
   const chapterParam = params.get("chapter");
   const chapterData = findChapterByTitle(story, chapterParam);
 
+  toggleNavigationElements(introNavigation, detailNavigation, chapterParam);
+
   if (chapterData) {
     updateChapterContent(chapterData, story); // set current chapter data
   } else {
     updateChapterContent(story.properties, story, true); // Reset to story intro
-  }
-
-  toggleNavigationElements(introNavigation, detailNavigation, chapterParam);
-
-  if (!chapterParam) {
     setupStartButton(story, introNavigation, detailNavigation);
   }
 }
@@ -45,7 +42,7 @@ function findChapterByTitle(story, chapterTitle) {
  */
 function toggleNavigationElements(introNav, detailNav, chapterParam) {
   setNavigationActive(introNav, !chapterParam);
-  setNavigationActive(detailNav, !!chapterParam);
+  setNavigationActive(detailNav, Boolean(chapterParam));
 }
 
 /**
@@ -87,7 +84,7 @@ function setNavigationActive(navElement, isActive) {
  * @param {Story} story - The story object.
  * @param {boolean} [isIntro=true] - Flag indicating if the current view is the introduction.
  */
-function updateChapterContent(chapterData, story, isIntro = false) {
+function updateChapterContent(chapterData, story, isIntro = true) {
   const chapterDetail = document.querySelector(".chapter-detail");
 
   chapterDetail.querySelector(".story-title").textContent = isIntro
