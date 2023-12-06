@@ -364,6 +364,14 @@ function handleFormDialogSubmit(action, selectedChapter) {
 function handleEditAction(chapter) {
   const container = document.querySelector(".locations-container");
 
+  // Get the radius input element
+  const radiusInput = document.querySelector("#radius");
+
+  // Update the slider progress when the value changed
+  radiusInput.addEventListener("input", () => {
+    radiusInput.style.setProperty("--value", radiusInput.value);
+  });
+
   // Add custom data-attribute to the container
   container.setAttribute("data-mode", locationMenuOptions.edit);
 

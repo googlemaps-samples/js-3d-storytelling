@@ -30,6 +30,10 @@
   --text-color-heading: #202124;
   --text-color-paragraph: var(--text-color-primary);
 
+  /* ---- border colors and radius ---- */
+  --border-color: #e8eaed;
+  --border-color-controls: #5f6368;
+  --border-radius: 0.25rem;
   /* ---- background colors ---- */
   --background-color: #fff;
   --background-color-grey: rgba(248, 249, 250, 1);
@@ -51,6 +55,10 @@
   --spacing-medium: 1rem;
   --spacing-medium-large: 1.5rem;
   --spacing-large: 2rem;
+
+  /* ---- range slider ---- */
+  --slider-thumb-size: 1.25rem;
+  --slider-track-size: 0.25rem;
 }
 
 *,
@@ -204,4 +212,76 @@ button {
   align-items: center;
   justify-content: flex-start;
   gap: var(--spacing-medium);
+}
+
+/* Range slider styles */
+input[type="range"] {
+  --slider-range: calc(var(--max) - var(--min));
+  --slider-ratio: calc((var(--value) - var(--min)) / var(--slider-range));
+  --slider-progress: calc(
+    0.5 * var(--slider-thumb-size) + var(--slider-ratio) *
+      (100% - var(--slider-thumb-size))
+  );
+  width: 100%;
+  height: var(--slider-thumb-size);
+  outline: none;
+  -webkit-appearance: none;
+}
+
+/* Webkit */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: var(--slider-thumb-size);
+  height: var(--slider-thumb-size);
+  border-radius: 50%;
+  background: var(--accent-color);
+  border: none;
+  box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15),
+    0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+  margin-top: calc(
+    var(--slider-thumb-size) * -0.5 + var(--slider-track-size) * 0.5
+  );
+}
+
+input[type="range"]::-webkit-slider-thumb:hover,
+input[type="range"]:focus-visible::-webkit-slider-thumb {
+  outline: 10px solid rgba(66, 133, 244, 0.08);
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: var(--slider-track-size);
+  border: none;
+  border-radius: 0.125rem;
+  background: linear-gradient(var(--accent-color), var(--accent-color)) 0 /
+      var(--slider-progress) 100% no-repeat,
+    var(--border-color);
+  outline: none;
+  box-shadow: none;
+}
+
+/* Firefox */
+input[type="range"]::-moz-range-thumb {
+  width: var(--slider-thumb-size);
+  height: var(--slider-thumb-size);
+  border-radius: 50%;
+  background: var(--accent-color);
+  border: none;
+  box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15),
+    0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+}
+
+input[type="range"]::-moz-range-thumb:hover,
+input[type="range"]:focus-visible::-moz-range-thumb {
+  outline: 10px solid rgba(66, 133, 244, 0.08);
+}
+
+input[type="range"]::-moz-range-track {
+  height: var(--slider-track-size);
+  border: none;
+  border-radius: 0.125rem;
+  background: linear-gradient(var(--accent-color), var(--accent-color)) 0 /
+      var(--slider-progress) 100% no-repeat,
+    var(--border-color);
+  outline: none;
+  box-shadow: none;
 }
