@@ -1,5 +1,5 @@
 import { updateChapterDetail } from "../detail.js";
-import { setParams } from "../utils/prams.js";
+import { setParams } from "../utils/params.js";
 
 /**
  * Returns a story intro card as HTML element.

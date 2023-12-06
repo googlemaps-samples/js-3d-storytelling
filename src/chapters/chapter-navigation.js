@@ -1,4 +1,4 @@
-import { getParams, setParams } from "../utils/prams.js";
+import { getParams, setParams } from "../utils/params.js";
 
 /**
  * Initializes and manages chapter navigation for a story.
