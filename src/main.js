@@ -30,10 +30,10 @@ async function main() {
 
     // Create markers from chapter coordinates using chapter title as marker id
     await createMarkers(
-      config.chapters.map(({ coords, title }) => ({ coords, id: title }))
+      story.chapters.map(({ coords, title }) => ({ coords, id: title }))
     );
 
-    //    initializeStory(story);
+    //initializeStory(story);
 
     addSidebarToggleHandler();
     initDraggableTiles();

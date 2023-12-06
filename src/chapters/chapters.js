@@ -1,4 +1,5 @@
 import { updateChapterDetail } from "../detail.js";
+import { createCustomRadiusShader } from "../utils/cesium.js";
 
 /**
  * Returns a story intro card as HTML element.
@@ -21,6 +22,7 @@ export function createStoryIntroCard(storyProperties) {
   card.addEventListener("click", (event) => {
     setCustomConfig("chapter", "intro");
     updateChapterDetail("intro");
+    createCustomRadiusShader(storyProperties.coords, 1000);
   });
 
   return card;
@@ -52,6 +54,7 @@ export function createChapterCard(chapter) {
   card.addEventListener("click", (event) => {
     setCustomConfig("chapter", chapter.title);
     updateChapterDetail(chapter.title);
+    createCustomRadiusShader(chapter.coords, 100);
   });
 
   return card;
