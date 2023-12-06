@@ -1,4 +1,4 @@
-import { getParams, setCustomConfig } from "./chapters.js";
+import { getParams, setParams } from "../utils/prams.js";
 
 /**
  * Initializes and manages chapter navigation for a story.
@@ -9,29 +9,21 @@ import { getParams, setCustomConfig } from "./chapters.js";
 export function initChapterNavigation(story) {
   const introNavigation = document.querySelector(".intro-navigation");
   const detailNavigation = document.querySelector(".detail-navigation");
-  const chapterParam = getChapterParam();
 
-  chapterParam
-    ? selectChapter(story, chapterParam)
-    : revertToStoryProperties(story);
+  const params = getParams();
+  const chapterParam = params.get("chapter");
+  const chapterData = findChapterByTitle(story, chapterParam);
+
+  if (chapterData) {
+    updateChapterContent(chapterData, story); // set current chapter data
+  } else {
+    updateChapterContent(story.properties, story, true); // Reset to story intro
+  }
 
   toggleNavigationElements(introNavigation, detailNavigation, chapterParam);
 
   if (!chapterParam) {
     setupStartButton(story, introNavigation, detailNavigation);
-  }
-}
-
-/**
- * Handles chapter selection based on the provided chapter title.
- * Updates the chapter content and UI based on the selected chapter.
- * @param {Story} story - The story object.
- * @param {string} chapterTitle - The title of the selected chapter.
- */
-function selectChapter(story, chapterTitle) {
-  const chapterData = findChapterByTitle(story, chapterTitle);
-  if (chapterData) {
-    updateChapterContent(chapterData, story);
   }
 }
 
@@ -42,9 +34,7 @@ function selectChapter(story, chapterTitle) {
  * @return {Object|null} - The found chapter object or null if not found.
  */
 function findChapterByTitle(story, chapterTitle) {
-  return (
-    story.chapters.find((chapter) => chapter.title === chapterTitle) || null
-  );
+  return story.chapters.find((chapter) => chapter.title === chapterTitle);
 }
 
 /**
@@ -59,15 +49,6 @@ function toggleNavigationElements(introNav, detailNav, chapterParam) {
 }
 
 /**
- * Retrieves the current chapter parameter from the URL.
- * @return {string|null} - The current chapter name or null if not present.
- */
-function getChapterParam() {
-  const params = getParams();
-  return params.get("chapter");
-}
-
-/**
  * Sets up the start button and its event listener for the introduction navigation.
  * @param {HTMLElement} introNavigation - The intro navigation element.
  * @param {Story} story - The story object.
@@ -76,9 +57,7 @@ function getChapterParam() {
 function setupStartButton(story, introNavigation, detailNavigation) {
   const startButton = introNavigation.querySelector("#start-button");
   startButton.addEventListener("click", () => {
-    activateFirstChapter(story);
-    toggleNavigationElements(introNavigation, detailNavigation, true);
-    updateChapterContent(story.chapters[0], story);
+    startStory(story, introNavigation, detailNavigation);
   });
 }
 
@@ -86,9 +65,11 @@ function setupStartButton(story, introNavigation, detailNavigation) {
  * Activates the first chapter in the story and updates the configuration.
  * @param {Story} story - The story object.
  */
-function activateFirstChapter(story) {
+function startStory(story, introNavigation, detailNavigation) {
   const firstChapterTitle = story.chapters[0].title;
-  setCustomConfig("chapter", firstChapterTitle);
+  setParams("chapter", firstChapterTitle);
+  toggleNavigationElements(introNavigation, detailNavigation, true);
+  updateChapterContent(story.chapters[0], story);
 }
 
 /**
@@ -130,12 +111,4 @@ function updateChapterContent(chapterData, story, isIntro = false) {
     : `Image credit: ${chapterData.imageCredit}`;
 
   chapterDetail.querySelector(".attribution").textContent = imageCredit;
-}
-
-/**
- * Reverts the content to the original story properties.
- * @param {Story} story - The story object.
- */
-function revertToStoryProperties(story) {
-  updateChapterContent(story.properties, story, true);
 }

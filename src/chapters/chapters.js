@@ -1,4 +1,5 @@
 import { updateChapterDetail } from "../detail.js";
+import { setParams } from "../utils/prams.js";
 
 /**
  * Returns a story intro card as HTML element.
@@ -19,7 +20,7 @@ export function createStoryIntroCard(storyProperties) {
   card.appendChild(storyIntroTitle);
 
   card.addEventListener("click", (event) => {
-    setCustomConfig("chapter", "intro");
+    setParams("chapter", "intro");
     updateChapterDetail("intro");
   });
 
@@ -50,45 +51,12 @@ export function createChapterCard(chapter) {
   card.appendChild(chapterTitle);
 
   card.addEventListener("click", (event) => {
-    setCustomConfig("chapter", chapter.title);
+    setParams("chapter", chapter.title);
     updateChapterDetail(chapter.title);
   });
 
   return card;
 }
-
-export function getParams() {
-  return new URLSearchParams(window.location.hash.replace("#", ""));
-}
-
-/**
- * Sets overrides for the configuration data as URL hash parameters.
- * If the passed value is `undefined`, the given parameter will be removed from the URL.
- *
- * @param {string} parameter - The name of the URL hash parameter to set.
- * @param {string | number | Array<string | number> | undefined} value - The value of the URL hash parameter to set.
- */
-export const setCustomConfig = (parameter, value) => {
-  const params = getParams();
-
-  if (value) {
-    if (Array.isArray(value)) {
-      // Delete array parameter values and add new array values
-      params.delete(parameter);
-      for (let index = 0; index < value.length; index++) {
-        params.append(parameter, value[index]);
-      }
-    } else {
-      // Override parameter value
-      params.set(parameter, value);
-    }
-  } else {
-    // Remove parameter value
-    params.delete(parameter);
-  }
-
-  window.location.hash = params;
-};
 
 /**
  * Fills the chapters bar with UI elements.
