@@ -86,7 +86,7 @@
   color: var(--text-color-white);
   display: inline-flex;
   gap: var(--spacing-extra-small);
-  padding: var(--spacing-extra-small) var(--spacing-medium);
+  padding: var(--spacing-small) var(--spacing-medium);
   padding-right: var(--spacing-extra-small);
   align-items: center;
 }
