@@ -1,3 +1,5 @@
+import { getCameraOptions } from "../utils/cesium.js";
+
 /**
  * Options for radio buttons in the sidebar.
  * @typedef {Object} LocationMenuOptions
@@ -385,6 +387,15 @@ function handleEditAction(chapter) {
   form.querySelector(".url-input input").value = chapter.imageUrl;
   form.querySelector(".image-credit-container input").value =
     chapter.imageCredit;
+  const cameraOptionsInput = form.querySelector('input[name="camera-options"]');
+  cameraOptionsInput.value = JSON.stringify(chapter.cameraOptions);
+
+  // Update input for camera options on save camera position button click
+  document
+    .getElementById("save-camera-position-button")
+    .addEventListener("click", () => {
+      cameraOptionsInput.value = JSON.stringify(getCameraOptions());
+    });
 
   // Code for edit-from submission
   const editForm = document.querySelector(".chapter-form.edit");
