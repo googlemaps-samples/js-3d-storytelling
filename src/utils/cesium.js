@@ -13,13 +13,6 @@ const CAMERA_OFFSET = {
   range: 800, // 800 meters from the center.
 };
 
-// Todo: Replace this
-const START_COORDINATES = {
-  latitude: 37.7749,
-  longitude: -122.4194,
-  height: 100000,
-};
-
 /**
  * An export of the CesiumJS viewer instance to be accessed by other modules.
  * @type {Cesium.Viewer} The CesiumJS viewer instance.
@@ -101,6 +94,21 @@ export async function performFlyTo(coords, options = {}) {
   } catch (error) {
     console.error(`Error performing fly to: ${error}`);
   }
+}
+
+/**
+ * Returns current camera options
+ *
+ * @return {Object} Object containing height, heading, pitch and roll options.
+ */
+export function getCameraOptions() {
+  const { positionCartographic, heading, pitch, roll } = cesiumViewer.camera;
+  return {
+    height: positionCartographic.height,
+    heading: Cesium.Math.toDegrees(heading),
+    pitch: Cesium.Math.toDegrees(pitch),
+    roll: Cesium.Math.toDegrees(roll),
+  };
 }
 
 /**
