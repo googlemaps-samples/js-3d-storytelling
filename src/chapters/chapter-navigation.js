@@ -55,7 +55,7 @@ function findChapterByTitle(story, chapterTitle) {
  */
 function toggleNavigationElements(introNav, detailNav, chapterParam) {
   setNavigationActive(introNav, !chapterParam);
-  setNavigationActive(detailNav, !!chapterParam);
+  setNavigationActive(detailNav, Boolean(chapterParam));
 }
 
 /**
