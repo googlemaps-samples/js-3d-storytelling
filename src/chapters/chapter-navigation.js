@@ -106,7 +106,7 @@ function setNavigationActive(navElement, isActive) {
  * @param {Story} story - The story object.
  * @param {boolean} [isIntro=true] - Flag indicating if the current view is the introduction.
  */
-function updateChapterContent(chapterData, story, isIntro = false) {
+function updateChapterContent(chapterData, story, isIntro = true) {
   const chapterDetail = document.querySelector(".chapter-detail");
 
   chapterDetail.querySelector(".story-title").textContent = isIntro
