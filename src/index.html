@@ -117,7 +117,7 @@
               <div class="field-wrapper">
                 <input
                   type="text"
-                  name="description"
+                  name="content"
                   placeholder="Add a description"
                 />
                 <div class="field-placeholder">
@@ -143,7 +143,7 @@
               <div class="field-wrapper url-input">
                 <input
                   type="text"
-                  name="date"
+                  name="imageUrl"
                   placeholder="Image or Youtube URL"
                 />
                 <div class="field-placeholder">
@@ -155,7 +155,7 @@
                 <div class="field-wrapper">
                   <input
                     type="text"
-                    name="date"
+                    name="imageCredit"
                     placeholder="Add an image or video credit"
                   />
                   <div class="field-placeholder">
@@ -180,7 +180,11 @@
             </button>
           </div>
           <ul class="location-list"></ul>
-          <form class="edit chapter-form">
+          <form
+            class="edit chapter-form"
+            name="edit-chapter-form"
+            method="dialog"
+          >
             <fieldset>
               <div class="field-wrapper">
                 <input type="text" name="title" placeholder="Add a title" />
@@ -191,7 +195,7 @@
               <div class="field-wrapper">
                 <input
                   type="text"
-                  name="description"
+                  name="content"
                   placeholder="Add a description"
                 />
                 <div class="field-placeholder">
@@ -199,15 +203,9 @@
                 </div>
               </div>
               <div class="field-wrapper">
-                <input type="text" name="author" placeholder="Add an author" />
-                <div class="field-placeholder">
-                  <span class="label">Author</span>
-                </div>
-              </div>
-              <div class="field-wrapper">
                 <input
                   type="text"
-                  name="date"
+                  name="dateTime"
                   placeholder="Add a date or time"
                 />
                 <div class="field-placeholder">
@@ -217,7 +215,7 @@
               <div class="field-wrapper url-input">
                 <input
                   type="text"
-                  name="date"
+                  name="imageUrl"
                   placeholder="Image or Youtube URL"
                 />
                 <div class="field-placeholder">
@@ -229,7 +227,7 @@
                 <div class="field-wrapper">
                   <input
                     type="text"
-                    name="date"
+                    name="imageCredit"
                     placeholder="Add an image or video credit"
                   />
                   <div class="field-placeholder">
@@ -262,7 +260,7 @@
                     <div class="radius-slider-container">
                       <input
                         type="range"
-                        name="speed"
+                        name="radius"
                         id="radius"
                         min="0.1"
                         max="5"

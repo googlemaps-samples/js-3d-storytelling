@@ -4,8 +4,8 @@ import createMarkers from "./utils/create-markers.js";
 import {
   addSidebarToggleHandler,
   initAutoComplete,
-  updatePlaces,
-  initDraggableTiles,
+  updateSidebarLocationList,
+  initDragAndDrop,
 } from "./sidebar/sidebar.js";
 import { addChaptersBar } from "./chapters/chapters.js";
 import { initGoogleMaps } from "./utils/places.js";
@@ -18,7 +18,17 @@ import { initChapterNavigation } from "./chapters/chapter-navigation.js";
 // or request some file from another host, by changing the config url parameter.
 //
 // You could also implement your (dynamic) configuration loading function here.
-export const story = await loadConfig("config.json");
+export let story;
+
+const isStoryInLocalStorage = Boolean(localStorage.getItem("story"));
+
+// Check if story is in local storage
+if (isStoryInLocalStorage) {
+  story = JSON.parse(localStorage.getItem("story"));
+} else {
+  story = await loadConfig("./config.json");
+  localStorage.setItem("story", JSON.stringify(story));
+}
 
 const { chapters, properties } = story;
 
@@ -27,7 +37,7 @@ async function main() {
     await initCesiumViewer(properties);
     await initGoogleMaps();
     await initAutoComplete();
-    updatePlaces(chapters);
+    updateSidebarLocationList(chapters);
 
     // Create markers from chapter coordinates using chapter title as marker id
     await createMarkers(
@@ -37,7 +47,7 @@ async function main() {
     //    initializeStory(story);
 
     addSidebarToggleHandler();
-    initDraggableTiles(story);
+    initDragAndDrop();
     initChapterNavigation(story);
     addChaptersBar(story);
   } catch (error) {
@@ -46,3 +56,14 @@ async function main() {
 }
 
 main();
+
+export function updateUI(story) {
+  // Update sidebar
+  updateSidebarLocationList(story.chapters);
+  // Update markers
+  createMarkers(
+    story.chapters.map(({ coords, title }) => ({ coords, id: title }))
+  );
+  // Update chapters bar
+  addChaptersBar(story);
+}

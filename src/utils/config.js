@@ -1,3 +1,4 @@
+import { updateUI } from "../main.js";
 /**
  * Function to deep freeze an object.
  *
@@ -36,7 +37,7 @@ function deepFreeze(object) {
  * @throws {string} If an error occurs during the fetch or parsing, a descriptive error message is thrown.
  *
  * @example
- * // Usage example:
+ *  Usage example:
  * const configUrl = "path/to/config.json";
  * try {
  *   const configData = await loadConfig(configUrl);
@@ -61,3 +62,84 @@ export async function loadConfig(configUrl) {
     throw `Failed to load and parse configuration data: ${error}`;
   }
 }
+
+/**
+ * Updates the story chapter and saves it to local storage.
+ * @param {Object} updatedChapter - The chapter object to be updated.
+ * @returns {void}
+ */
+export async function setStory(updatedChapter) {
+  // Get story from local storage
+  const story = JSON.parse(localStorage.getItem("story"));
+
+  // Find the chapter to be updated
+  const chapterIndex = story.chapters.findIndex(
+    (chapter) => Number(chapter.id) === Number(updatedChapter.id)
+  );
+
+  // Update chapter
+  story.chapters[chapterIndex] = updatedChapter;
+
+  // Save updated object back to local storage
+  localStorage.setItem("story", JSON.stringify(story));
+
+  updateUI(story);
+}
+
+/**
+ * Returns the updated chapter data from the edit chapter form.
+ */
+export const getChapterDetails = () => {
+  const locationConfigForm = document.querySelector(
+    'form[name="edit-chapter-form"]'
+  );
+  return getFormData(locationConfigForm);
+};
+
+/**
+ * Returns the data of an HTML form element in form of an object.
+ *
+ * @param {HTMLFormElement} form - The HTML form element to get the data from.
+ * @returns {Object} The form data as object.
+ */
+const getFormData = (form) => {
+  const formData = new FormData(form);
+
+  return Array.from(formData.keys()).reduce((result, key) => {
+    const inputType = form.querySelector(`input[name="${key}"]`).type;
+    // Handle numeric input values
+    const isNumericValue = inputType === "number" || inputType === "range";
+    const value = isNumericValue
+      ? Number(formData.get(key))
+      : formData.get(key);
+
+    if (key.includes(".")) {
+      // Handle object data with dot-separated keys
+      // e.g. "my.nested.keys" results in {my: {nested: {keys: ...}}}
+      const [objectKey, ...nestedKeys] = key.split(".");
+
+      const setNestedProperty = (object, properties, value) => {
+        const [property, ...nestedProperties] = properties;
+        return {
+          ...object,
+          [property]: nestedProperties.length
+            ? setNestedProperty(nestedProperties, value)
+            : value,
+        };
+      };
+
+      result[objectKey] = setNestedProperty(
+        result[objectKey] || {},
+        nestedKeys,
+        value
+      );
+    } else if (result[key]) {
+      // Combine the values of inputs with the same name as array
+      result[key] = formData.getAll(key);
+    } else {
+      result[key] = value;
+    }
+
+    return result;
+  }, {});
+};
