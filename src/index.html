@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="./main.css" />
+    <link rel="stylesheet" type="text/css" href="./styles/chapters.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/cesiumjs/1.105/Build/Cesium/Cesium.js"></script>
     <link
       href="https://ajax.googleapis.com/ajax/libs/cesiumjs/1.105/Build/Cesium/Widgets/widgets.css"
@@ -236,9 +237,48 @@
                   </div>
                 </div>
               </div>
-              <button type="button" class="button save-camera-position">
-                Save Camera Position
-              </button>
+              <details class="more-settings-container">
+                <summary class="more-settings">More Settings</summary>
+                <ul>
+                  <li>
+                    <input
+                      type="checkbox"
+                      id="marker-checkbox"
+                      name="marker-checkbox"
+                    />
+                    <label for="marker-checkbox">Display Location Marker</label>
+                  </li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      id="vignette-checkbox"
+                      name="vignette-checkbox"
+                    />
+                    <label for="vignette-checkbox"
+                      >Display Radius Vignette</label
+                    >
+                  </li>
+                  <li>
+                    <div class="radius-slider-container">
+                      <input
+                        type="range"
+                        name="speed"
+                        id="radius"
+                        min="0.1"
+                        max="5"
+                        step="0.1"
+                        style="--value: 2.5; --min: 0.1; --max: 5"
+                      /><label>0,1 mi</label><label>5 mi</label>
+                    </div>
+                  </li>
+                  <li>
+                    <button type="button" class="button save-camera-position">
+                      Save Camera Position
+                    </button>
+                  </li>
+                </ul>
+              </details>
+
               <button type="submit" class="button leave-edit-mode">
                 Leave edit mode
               </button>

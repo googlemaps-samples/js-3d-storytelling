@@ -113,7 +113,7 @@ export async function performFlyTo(coords, options = {}) {
  * configuring its default camera position and orientation, and adding both a 3D
  * tileset and attribution to the viewer.
  */
-export async function initCesiumViewer() {
+export async function initCesiumViewer(storyProperties) {
   // Set the default access token to null to prevent the CesiumJS viewer from requesting an access token
   Cesium.Ion.defaultAccessToken = null;
 
@@ -141,14 +141,18 @@ export async function initCesiumViewer() {
   // Disable free-look, the camera view direction can only be changed through translating or rotating
   cesiumViewer.scene.screenSpaceCameraController.enableLook = false;
 
-  const { latitude, longitude, height } = START_COORDINATES;
+  const { coords, cameraOptions } = storyProperties;
 
   // Set the starting position and orientation of the camera
   cesiumViewer.camera.setView({
-    destination: Cesium.Cartesian3.fromDegrees(longitude, latitude, height),
+    destination: Cesium.Cartesian3.fromDegrees(
+      coords.longitude,
+      coords.latitude,
+      cameraOptions.height
+    ),
     orientation: {
-      heading: 0, // no heading
-      pitch: Cesium.Math.toRadians(-90), // -90 degrees to the tangent plane (looking down)
+      heading: cameraOptions.heading, // no heading
+      pitch: Cesium.Math.toRadians(cameraOptions.pitch),
       roll: 0,
     },
   });

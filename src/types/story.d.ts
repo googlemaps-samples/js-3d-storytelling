@@ -7,7 +7,7 @@ type CesiumCameraOptions = {
 };
 
 // Define the type for the Segment
-interface Chapter = {
+interface Chapter {
   title: string; // Title of the segment
   imageUrl: string; // URL for the segment's image (google or custom)
   imageCredit: string; // Credit for the segment's image
@@ -16,7 +16,7 @@ interface Chapter = {
   coords: google.maps.LatLngLiteral; // Latitude and longitude coordinates using Google Maps type
   address: string; // Clear text address
   cameraOptions: CesiumCameraOptions; // Basic Cesium camera options
-};
+}
 
 interface StoryProperties {
   imageUrl: string; // The image url for the intro card

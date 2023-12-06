@@ -9,6 +9,7 @@ import {
 } from "./sidebar/sidebar.js";
 import { addChaptersBar } from "./chapters/chapters.js";
 import { initGoogleMaps } from "./utils/places.js";
+import { initChapterNavigation } from "./chapters/chapter-navigation.js";
 
 // Here we load the configuration.
 // The current implementation loads our local `config.json`.
@@ -19,11 +20,11 @@ import { initGoogleMaps } from "./utils/places.js";
 // You could also implement your (dynamic) configuration loading function here.
 export const story = await loadConfig("config.json");
 
-const { chapters } = story;
+const { chapters, properties } = story;
 
 async function main() {
   try {
-    await initCesiumViewer();
+    await initCesiumViewer(properties);
     await initGoogleMaps();
     await initAutoComplete();
     updatePlaces(chapters);
@@ -36,7 +37,8 @@ async function main() {
     //initializeStory(story);
 
     addSidebarToggleHandler();
-    initDraggableTiles();
+    initDraggableTiles(story);
+    initChapterNavigation(story);
     addChaptersBar(story);
   } catch (error) {
     console.error(error);
