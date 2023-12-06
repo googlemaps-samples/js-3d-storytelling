@@ -9,6 +9,7 @@ import {
 } from "./sidebar/sidebar.js";
 import { addChaptersBar } from "./chapters/chapters.js";
 import { initGoogleMaps } from "./utils/places.js";
+import { initChapterNavigation } from "./chapters/chapter-navigation.js";
 
 // Here we load the configuration.
 // The current implementation loads our local `config.json`.
@@ -30,13 +31,14 @@ async function main() {
 
     // Create markers from chapter coordinates using chapter title as marker id
     await createMarkers(
-      config.chapters.map(({ coords, title }) => ({ coords, id: title }))
+      story.chapters.map(({ coords, title }) => ({ coords, id: title }))
     );
 
     //    initializeStory(story);
 
     addSidebarToggleHandler();
-    initDraggableTiles();
+    initDraggableTiles(story);
+    initChapterNavigation(story);
     addChaptersBar(story);
   } catch (error) {
     console.error(error);
