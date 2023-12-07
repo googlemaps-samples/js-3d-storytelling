@@ -1,5 +1,9 @@
-import { updateChapterDetail } from "../detail.js";
 import { setParams } from "../utils/params.js";
+import { story } from "../main.js";
+import {
+  toggleNavigationElements,
+  updateChapterContent,
+} from "./chapter-navigation.js";
 
 /**
  * Returns a story intro card as HTML element.
@@ -19,9 +23,10 @@ export function createStoryIntroCard(storyProperties) {
   storyIntroTitle.textContent = storyProperties.title;
   card.appendChild(storyIntroTitle);
 
-  card.addEventListener("click", (event) => {
-    setParams("chapter", "intro");
-    updateChapterDetail("intro");
+  card.addEventListener("click", () => {
+    setParams("chapter", null);
+    toggleNavigationElements(false);
+    updateChapterContent(storyProperties, story, true);
   });
 
   return card;
@@ -50,9 +55,10 @@ export function createChapterCard(chapter) {
   chapterTitle.textContent = chapter.title;
   card.appendChild(chapterTitle);
 
-  card.addEventListener("click", (event) => {
+  card.addEventListener("click", () => {
     setParams("chapter", chapter.title);
-    updateChapterDetail(chapter.title);
+    toggleNavigationElements(true);
+    updateChapterContent(chapter, story, false);
   });
 
   return card;

@@ -24,22 +24,21 @@ const { chapters, properties } = story;
 
 async function main() {
   try {
+    updatePlaces(chapters);
+    addSidebarToggleHandler();
+    initDraggableTiles(story);
+    initChapterNavigation(story);
+    addChaptersBar(story);
+
     await initCesiumViewer(properties);
     await initGoogleMaps();
     await initAutoComplete();
-    updatePlaces(chapters);
-
     // Create markers from chapter coordinates using chapter title as marker id
     await createMarkers(
       story.chapters.map(({ coords, title }) => ({ coords, id: title }))
     );
 
     //    initializeStory(story);
-
-    addSidebarToggleHandler();
-    initDraggableTiles(story);
-    initChapterNavigation(story);
-    addChaptersBar(story);
   } catch (error) {
     console.error(error);
   }
