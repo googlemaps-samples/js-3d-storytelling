@@ -20,6 +20,11 @@ const CAMERA_OFFSET = {
 export let cesiumViewer;
 
 /**
+ * @type {Cesium.Cesium3DTileset} The Google Photorealistic 3D tileset.
+ */
+let tileset = null;
+
+/**
  * Adjusts the height of the given coordinates to be above the surface by the specified offset height.
  *
  * @param {google.maps.LatLngLiteral} coords - The latitude and longitude coordinates.
@@ -173,7 +178,7 @@ export async function initCesiumViewer(storyProperties) {
  */
 async function createTileset() {
   try {
-    const tileset = await Cesium.Cesium3DTileset.fromUrl(
+    tileset = await Cesium.Cesium3DTileset.fromUrl(
       "https://tile.googleapis.com/v1/3dtiles/root.json?key=" +
         GOOGLE_MAPS_API_KEY
     );
@@ -207,4 +212,56 @@ function createAttribution() {
   img.alt = "Google";
 
   cesiumCredits.prepend(img);
+}
+
+/**
+ * Adds a custom shader for the tiles to darken all tiles outside the radius around the center.
+ *
+ * @param {google.maps.LatLngLiteral} coordinates - The center coordinates.
+ * @param {number} radius - The radius in meters.
+ */
+export function createCustomRadiusShader(coordinates, radius) {
+  const { lat, lng } = coordinates;
+  const center = Cesium.Cartesian3.fromDegrees(lng, lat);
+
+  tileset.customShader = new Cesium.CustomShader({
+    uniforms: {
+      u_center: {
+        type: Cesium.UniformType.VEC3,
+        value: center,
+      },
+      u_radius: {
+        type: Cesium.UniformType.FLOAT,
+        value: radius,
+      },
+      u_darkenAmount: {
+        type: Cesium.UniformType.FLOAT,
+        value: 0.3, // The amount to darken the tile color from 0 = black to 1 = original color
+      },
+    },
+    fragmentShaderText: `
+      // Color tiles by distance to the center
+      void fragmentMain(FragmentInput fsInput, inout czm_modelMaterial material)
+      {
+        float distanceInMeters = length(u_center - fsInput.attributes.positionWC.xyz);
+        float range = 10.0 ;
+        float min = u_radius - range;
+        float max = u_radius + range;
+
+        // Darken the tiles if the distance to the center is greater than the radius
+        if(distanceInMeters > min && distanceInMeters < max)
+        {
+          float ratio = (distanceInMeters - min) / (max - min) * (u_darkenAmount - 1.0) - 1.0 * -1.0; 
+          vec3 darkenedColor = material.diffuse * ratio;
+          material.diffuse = darkenedColor;
+        }
+
+         if(distanceInMeters > max)
+        {
+          vec3 darkenedColor = material.diffuse * u_darkenAmount;
+          material.diffuse = darkenedColor;
+        }
+      }
+    `,
+  });
 }

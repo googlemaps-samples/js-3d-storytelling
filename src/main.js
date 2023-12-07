@@ -34,7 +34,7 @@ async function main() {
       story.chapters.map(({ coords, title }) => ({ coords, id: title }))
     );
 
-    //    initializeStory(story);
+    //initializeStory(story);
 
     addSidebarToggleHandler();
     initDraggableTiles(story);
