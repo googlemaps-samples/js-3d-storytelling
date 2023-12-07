@@ -1,4 +1,5 @@
 import { getCameraOptions } from "../utils/cesium.js";
+import { updateUI } from "../main.js";
 
 import { getChapterDetails, setStory } from "../utils/config.js";
 /**
@@ -365,8 +366,8 @@ function handleEditMenuSubmit(action, selectedChapter) {
 
     // This case deletes the chapter
     case locationMenuOptions.delete:
-      console.log("Delete");
-      // Todo: Code for handling delete option
+      handleDeleteAction(selectedChapter.id);
+
       break;
     default:
       console.warn("Invalid option type");
@@ -442,4 +443,30 @@ function handleEditAction(chapter) {
     // Remove the event listener after the submit
     { once: true }
   );
+}
+
+/**
+ * Handles the delete action for a chapter.
+ * Removes the chapter with the specified id from the story,
+ * updates the localStorage and updates the UI.
+ *
+ * @param {number} id - The id of the chapter to be deleted.
+ */
+function handleDeleteAction(id) {
+  // Get story from local storage
+  const story = JSON.parse(localStorage.getItem("story"));
+
+  // Find the chapter to be deleted
+  const chapterIndex = story.chapters.findIndex(
+    (chapter) => Number(chapter.id) === Number(id)
+  );
+
+  // Delete chapter
+  story.chapters.splice(chapterIndex, 1);
+
+  // Save updated object back to local storage
+  localStorage.setItem("story", JSON.stringify(story));
+
+  // Update UI
+  updateUI(story);
 }
