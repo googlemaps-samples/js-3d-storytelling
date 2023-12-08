@@ -4,7 +4,7 @@ import createMarkers from "./utils/create-markers.js";
 import {
   addSidebarToggleHandler,
   initAutoComplete,
-  updateSidebarLocationList,
+  updateSidebar,
   initDragAndDrop,
 } from "./sidebar/sidebar.js";
 import { addChaptersBar } from "./chapters/chapters.js";
@@ -37,7 +37,7 @@ async function main() {
     await initCesiumViewer(properties);
     await initGoogleMaps();
     await initAutoComplete();
-    updateSidebarLocationList(chapters);
+    updateSidebar(story);
 
     // Create markers from chapter coordinates using chapter title as marker id
     await createMarkers(
@@ -59,7 +59,7 @@ main();
 
 export function updateUI(story) {
   // Update sidebar
-  updateSidebarLocationList(story.chapters);
+  updateSidebar(story);
   // Update markers
   createMarkers(
     story.chapters.map(({ coords, title }) => ({ coords, id: title }))

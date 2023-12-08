@@ -31,9 +31,19 @@ export function addSidebarToggleHandler() {
 /**
  * Updates the places in the sidebar based on the given chapters.
  *
- * @param {Array} chapters - The chapters containing location information.
+ * @param {Array} story - The story object containing the chapters and details properties.
  */
-export function updateSidebarLocationList(chapters) {
+export function updateSidebar(story) {
+  const { chapters, properties } = story;
+  // Fill story details form with the properties data
+  updateStoryDetails(properties);
+
+  // Fill location list with the chapters data
+  updateLocationList(chapters);
+}
+
+function updateLocationList(chapters) {
+  // Fill the location list with the chapters data
   const locationListContainer = document.querySelector(".location-list");
 
   locationListContainer.replaceChildren(
@@ -48,6 +58,33 @@ export function updateSidebarLocationList(chapters) {
 
   // Enable the edit menu for the each location tile
   createEditMenus(chapters);
+}
+
+/**
+ * Updates the story details form with the provided properties data.
+ * @param {Object} properties - The properties data to fill the form with.
+ */
+function updateStoryDetails(properties) {
+  // Fill the story details form with the properties data
+  const storyDetailsForm = document.querySelector(
+    'form[name="story-details-form"]'
+  );
+
+  // Fill the form inputs with the properties data
+  storyDetailsForm.querySelector('input[name="title"]').value =
+    properties.title ?? null;
+  storyDetailsForm.querySelector('input[name="description"]').value =
+    properties.description ?? null;
+  storyDetailsForm.querySelector('input[name="createdBy"]').value =
+    properties.createdBy ?? null;
+  storyDetailsForm.querySelector('input[name="date"]').value =
+    properties.date ?? null;
+  storyDetailsForm.querySelector('input[name="startButtonText"]').value =
+    properties.startButtonText ?? null;
+  storyDetailsForm.querySelector('input[name="imageUrl"]').value =
+    properties.imageUrl ?? null;
+  storyDetailsForm.querySelector('input[name="imageCredit"]').value =
+    properties.imageCredit ?? null;
 }
 
 /**
