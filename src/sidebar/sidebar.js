@@ -1,5 +1,5 @@
+import { story } from "../main.js";
 import { getCameraOptions } from "../utils/cesium.js";
-import { updateUI } from "../main.js";
 
 import { getChapterDetails, setStory } from "../utils/config.js";
 /**
@@ -30,10 +30,8 @@ export function addSidebarToggleHandler() {
 
 /**
  * Updates the places in the sidebar based on the given chapters.
- *
- * @param {Array} story - The story object containing the chapters and details properties.
  */
-export function updateSidebar(story) {
+export function updateSidebar() {
   const { chapters, properties } = story;
   // Fill story details form with the properties data
   updateStoryDetails(properties);
@@ -491,7 +489,7 @@ function handleEditAction(chapter) {
  */
 function handleDeleteAction(id) {
   // Get story from local storage
-  const story = JSON.parse(localStorage.getItem("story"));
+  // const story = JSON.parse(localStorage.getItem("story"));
 
   // Find the chapter to be deleted
   const chapterIndex = story.chapters.findIndex(

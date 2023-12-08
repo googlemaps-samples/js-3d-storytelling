@@ -30,7 +30,7 @@ if (isStoryInLocalStorage) {
   localStorage.setItem("story", JSON.stringify(story));
 }
 
-const { chapters, properties } = story;
+const { properties } = story;
 
 async function main() {
   try {
@@ -57,7 +57,7 @@ async function main() {
 
 main();
 
-export function updateUI(story) {
+export function updateUI() {
   // Update sidebar
   updateSidebar(story);
   // Update markers
