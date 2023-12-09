@@ -1,4 +1,3 @@
-import { updateUI, story } from "../main.js";
 /**
  * Function to deep freeze an object.
  *
@@ -53,34 +52,11 @@ export async function loadConfig(configUrl) {
     // Parse the JSON data
     const configData = await configResponse.json();
 
-    // Freeze the config object with all its properties
-    deepFreeze(configData);
-
     return configData;
   } catch (error) {
     // Handle and report any errors during the process.
     throw `Failed to load and parse configuration data: ${error}`;
   }
-}
-
-/**
- * Updates the story chapter and saves it to local storage.
- * @param {Object} updatedChapter - The chapter object to be updated.
- * @returns {void}
- */
-export async function setStory(updatedChapter) {
-  // Find the chapter to be updated
-  const chapterIndex = story.chapters.findIndex(
-    (chapter) => Number(chapter.id) === Number(updatedChapter.id)
-  );
-
-  // Update chapter
-  story.chapters[chapterIndex] = updatedChapter;
-
-  // Save updated object back to local storage
-  localStorage.setItem("story", JSON.stringify(story));
-
-  updateUI();
 }
 
 /**
@@ -112,6 +88,15 @@ export const getChapterDetails = () => {
   return getFormData(locationConfigForm);
 };
 
+/**
+ * Returns the updated chapter data from the edit chapter form.
+ */
+export const getStoryDetails = () => {
+  const storyDetailsForm = document.querySelector(
+    'form[name="story-details-form"]'
+  );
+  return getFormData(storyDetailsForm);
+};
 /**
  * Returns the data of an HTML form element in form of an object.
  *
