@@ -27,7 +27,7 @@ async function main() {
     updatePlaces(chapters);
     addSidebarToggleHandler();
     initDraggableTiles(story);
-    initChapterNavigation(story);
+    initChapterNavigation();
     addChaptersBar(story);
 
     await initCesiumViewer(properties);
