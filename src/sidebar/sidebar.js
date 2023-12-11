@@ -296,13 +296,15 @@ function closeMenu(dialog) {
  */
 export function initDragAndDrop() {
   // Represents the collection of draggable location tiles.
-  const draggableLocations = document.querySelectorAll(".location-list-item");
+  const draggableLocationsItems = document.querySelectorAll(
+    ".location-list-item"
+  );
 
   // Represents the container of the location tiles.
   const locationList = document.querySelector(".location-list");
 
   // Add event listeners to all draggable tiles
-  draggableLocations.forEach((draggable) => {
+  draggableLocationsItems.forEach((draggable) => {
     draggable.addEventListener("dragstart", () => {
       draggable.classList.add("dragging");
     });
@@ -312,7 +314,7 @@ export function initDragAndDrop() {
     });
   });
 
-  //
+  // Add event listeners to the location list where the tiles can be dropped
   locationList.addEventListener("dragover", (event) => {
     event.preventDefault();
 
@@ -324,6 +326,44 @@ export function initDragAndDrop() {
       locationList.insertBefore(draggable, nextElement);
     }
   });
+
+  locationList.addEventListener("drop", (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    // Get the id of the dragged location-list-item
+    const draggedLocationItemId = event.target.id;
+
+    // Get the id of the location-list-item next which the dragged location-list-item should be inserted
+    const nextLocationItemId = event.target.nextSibling?.id ?? null;
+
+    updateChapterBarCards(draggedLocationItemId, nextLocationItemId);
+
+    // Todo: update the story chapters array
+  });
+}
+
+function updateChapterBarCards(draggedLocationItemId, nextLocationItemId) {
+  // Get chapter card container
+  const cardsContainer = document.querySelector("#chapters-bar .cards");
+
+  // Get the dragged location-chapter
+  const targetChapter = cardsContainer.querySelector(
+    `.card[id="${draggedLocationItemId}"]`
+  );
+
+  // Get the next location-chapter
+  const nextChapter = cardsContainer.querySelector(
+    `.card[id="${nextLocationItemId}"]`
+  );
+
+  // Insert the dragged location-chapter after the next location-chapter
+  // If the nextChapter is null, the dragged location-chapter should be inserted at the end of the list
+  if (!nextChapter) {
+    cardsContainer.appendChild(targetChapter);
+  } else {
+    cardsContainer.insertBefore(targetChapter, nextChapter);
+  }
 }
 
 /**
