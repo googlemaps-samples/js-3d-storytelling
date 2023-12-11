@@ -94,7 +94,7 @@
 
 .chapter .detail-navigation #play-story svg,
 .chapter .detail-navigation #play-story path {
-  fill: #1a73e8;
+  fill: var(--accent-color);
 }
 
 .chapter .intro-navigation {
