@@ -171,7 +171,6 @@ async function handleClickOnMarker(click) {
   // if the same marker is clicked again, set the selected marker to null and close the sidebar
   if (selectedMarkerId === markerId) {
     setSelectedMarker(null);
-    resetToIntro();
   } else {
     setSelectedMarker(marker);
     updateChapter(
