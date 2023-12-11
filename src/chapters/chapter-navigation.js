@@ -1,4 +1,5 @@
 import { story } from "../main.js";
+import { performFlyTo } from "../utils/cesium.js";
 import { getParams, setParams } from "../utils/params.js";
 import { loadSvg } from "../utils/svg.js";
 
@@ -53,7 +54,10 @@ export function initChapterNavigation() {
   );
 
   // Set up event listeners
-  startButton.addEventListener("click", setFirstChapter);
+  startButton.addEventListener("click", () => {
+    toggleNavigationElements(true);
+    updateChapter(0);
+  });
   playButton.addEventListener("click", startStoryProgression);
   forwardButton.addEventListener("click", setNextChapter);
   backButton.addEventListener("click", setPreviousChapter);
@@ -65,15 +69,6 @@ export function initChapterNavigation() {
   updateChapterContent(chapterData || story.properties, !chapterData);
 }
 
-/**
- * Activates the first chapter in the story and updates the configuration.
- */
-function setFirstChapter() {
-  const firstChapterTitle = story.chapters[0].title;
-  setParams("chapter", firstChapterTitle);
-  toggleNavigationElements(firstChapterTitle);
-  updateChapterContent(story.chapters[0], false);
-}
 /**
  * Starts the progression of the story.
  *
@@ -111,7 +106,7 @@ async function startStoryProgression() {
     stopProgression();
   } else {
     // If the interval is not active, start it
-    intervalId = setInterval(progress, 5000);
+    intervalId = setInterval(progress, 1000);
     playButton.innerHTML = pauseIcon;
   }
 }
@@ -123,12 +118,9 @@ const setPreviousChapter = () => {
   const newChapterIndex = getCurrentChapterIndex() - 1;
 
   if (newChapterIndex >= 0) {
-    setParams("chapter", story.chapters[newChapterIndex].title);
-    updateChapterContent(story.chapters[newChapterIndex], false);
+    updateChapter(newChapterIndex);
   } else {
-    setParams("chapter", null);
-    updateChapterContent(story.properties);
-    toggleNavigationElements(null);
+    resetToIntro();
   }
 };
 
@@ -139,10 +131,28 @@ const setNextChapter = () => {
   const newChapterIndex = getCurrentChapterIndex() + 1;
 
   if (newChapterIndex < story.chapters.length) {
-    setParams("chapter", story.chapters[newChapterIndex].title);
-    updateChapterContent(story.chapters[newChapterIndex], false);
+    updateChapter(newChapterIndex);
   }
 };
+
+export function resetToIntro() {
+  setParams("chapter", null);
+  updateChapterContent(story.properties);
+  toggleNavigationElements(null);
+  performFlyTo(story.properties.coords, {
+    duration: 1,
+  });
+}
+
+export function updateChapter(chapterIndex) {
+  const coords = story.chapters[chapterIndex].coords;
+
+  setParams("chapter", story.chapters[chapterIndex].title);
+  updateChapterContent(story.chapters[chapterIndex], false);
+  performFlyTo(coords, {
+    duration: 1,
+  });
+}
 
 /**
  * Toggles the active state of navigation elements based on chapter presence.

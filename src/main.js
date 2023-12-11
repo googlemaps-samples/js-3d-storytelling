@@ -18,6 +18,11 @@ import { initChapterNavigation } from "./chapters/chapter-navigation.js";
 // or request some file from another host, by changing the config url parameter.
 //
 // You could also implement your (dynamic) configuration loading function here.
+
+/**
+ * The story configuration object
+ * @type {Story}
+ */
 export let story;
 
 const isStoryInLocalStorage = Boolean(localStorage.getItem("story"));

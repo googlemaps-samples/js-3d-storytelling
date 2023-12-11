@@ -1,4 +1,6 @@
-import { cesiumViewer, performFlyTo } from "./cesium.js";
+import { resetToIntro, updateChapter } from "../chapters/chapter-navigation.js";
+import { story } from "../main.js";
+import { cesiumViewer } from "./cesium.js";
 
 // The size of the marker in relation to the original SVG size.
 // We are scaling it down to help preserve clarity when increasing marker size for the selected marker.
@@ -145,10 +147,10 @@ export function setSelectedMarker(marker) {
  * When a marker is clicked, there are multiple things happening:
  * 1. The camera is moved to the marker position
  * 2. The clicked marker is scaled up and the previously clicked marker is scaled down
+ *
  * @param {object} click - The click event object
- * @param {id: string; coords: google.maps.LatLngLiteral[]} markerCoords - the current markers on the map
  */
-async function handleClickOnMarker(click, coords) {
+async function handleClickOnMarker(click) {
   // Raycast from click position returning intercepting object
   const pickedObject = cesiumViewer.scene.pick(click.position);
   // check if "primitive" property is available... (not available when clicking sky for example)
@@ -165,26 +167,23 @@ async function handleClickOnMarker(click, coords) {
 
   const marker = primitive.id;
   const markerId = marker.id;
-  const currentMarker = coords.find(({ id }) => id === markerId);
 
   // if the same marker is clicked again, set the selected marker to null and close the sidebar
   if (selectedMarkerId === markerId) {
     setSelectedMarker(null);
+    resetToIntro();
   } else {
     setSelectedMarker(marker);
+    updateChapter(
+      story.chapters.findIndex((chapter) => chapter.title === markerId)
+    );
   }
-
-  // move the camera to the clicked marker
-  await performFlyTo(currentMarker.coords, {
-    duration: 1,
-  });
 }
 
 /**
  * Adds an event handler to the viewer which is used to pick an object that is under the 2d context of the mouse/pointer.
- * @param {id: string; coords: google.maps.LatLngLiteral[]} markerCoords - the current markers on the map
  */
-function createMarkerClickHandler(markerCoords) {
+function createMarkerClickHandler() {
   if (markerClickHandler) {
     markerClickHandler.destroy();
   }
@@ -199,7 +198,7 @@ function createMarkerClickHandler(markerCoords) {
 
   // Basically an onClick statement
   markerClickHandler.setInputAction((click) => {
-    handleClickOnMarker(click, markerCoords);
+    handleClickOnMarker(click);
   }, Cesium.ScreenSpaceEventType.LEFT_CLICK); // This defines that we want to listen for a click event
 }
 
@@ -248,7 +247,7 @@ async function createMarkers(markerCoords) {
   });
 
   // add a click handler to the viewer which handles the click only when clicking on a billboard (Marker) instance
-  createMarkerClickHandler(markerCoords);
+  createMarkerClickHandler();
 }
 
 export default createMarkers;
