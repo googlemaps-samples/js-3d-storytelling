@@ -181,6 +181,9 @@ export const storyProxyHandler = {
       // Update chapter details
       updateChapterContent(target.properties, target, true);
 
+      // Get cards container
+      const cardsContainer = document.querySelector("#chapters-bar .cards");
+
       // Update the intro card
       const card = cardsContainer.querySelector(`.story-intro`);
 

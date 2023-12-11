@@ -3,6 +3,7 @@
  */
 
 .chapter {
+  --chapter-color: rgba(255, 255, 255, 0.8);
   position: absolute;
   display: flex;
   width: 350px;
@@ -29,6 +30,15 @@
   line-height: var(--spacing-large);
 }
 
+.chapter .story-intro-attribution {
+  text-align: right;
+}
+
+.chapter .story-intro-author,
+.chapter .story-intro-date {
+  color: var(--chapter-color);
+}
+
 .chapter h2 {
   color: #fff;
   font-family: var(--font-family-serif);
@@ -51,7 +61,7 @@
 }
 
 .chapter .description {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--chapter-color);
   font-family: var(--font-family-base);
   font-size: var(--font-size-medium);
   line-height: var(--spacing-medium-large);
