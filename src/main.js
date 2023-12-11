@@ -189,14 +189,3 @@ async function main() {
 }
 
 main();
-
-export function updateUI() {
-  // Update sidebar
-  updateSidebar(storyProxy);
-  // Update markers
-  createMarkers(
-    storyProxy.chapters.map(({ coords, title }) => ({ coords, id: title }))
-  );
-  // Update chapters bar
-  addChaptersBar(storyProxy);
-}
