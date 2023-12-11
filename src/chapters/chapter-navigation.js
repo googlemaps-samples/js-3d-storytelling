@@ -99,7 +99,6 @@ async function stopProgression() {
 
 /**
  * Progresses to the next chapter and stops progression if the current chapter is the last one.
- *
  * @param {type} paramName - description of parameter
  * @return {type} description of return value
  */
@@ -112,7 +111,6 @@ function progress() {
 
 /**
  * Starts the progression of the story.
- *
  * @return {Promise<void>} This function does not return anything.
  */
 async function startStoryProgression() {
@@ -153,6 +151,10 @@ const setNextChapter = () => {
   }
 };
 
+/**
+ * Resets the application to the introductory state.
+ * @return {void} 
+ */
 export function resetToIntro() {
   setParams("chapter", null);
   updateChapterContent(story.properties);
@@ -162,6 +164,11 @@ export function resetToIntro() {
   });
 }
 
+/**
+ * Updates the current chapter of the story based on the given chapter index.
+ * @param {number} chapterIndex - The index of the chapter to be updated.
+ * @return {undefined} This function does not return a value.
+ */
 export function updateChapter(chapterIndex) {
   const coords = story.chapters[chapterIndex].coords;
 
