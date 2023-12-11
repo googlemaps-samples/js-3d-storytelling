@@ -1,7 +1,9 @@
+import { story } from "../main.js";
 import { createCustomRadiusShader } from "../utils/cesium.js";
 import { setParams } from "../utils/params.js";
 import {
-  toggleNavigationElements,
+  activateNavigationElement,
+  updateChapter,
   updateChapterContent,
 } from "./chapter-navigation.js";
 
@@ -26,7 +28,7 @@ export function createStoryIntroCard(storyProperties) {
   // set intro view
   card.addEventListener("click", () => {
     setParams("chapter");
-    toggleNavigationElements(false);
+    activateNavigationElement("intro");
     updateChapterContent(storyProperties, true);
     createCustomRadiusShader(storyProperties.coords, 1000);
   });
@@ -43,26 +45,30 @@ export function createStoryIntroCard(storyProperties) {
 export function createChapterCard(chapter) {
   const card = document.createElement("article");
   card.classList.add("card", "chapter-card");
+  card.id = chapter.id;
 
   const chapterImage = document.createElement("img");
+  chapterImage.setAttribute("data-input-name", "imageUrl");
   chapterImage.src = chapter.imageUrl;
   card.appendChild(chapterImage);
 
   const chapterDate = document.createElement("p");
+  chapterDate.setAttribute("data-input-name", "dateTime");
   chapterDate.classList.add("date");
   chapterDate.textContent = chapter.dateTime;
   card.appendChild(chapterDate);
 
   const chapterTitle = document.createElement("h2");
+  chapterTitle.setAttribute("data-input-name", "title");
   chapterTitle.textContent = chapter.title;
   card.appendChild(chapterTitle);
 
   // set current chapter
   card.addEventListener("click", () => {
-    setParams("chapter", chapter.title);
-    toggleNavigationElements(true);
-    updateChapterContent(chapter, false);
-    createCustomRadiusShader(chapter.coords, 100);
+    const chapterIndex = story.chapters.findIndex(
+      ({ id }) => id === chapter.id
+    );
+    updateChapter(chapterIndex);
   });
 
   return card;

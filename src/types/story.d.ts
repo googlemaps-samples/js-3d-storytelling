@@ -20,6 +20,7 @@ interface Chapter {
 
 interface StoryProperties {
   imageUrl: string; // The image url for the intro card
+  imageCredit: string; // The image credit for the intro card
   title: string; // The title of the story
   date: string; // A date associated with the story
   description: string; // The description text

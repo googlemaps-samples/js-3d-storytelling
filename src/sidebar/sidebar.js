@@ -1,7 +1,7 @@
+import { story } from "../main.js";
 import { getCameraOptions } from "../utils/cesium.js";
-import { updateUI } from "../main.js";
 
-import { getChapterDetails, setStory } from "../utils/config.js";
+import { getStoryDetails } from "../utils/config.js";
 /**
  * Options for radio buttons in the sidebar.
  * @typedef {Object} LocationMenuOptions
@@ -30,10 +30,18 @@ export function addSidebarToggleHandler() {
 
 /**
  * Updates the places in the sidebar based on the given chapters.
- *
- * @param {Array} chapters - The chapters containing location information.
  */
-export function updateSidebarLocationList(chapters) {
+export function updateSidebar() {
+  const { chapters, properties } = story;
+  // Fill story details form with the properties data
+  updateStoryDetails(properties);
+
+  // Fill location list with the chapters data
+  updateLocationList(chapters);
+}
+
+export function updateLocationList(chapters) {
+  // Fill the location list with the chapters data
   const locationListContainer = document.querySelector(".location-list");
 
   locationListContainer.replaceChildren(
@@ -48,6 +56,59 @@ export function updateSidebarLocationList(chapters) {
 
   // Enable the edit menu for the each location tile
   createEditMenus(chapters);
+}
+
+/**
+ * Updates the story details form with the provided properties data.
+ * @param {Object} properties - The properties data to fill the form with.
+ */
+function updateStoryDetails(properties) {
+  // Fill the story details form with the properties data
+  const storyDetailsForm = document.querySelector(
+    'form[name="story-details-form"]'
+  );
+
+  // Fill the form inputs with the properties data
+  storyDetailsForm.querySelector('input[name="title"]').value =
+    properties.title ?? null;
+  storyDetailsForm.querySelector('input[name="description"]').value =
+    properties.description ?? null;
+  storyDetailsForm.querySelector('input[name="createdBy"]').value =
+    properties.createdBy ?? null;
+  storyDetailsForm.querySelector('input[name="date"]').value =
+    properties.date ?? null;
+  storyDetailsForm.querySelector('input[name="startButtonText"]').value =
+    properties.startButtonText ?? null;
+  storyDetailsForm.querySelector('input[name="imageUrl"]').value =
+    properties.imageUrl ?? null;
+  storyDetailsForm.querySelector('input[name="imageCredit"]').value =
+    properties.imageCredit ?? null;
+
+  // In the story details form, the user can change the story properties.
+  // As there is no submit button, we submit the form when the user changes an input.
+  storyDetailsForm.addEventListener("input", () => {
+    storyDetailsForm.requestSubmit();
+  });
+
+  // Code for story-details-form submission
+  storyDetailsForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    // Get updated story details
+    const updatedStoryDetails = getStoryDetails();
+
+    // Update story properties
+    const updatedStoryProperties = {
+      ...story.properties,
+      ...updatedStoryDetails,
+    };
+
+    // Update story
+    story.properties = updatedStoryProperties;
+
+    // Save updated object back to local storage
+    localStorage.setItem("story", JSON.stringify(story));
+  });
 }
 
 /**
@@ -69,6 +130,7 @@ function createLocationTile(chapter) {
   // Set attributes and content
   li.className = "location-list-item";
   li.draggable = true;
+  li.id = chapter.id;
 
   p.textContent = chapter.title;
 
@@ -129,6 +191,8 @@ export async function initAutoComplete() {
     options
   );
 
+  let location = null;
+
   // Listen to location changes
   autocomplete.addListener("place_changed", () => {
     const selectedPlace = autocomplete.getPlace();
@@ -137,15 +201,29 @@ export async function initAutoComplete() {
     if (!selectedPlace.geometry) {
       return;
     }
-    // Todo: do something with the location
-    const { location } = selectedPlace.geometry;
+    location = selectedPlace.geometry.location;
+
+    locationSubmitButton.disabled = false;
   });
 
-  // Disable form submission button when the input field is empty
+  const locationSubmitButton = document.querySelector(".add-location");
+
+  // If input field is empty clear existing location and disable form submission button
   locationInput.addEventListener("input", () => {
-    const locationSubmitButton = document.querySelector(".add-location");
-    locationSubmitButton.disabled = locationInput.value === "";
+    if (locationInput.value === "") {
+      location = null;
+      locationSubmitButton.disabled = true;
+    }
   });
+
+  // Handle submit location button click
+  locationSubmitButton.addEventListener("click", () =>
+    // Adds new chapter to story
+    addStory({
+      title: locationInput.value,
+      coords: location.toJSON(),
+    })
+  );
 }
 // A reference to the currently open dialog
 let currentOpenedMenu = null;
@@ -244,35 +322,76 @@ function closeMenu(dialog) {
  * Initializes the draggable location tiles functionality.
  */
 export function initDragAndDrop() {
-  // Represents the collection of draggable location tiles.
-  const draggableLocations = document.querySelectorAll(".location-list-item");
+  // Get all draggable location list items
+  const locationItems = document.querySelectorAll(".location-list-item");
 
-  // Represents the container of the location tiles.
+  // Get the location list where the tiles can be dropped
   const locationList = document.querySelector(".location-list");
 
   // Add event listeners to all draggable tiles
-  draggableLocations.forEach((draggable) => {
-    draggable.addEventListener("dragstart", () => {
-      draggable.classList.add("dragging");
+  locationItems.forEach((item) => {
+    item.addEventListener("dragstart", () => {
+      item.classList.add("dragging");
     });
 
-    draggable.addEventListener("dragend", () => {
-      draggable.classList.remove("dragging");
+    item.addEventListener("dragend", () => {
+      item.classList.remove("dragging");
     });
   });
 
-  //
+  // Add event listeners to the location list where the tiles can be dropped
   locationList.addEventListener("dragover", (event) => {
     event.preventDefault();
 
-    const nextElement = getNextElement(locationList, event.clientY);
-    const draggable = document.querySelector(".dragging");
+    const nextElement = getNextElementByVerticalPosition(
+      locationList,
+      event.clientY
+    );
+    const draggedItem = document.querySelector(".dragging");
     if (nextElement == null) {
-      locationList.appendChild(draggable);
+      locationList.appendChild(draggedItem);
     } else {
-      locationList.insertBefore(draggable, nextElement);
+      locationList.insertBefore(draggedItem, nextElement);
     }
   });
+
+  locationList.addEventListener("drop", (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    // Get the id of the dragged location-list-item
+    const draggedLocationItemId = event.target.id;
+
+    // Get the id of the location-list-item next which the dragged location-list-item should be inserted
+    const nextLocationItemId = event.target.nextSibling?.id ?? null;
+
+    updateChapterBarCards(draggedLocationItemId, nextLocationItemId);
+
+    // Todo: update the story chapters array
+  });
+}
+
+function updateChapterBarCards(draggedLocationItemId, nextLocationItemId) {
+  // Get chapter card container
+  const cardsContainer = document.querySelector("#chapters-bar .cards");
+
+  // Get the dragged location-chapter
+  const targetChapter = cardsContainer.querySelector(
+    `.card[id="${draggedLocationItemId}"]`
+  );
+
+  // Get the next location-chapter
+  const nextChapter = cardsContainer.querySelector(
+    `.card[id="${nextLocationItemId}"]`
+  );
+
+  // Insert the dragged location-chapter after the next location-chapter
+  // If the nextChapter is null, the dragged location-chapter should be inserted at the end of the list
+  if (!nextChapter) {
+    cardsContainer.appendChild(targetChapter);
+  } else {
+    cardsContainer.insertBefore(targetChapter, nextChapter);
+  }
 }
 
 /**
@@ -282,15 +401,15 @@ export function initDragAndDrop() {
  * @param {number} draggedElementPositionY - The vertical position of the dragged element.
  * @returns {HTMLElement} - The element after which the dragged element should be inserted.
  */
-function getNextElement(container, draggedElementPositionY) {
-  const draggableElements = [
+function getNextElementByVerticalPosition(container, draggedElementPositionY) {
+  const nonDraggedLocationItems = [
     ...container.querySelectorAll(".location-list-item:not(.dragging)"),
   ];
 
   // Find the element that is closest to the dragged element
   // by comparing the vertical position of the dragged element to the vertical position of the other elements.
   // The element with the smallest offset is the closest element.
-  return draggableElements.reduce(
+  return nonDraggedLocationItems.reduce(
     (closest, child) => {
       const box = child.getBoundingClientRect();
       const offset = draggedElementPositionY - box.top - box.height / 2;
@@ -401,6 +520,9 @@ function handleEditAction(chapter) {
 
   const editForm = document.querySelector("form[name='edit-chapter-form']");
 
+  // Set which chapter the form belongs to
+  editForm.setAttribute("key", chapter.id);
+
   // Fill the form inputs with the chapter data
   editForm.querySelector('input[name="title"]').value = chapter.title ?? null;
   editForm.querySelector('input[name="content"]').value =
@@ -414,6 +536,7 @@ function handleEditAction(chapter) {
   const cameraOptionsInput = editForm.querySelector(
     'input[name="camera-options"]'
   );
+
   cameraOptionsInput.value = JSON.stringify(chapter.cameraOptions) ?? null;
 
   // Update input for camera options on save camera position button click
@@ -423,26 +546,41 @@ function handleEditAction(chapter) {
       cameraOptionsInput.value = JSON.stringify(getCameraOptions());
     });
 
+  // Add event listener that listens to changes to the chapter properties
+  editForm.addEventListener("input", (event) => {
+    const selectedChapterKey = editForm.getAttribute("key");
+
+    // Find index of chapter to be updated
+    const selectedChapterIndex = story.chapters.findIndex(
+      (chapter) => Number(selectedChapterKey) === Number(chapter.id)
+    );
+
+    // Get the update input value
+    const inputName = event.target.name;
+
+    // Update the chapter
+    story.chapters[selectedChapterIndex][inputName] = event.target.value;
+  });
+
   // Code for edit-from submission
+  // The form is submitted when the user clicks the leave-edit-mode button
   editForm.addEventListener(
     "submit",
     async (event) => {
       event.preventDefault();
 
-      const updatedChapterDetails = getChapterDetails();
-
-      const updatedChapter = {
-        ...chapter,
-        ...updatedChapterDetails,
-      };
-      setStory(updatedChapter);
-
-      // Remove custom data-attribute from the container
-      container.removeAttribute("data-mode");
+      localStorage.setItem("story", JSON.stringify(story));
     },
+
     // Remove the event listener after the submit
     { once: true }
   );
+
+  const LeaveEditFormButton = document.querySelector("button.leave-edit-mode");
+
+  LeaveEditFormButton.addEventListener("click", () => {
+    container.removeAttribute("data-mode");
+  });
 }
 
 /**
@@ -453,20 +591,7 @@ function handleEditAction(chapter) {
  * @param {number} id - The id of the chapter to be deleted.
  */
 function handleDeleteAction(id) {
-  // Get story from local storage
-  const story = JSON.parse(localStorage.getItem("story"));
-
-  // Find the chapter to be deleted
-  const chapterIndex = story.chapters.findIndex(
-    (chapter) => Number(chapter.id) === Number(id)
-  );
-
-  // Delete chapter
-  story.chapters.splice(chapterIndex, 1);
-
+  delete story.chapters[id];
   // Save updated object back to local storage
   localStorage.setItem("story", JSON.stringify(story));
-
-  // Update UI
-  updateUI(story);
 }

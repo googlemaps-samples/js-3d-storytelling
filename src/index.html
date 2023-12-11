@@ -67,7 +67,7 @@
               />
             </button>
           </span>
-          <button id="play-story">
+          <button id="autoplay-story">
             <svg
               width="24"
               height="24"
@@ -105,7 +105,7 @@
         <details class="story-details-container full-width" id="story-details">
           <summary><h2>Story Details:</h2></summary>
 
-          <form class="chapter-form">
+          <form class="chapter-form" name="story-details-form" method="dialog">
             <fieldset>
               <div class="field-wrapper">
                 <input type="text" name="title" placeholder="Add a title" />
@@ -116,7 +116,7 @@
               <div class="field-wrapper">
                 <input
                   type="text"
-                  name="content"
+                  name="description"
                   placeholder="Add a description"
                 />
                 <div class="field-placeholder">
@@ -124,7 +124,11 @@
                 </div>
               </div>
               <div class="field-wrapper">
-                <input type="text" name="author" placeholder="Add an author" />
+                <input
+                  type="text"
+                  name="createdBy"
+                  placeholder="Add an author"
+                />
                 <div class="field-placeholder">
                   <span class="label">Author</span>
                 </div>
@@ -137,6 +141,16 @@
                 />
                 <div class="field-placeholder">
                   <span class="label">Date or Time</span>
+                </div>
+              </div>
+              <div class="field-wrapper">
+                <input
+                  type="text"
+                  name="startButtonText"
+                  placeholder="Add start button text"
+                />
+                <div class="field-placeholder">
+                  <span class="label">Start text</span>
                 </div>
               </div>
               <div class="field-wrapper url-input">
