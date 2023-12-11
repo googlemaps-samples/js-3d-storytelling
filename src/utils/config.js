@@ -148,7 +148,7 @@ const getFormData = (form) => {
 };
 
 /**
- * Proxy handler for handling get, set and delete operations on story proxy object.
+ * Proxy handler for handling get, set and delete operations on story object.
  * @type {ProxyHandler}
  */
 export const storyProxyHandler = {
