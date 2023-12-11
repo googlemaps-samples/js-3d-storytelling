@@ -35,11 +35,11 @@ if (isStoryInLocalStorage) {
   localStorage.setItem("story", JSON.stringify(story));
 }
 
-const { chapters, properties } = story;
+const { chapters } = story;
 
 async function main() {
   try {
-    await initCesiumViewer(properties);
+    await initCesiumViewer();
     await initGoogleMaps();
     await initAutoComplete();
     updateSidebarLocationList(chapters);

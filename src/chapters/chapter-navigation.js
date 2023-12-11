@@ -3,6 +3,13 @@ import { performFlyTo } from "../utils/cesium.js";
 import { getParams, setParams } from "../utils/params.js";
 import { loadSvg } from "../utils/svg.js";
 
+/**
+ * The time in milliseconds between each chapter progression
+ * @type {number}
+ * @readonly
+ */
+const TIME_PER_CHAPTER = 3000;
+
 // Html elements
 /** The nav element shown on the intro details overlay
  * @type {HTMLNavElement}
@@ -58,15 +65,49 @@ export function initChapterNavigation() {
     toggleNavigationElements(true);
     updateChapter(0);
   });
+
+  forwardButton.addEventListener("click", () => {
+    setNextChapter();
+    stopProgression();
+  });
+
+  backButton.addEventListener("click", () => {
+    setPreviousChapter();
+    stopProgression();
+  });
+
   playButton.addEventListener("click", startStoryProgression);
-  forwardButton.addEventListener("click", setNextChapter);
-  backButton.addEventListener("click", setPreviousChapter);
 
   // Initialize chapter content based on URL parameters
   chapterData
     ? toggleNavigationElements(true)
     : toggleNavigationElements(false);
+
   updateChapterContent(chapterData || story.properties, !chapterData);
+}
+
+/**
+ * Stops the progression of the function.
+ */
+async function stopProgression() {
+  const playIcon = await loadSvg("round-play-button");
+  playButton.innerHTML = playIcon;
+
+  clearTimeout(intervalId);
+  intervalId = null;
+}
+
+/**
+ * Progresses to the next chapter and stops progression if the current chapter is the last one.
+ *
+ * @param {type} paramName - description of parameter
+ * @return {type} description of return value
+ */
+function progress() {
+  setNextChapter();
+  if (getCurrentChapterIndex() === story.chapters.length - 1) {
+    stopProgression();
+  }
 }
 
 /**
@@ -76,29 +117,6 @@ export function initChapterNavigation() {
  */
 async function startStoryProgression() {
   const pauseIcon = await loadSvg("round-pause-button");
-  const playIcon = await loadSvg("round-play-button");
-
-  /**
-   * Stops the progression of the function.
-   */
-  function stopProgression() {
-    clearTimeout(intervalId);
-    intervalId = null;
-    playButton.innerHTML = playIcon;
-  }
-
-  /**
-   * Progresses to the next chapter and stops progression if the current chapter is the last one.
-   *
-   * @param {type} paramName - description of parameter
-   * @return {type} description of return value
-   */
-  function progress() {
-    setNextChapter();
-    if (getCurrentChapterIndex() === story.chapters.length - 1) {
-      stopProgression();
-    }
-  }
 
   // Set up the interval
   if (intervalId) {
@@ -106,7 +124,7 @@ async function startStoryProgression() {
     stopProgression();
   } else {
     // If the interval is not active, start it
-    intervalId = setInterval(progress, 1000);
+    intervalId = setInterval(progress, TIME_PER_CHAPTER);
     playButton.innerHTML = pauseIcon;
   }
 }
@@ -150,7 +168,7 @@ export function updateChapter(chapterIndex) {
   setParams("chapter", story.chapters[chapterIndex].title);
   updateChapterContent(story.chapters[chapterIndex], false);
   performFlyTo(coords, {
-    duration: 1,
+    duration: 2,
   });
 }
 

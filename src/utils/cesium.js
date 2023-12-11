@@ -1,4 +1,5 @@
 import { GOOGLE_MAPS_API_KEY } from "../env.js";
+import { story } from "../main.js";
 
 // Camera height above the target when flying to a point.
 const CAMERA_HEIGHT = 100;
@@ -121,7 +122,7 @@ export function getCameraOptions() {
  * configuring its default camera position and orientation, and adding both a 3D
  * tileset and attribution to the viewer.
  */
-export async function initCesiumViewer(storyProperties) {
+export async function initCesiumViewer() {
   // Set the default access token to null to prevent the CesiumJS viewer from requesting an access token
   Cesium.Ion.defaultAccessToken = null;
 
@@ -149,13 +150,13 @@ export async function initCesiumViewer(storyProperties) {
   // Disable free-look, the camera view direction can only be changed through translating or rotating
   cesiumViewer.scene.screenSpaceCameraController.enableLook = false;
 
-  const { coords, cameraOptions } = storyProperties;
+  const { coords, cameraOptions } = story.properties;
 
   // Set the starting position and orientation of the camera
   cesiumViewer.camera.setView({
     destination: Cesium.Cartesian3.fromDegrees(
-      coords.longitude,
-      coords.latitude,
+      coords.lng,
+      coords.lat,
       cameraOptions.height
     ),
     orientation: {
