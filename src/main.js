@@ -163,7 +163,7 @@ if (isStoryInLocalStorage) {
  */
 export let story = new Proxy(storyConfig, storyProxyHandler);
 
-const { properties } = story;
+const { properties, chapters } = story;
 
 async function main() {
   try {
@@ -172,10 +172,8 @@ async function main() {
     await initAutoComplete();
     updateSidebar(story);
 
-    // Create markers from chapter coordinates using chapter title as marker id
-    await createMarkers(
-      story.chapters.map(({ coords, title }) => ({ coords, id: title }))
-    );
+    // Create markers from chapter coordinates
+    await createMarkers(chapters);
 
     //initializeStory(story);
 
