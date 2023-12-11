@@ -84,6 +84,25 @@ export async function setStory(updatedChapter) {
 }
 
 /**
+ * Adds a new story chapter and saves it to local storage.
+ * @param {Object} newChapter - The chapter object to be added.
+ * @returns {void}
+ */
+export async function addStory(newChapter) {
+  const chapterIds = story.chapters.map(({ id }) => id).filter(Boolean);
+  // Increment hightest existing chapter id by one
+  const newChapterId = Math.max(...chapterIds) + 1;
+
+  // Add new chapter to story
+  story.chapters.push({ ...newChapter, id: newChapterId });
+
+  // Save updated object back to local storage
+  localStorage.setItem("story", JSON.stringify(story));
+
+  updateUI();
+}
+
+/**
  * Returns the updated chapter data from the edit chapter form.
  */
 export const getChapterDetails = () => {
