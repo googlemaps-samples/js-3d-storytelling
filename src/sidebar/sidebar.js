@@ -322,35 +322,76 @@ function closeMenu(dialog) {
  * Initializes the draggable location tiles functionality.
  */
 export function initDragAndDrop() {
-  // Represents the collection of draggable location tiles.
-  const draggableLocations = document.querySelectorAll(".location-list-item");
+  // Get all draggable location list items
+  const locationItems = document.querySelectorAll(".location-list-item");
 
-  // Represents the container of the location tiles.
+  // Get the location list where the tiles can be dropped
   const locationList = document.querySelector(".location-list");
 
   // Add event listeners to all draggable tiles
-  draggableLocations.forEach((draggable) => {
-    draggable.addEventListener("dragstart", () => {
-      draggable.classList.add("dragging");
+  locationItems.forEach((item) => {
+    item.addEventListener("dragstart", () => {
+      item.classList.add("dragging");
     });
 
-    draggable.addEventListener("dragend", () => {
-      draggable.classList.remove("dragging");
+    item.addEventListener("dragend", () => {
+      item.classList.remove("dragging");
     });
   });
 
-  //
+  // Add event listeners to the location list where the tiles can be dropped
   locationList.addEventListener("dragover", (event) => {
     event.preventDefault();
 
-    const nextElement = getNextElement(locationList, event.clientY);
-    const draggable = document.querySelector(".dragging");
+    const nextElement = getNextElementByVerticalPosition(
+      locationList,
+      event.clientY
+    );
+    const draggedItem = document.querySelector(".dragging");
     if (nextElement == null) {
-      locationList.appendChild(draggable);
+      locationList.appendChild(draggedItem);
     } else {
-      locationList.insertBefore(draggable, nextElement);
+      locationList.insertBefore(draggedItem, nextElement);
     }
   });
+
+  locationList.addEventListener("drop", (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    // Get the id of the dragged location-list-item
+    const draggedLocationItemId = event.target.id;
+
+    // Get the id of the location-list-item next which the dragged location-list-item should be inserted
+    const nextLocationItemId = event.target.nextSibling?.id ?? null;
+
+    updateChapterBarCards(draggedLocationItemId, nextLocationItemId);
+
+    // Todo: update the story chapters array
+  });
+}
+
+function updateChapterBarCards(draggedLocationItemId, nextLocationItemId) {
+  // Get chapter card container
+  const cardsContainer = document.querySelector("#chapters-bar .cards");
+
+  // Get the dragged location-chapter
+  const targetChapter = cardsContainer.querySelector(
+    `.card[id="${draggedLocationItemId}"]`
+  );
+
+  // Get the next location-chapter
+  const nextChapter = cardsContainer.querySelector(
+    `.card[id="${nextLocationItemId}"]`
+  );
+
+  // Insert the dragged location-chapter after the next location-chapter
+  // If the nextChapter is null, the dragged location-chapter should be inserted at the end of the list
+  if (!nextChapter) {
+    cardsContainer.appendChild(targetChapter);
+  } else {
+    cardsContainer.insertBefore(targetChapter, nextChapter);
+  }
 }
 
 /**
@@ -360,15 +401,15 @@ export function initDragAndDrop() {
  * @param {number} draggedElementPositionY - The vertical position of the dragged element.
  * @returns {HTMLElement} - The element after which the dragged element should be inserted.
  */
-function getNextElement(container, draggedElementPositionY) {
-  const draggableElements = [
+function getNextElementByVerticalPosition(container, draggedElementPositionY) {
+  const nonDraggedLocationItems = [
     ...container.querySelectorAll(".location-list-item:not(.dragging)"),
   ];
 
   // Find the element that is closest to the dragged element
   // by comparing the vertical position of the dragged element to the vertical position of the other elements.
   // The element with the smallest offset is the closest element.
-  return draggableElements.reduce(
+  return nonDraggedLocationItems.reduce(
     (closest, child) => {
       const box = child.getBoundingClientRect();
       const offset = draggedElementPositionY - box.top - box.height / 2;
