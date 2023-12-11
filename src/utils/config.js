@@ -1,4 +1,4 @@
-import { updateUI } from "../main.js";
+import { updateUI, story } from "../main.js";
 /**
  * Function to deep freeze an object.
  *
@@ -69,9 +69,6 @@ export async function loadConfig(configUrl) {
  * @returns {void}
  */
 export async function setStory(updatedChapter) {
-  // Get story from local storage
-  const story = JSON.parse(localStorage.getItem("story"));
-
   // Find the chapter to be updated
   const chapterIndex = story.chapters.findIndex(
     (chapter) => Number(chapter.id) === Number(updatedChapter.id)
@@ -83,7 +80,7 @@ export async function setStory(updatedChapter) {
   // Save updated object back to local storage
   localStorage.setItem("story", JSON.stringify(story));
 
-  updateUI(story);
+  updateUI();
 }
 
 /**
