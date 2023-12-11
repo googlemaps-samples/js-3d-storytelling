@@ -192,7 +192,7 @@ export const storyProxyHandler = {
       // Update chapter card
       updateChapterCard(target, property, updatedValue);
 
-      // Beside the card, we also need to update the location list item in the sidebar
+      // Update the location list item in the sidebar
       updateLocationListItem(target, updatedValue);
     }
 
@@ -228,6 +228,11 @@ export const storyProxyHandler = {
   },
 };
 
+/**
+ * Deletes a chapter card from the DOM.
+ *
+ * @param {string} deletedChapterId - The ID of the chapter card to be deleted.
+ */
 function deleteChapterCard(deletedChapterId) {
   // Get cards container
   const cardsContainer = document.querySelector("#chapters-bar .cards");
@@ -239,6 +244,11 @@ function deleteChapterCard(deletedChapterId) {
   cardsContainer.removeChild(card);
 }
 
+/**
+ * Deletes a location list item from the DOM.
+ *
+ * @param {string} deletedChapterId - The ID of the chapter to be deleted.
+ */
 function deleteLocationListItem(deletedChapterId) {
   // Get location list container
   const locationListContainer = document.querySelector(".location-list");
@@ -252,6 +262,12 @@ function deleteLocationListItem(deletedChapterId) {
   locationListContainer.removeChild(locationListItem);
 }
 
+/**
+ * Updates the chapter card with the specified target, property, and updated value.
+ * @param {HTMLElement} target - The target element.
+ * @param {string} property - The property to be updated.
+ * @param {string} updatedValue - The updated value.
+ */
 function updateChapterCard(target, property, updatedValue) {
   // Get cards container
   const cardsContainer = document.querySelector("#chapters-bar .cards");
@@ -274,6 +290,12 @@ function updateChapterCard(target, property, updatedValue) {
   }
 }
 
+/**
+ * Updates the value of a location list item.
+ *
+ * @param {HTMLElement} target - The target location list item to be updated.
+ * @param {string} updatedValue - The updated value to be set.
+ */
 function updateLocationListItem(target, updatedValue) {
   // Get location list container
   const locationListContainer = document.querySelector(".location-list");
