@@ -1,4 +1,4 @@
-import { storyProxy } from "../main.js";
+import { story } from "../main.js";
 import { getParams, setParams } from "../utils/params.js";
 
 // Html elements
@@ -37,7 +37,7 @@ export function initChapterNavigation() {
   const params = getParams();
   const chapterParam = params.get("chapter");
   //Finds and returns a chapter from the story based on its title.
-  const chapterData = storyProxy.chapters.find(
+  const chapterData = story.chapters.find(
     (chapter) => chapter.title === chapterParam
   );
 
@@ -50,28 +50,28 @@ export function initChapterNavigation() {
   chapterData
     ? toggleNavigationElements(true)
     : toggleNavigationElements(false);
-  updateChapterContent(chapterData || storyProxy.properties, !chapterData);
+  updateChapterContent(chapterData || story.properties, !chapterData);
 }
 
 /**
  * Activates the first chapter in the story and updates the configuration.
  */
 function startStory() {
-  const firstChapterTitle = storyProxy.chapters[0].title;
+  const firstChapterTitle = story.chapters[0].title;
   setParams("chapter", firstChapterTitle);
   toggleNavigationElements(firstChapterTitle);
-  updateChapterContent(storyProxy.chapters[0], false);
+  updateChapterContent(story.chapters[0], false);
 }
 
 const setPreviousChapter = () => {
   const newChapterIndex = getCurrentChapterIndex() - 1;
 
   if (newChapterIndex >= 0) {
-    setParams("chapter", storyProxy.chapters[newChapterIndex].title);
-    updateChapterContent(storyProxy.chapters[newChapterIndex], false);
+    setParams("chapter", story.chapters[newChapterIndex].title);
+    updateChapterContent(story.chapters[newChapterIndex], false);
   } else {
     setParams("chapter", null);
-    updateChapterContent(storyProxy.properties);
+    updateChapterContent(story.properties);
     toggleNavigationElements(null);
   }
 };
@@ -79,9 +79,9 @@ const setPreviousChapter = () => {
 const setNextChapter = () => {
   const newChapterIndex = getCurrentChapterIndex() + 1;
 
-  if (newChapterIndex < storyProxy.chapters.length) {
-    setParams("chapter", storyProxy.chapters[newChapterIndex].title);
-    updateChapterContent(storyProxy.chapters[newChapterIndex], false);
+  if (newChapterIndex < story.chapters.length) {
+    setParams("chapter", story.chapters[newChapterIndex].title);
+    updateChapterContent(story.chapters[newChapterIndex], false);
   }
 };
 
@@ -101,9 +101,7 @@ export function toggleNavigationElements(chapterParam) {
 const getCurrentChapterIndex = () => {
   const params = getParams();
   const chapterParam = params.get("chapter");
-  return storyProxy.chapters.findIndex(
-    (chapter) => chapter.title === chapterParam
-  );
+  return story.chapters.findIndex((chapter) => chapter.title === chapterParam);
 };
 
 /**
@@ -116,14 +114,14 @@ export function updateChapterContent(chapterData, isIntro = true) {
 
   chapterDetail.querySelector(".story-title").textContent = isIntro
     ? ""
-    : storyProxy.properties.title;
+    : story.properties.title;
 
   chapterDetail.querySelector("h2").textContent = isIntro
-    ? storyProxy.properties.title
+    ? story.properties.title
     : chapterData.title;
 
   chapterDetail.querySelector(".description").textContent = isIntro
-    ? storyProxy.properties.description
+    ? story.properties.description
     : chapterData.content;
 
   chapterDetail.querySelector(".date").textContent = chapterData.date;
@@ -131,22 +129,20 @@ export function updateChapterContent(chapterData, isIntro = true) {
   chapterDetail.querySelector(".hero").src = chapterData.imageUrl;
 
   const imageCredit = isIntro
-    ? storyProxy.properties.createdBy
+    ? story.properties.createdBy
     : `Image credit: ${chapterData.imageCredit}`;
 
   chapterDetail.querySelector(".attribution").textContent = imageCredit;
 
   // update chapter index
   const chapterIndex = getCurrentChapterIndex();
-  const chapterIndexDisplay = `${chapterIndex + 1} / ${
-    storyProxy.chapters.length
-  }`;
+  const chapterIndexDisplay = `${chapterIndex + 1} / ${story.chapters.length}`;
   detailNavigation.querySelector("#chapter-index").textContent =
     chapterIndexDisplay;
 
   // if the last chapter is reached, disable the forward button
   // Check if the current chapter is the last chapter
-  if (chapterIndex + 1 === storyProxy.chapters.length) {
+  if (chapterIndex + 1 === story.chapters.length) {
     // Disable the forward button
     forwardButton.disabled = true;
   } else {

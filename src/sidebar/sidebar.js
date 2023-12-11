@@ -1,4 +1,4 @@
-import { storyProxy } from "../main.js";
+import { story } from "../main.js";
 import { getCameraOptions } from "../utils/cesium.js";
 
 import { getStoryDetails } from "../utils/config.js";
@@ -32,7 +32,7 @@ export function addSidebarToggleHandler() {
  * Updates the places in the sidebar based on the given chapters.
  */
 export function updateSidebar() {
-  const { chapters, properties } = storyProxy;
+  const { chapters, properties } = story;
   // Fill story details form with the properties data
   updateStoryDetails(properties);
 
@@ -99,15 +99,15 @@ function updateStoryDetails(properties) {
 
     // Update story properties
     const updatedStoryProperties = {
-      ...storyProxy.properties,
+      ...story.properties,
       ...updatedStoryDetails,
     };
 
     // Update story
-    storyProxy.properties = updatedStoryProperties;
+    story.properties = updatedStoryProperties;
 
     // Save updated object back to local storage
-    localStorage.setItem("story", JSON.stringify(storyProxy));
+    localStorage.setItem("story", JSON.stringify(story));
   });
 }
 
@@ -510,7 +510,7 @@ function handleEditAction(chapter) {
     const selectedChapterKey = editForm.getAttribute("key");
 
     // Find index of chapter to be updated
-    const selectedChapterIndex = storyProxy.chapters.findIndex(
+    const selectedChapterIndex = story.chapters.findIndex(
       (chapter) => Number(selectedChapterKey) === Number(chapter.id)
     );
 
@@ -518,7 +518,7 @@ function handleEditAction(chapter) {
     const inputName = event.target.name;
 
     // Update the chapter
-    storyProxy.chapters[selectedChapterIndex][inputName] = event.target.value;
+    story.chapters[selectedChapterIndex][inputName] = event.target.value;
   });
 
   // Code for edit-from submission
@@ -528,7 +528,7 @@ function handleEditAction(chapter) {
     async (event) => {
       event.preventDefault();
 
-      localStorage.setItem("story", JSON.stringify(storyProxy));
+      localStorage.setItem("story", JSON.stringify(story));
     },
 
     // Remove the event listener after the submit
@@ -550,7 +550,7 @@ function handleEditAction(chapter) {
  * @param {number} id - The id of the chapter to be deleted.
  */
 function handleDeleteAction(id) {
-  delete storyProxy.chapters[id];
+  delete story.chapters[id];
   // Save updated object back to local storage
-  localStorage.setItem("story", JSON.stringify(storyProxy));
+  localStorage.setItem("story", JSON.stringify(story));
 }

@@ -143,16 +143,16 @@ const storyProxyHandler = {
   },
 };
 
-let story;
+let storyConfig;
 
 const isStoryInLocalStorage = Boolean(localStorage.getItem("story"));
 
 // Check if story is in local storage
 if (isStoryInLocalStorage) {
-  story = JSON.parse(localStorage.getItem("story"));
+  storyConfig = JSON.parse(localStorage.getItem("story"));
 } else {
-  story = await loadConfig("./config.json");
-  localStorage.setItem("story", JSON.stringify(story));
+  storyConfig = await loadConfig("./config.json");
+  localStorage.setItem("story", JSON.stringify(storyConfig));
 }
 
 /**
@@ -161,20 +161,20 @@ if (isStoryInLocalStorage) {
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
  * @type {Proxy}
  */
-export let storyProxy = new Proxy(story, storyProxyHandler);
+export let story = new Proxy(storyConfig, storyProxyHandler);
 
-const { properties } = storyProxy;
+const { properties } = story;
 
 async function main() {
   try {
     await initCesiumViewer(properties);
     await initGoogleMaps();
     await initAutoComplete();
-    updateSidebar(storyProxy);
+    updateSidebar(story);
 
     // Create markers from chapter coordinates using chapter title as marker id
     await createMarkers(
-      storyProxy.chapters.map(({ coords, title }) => ({ coords, id: title }))
+      story.chapters.map(({ coords, title }) => ({ coords, id: title }))
     );
 
     //initializeStory(story);
@@ -182,7 +182,7 @@ async function main() {
     addSidebarToggleHandler();
     initDragAndDrop();
     initChapterNavigation();
-    addChaptersBar(story);
+    addChaptersBar(storyConfig);
   } catch (error) {
     console.error(error);
   }
