@@ -198,11 +198,35 @@ const getCurrentChapterIndex = () => {
 };
 
 /**
+ * Updates the details navigation. This includes the chapter index and
+ * the forward button (if the current chapter is the last).
+ */
+function updateDetailsNavigation() {
+  // update chapter index
+  const chapterIndex = getCurrentChapterIndex();
+  const chapterIndexDisplay = `${chapterIndex + 1} / ${story.chapters.length}`;
+  detailNavigation.querySelector("#chapter-index").textContent =
+    chapterIndexDisplay;
+
+  // if the last chapter is reached, disable the forward button
+  // Check if the current chapter is the last chapter
+  if (chapterIndex + 1 === story.chapters.length) {
+    // Disable the forward button
+    forwardButton.disabled = true;
+  } else {
+    // Enable the forward button
+    forwardButton.disabled = false;
+  }
+}
+
+/**
  * Updates the content of the chapter detail section.
  * @param {Chapter} chapterData - The data object containing chapter details
  * @param {boolean} [isIntro=true] - Flag indicating if the current view is the introduction.
  */
 export function updateChapterContent(chapterData, isIntro = true) {
+  updateDetailsNavigation();
+
   const chapterDetail = document.querySelector(".chapter-detail");
 
   chapterDetail.querySelector(".story-title").textContent = isIntro
@@ -226,20 +250,4 @@ export function updateChapterContent(chapterData, isIntro = true) {
     : `Image credit: ${chapterData.imageCredit}`;
 
   chapterDetail.querySelector(".attribution").textContent = imageCredit;
-
-  // update chapter index
-  const chapterIndex = getCurrentChapterIndex();
-  const chapterIndexDisplay = `${chapterIndex + 1} / ${story.chapters.length}`;
-  detailNavigation.querySelector("#chapter-index").textContent =
-    chapterIndexDisplay;
-
-  // if the last chapter is reached, disable the forward button
-  // Check if the current chapter is the last chapter
-  if (chapterIndex + 1 === story.chapters.length) {
-    // Disable the forward button
-    forwardButton.disabled = true;
-  } else {
-    // Enable the forward button
-    forwardButton.disabled = false;
-  }
 }
