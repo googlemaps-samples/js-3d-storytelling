@@ -25,7 +25,7 @@ export function createStoryIntroCard(storyProperties) {
 
   // set intro view
   card.addEventListener("click", () => {
-    setParams("chapter", null);
+    setParams("chapter");
     toggleNavigationElements(false);
     updateChapterContent(storyProperties, true);
     createCustomRadiusShader(storyProperties.coords, 1000);
