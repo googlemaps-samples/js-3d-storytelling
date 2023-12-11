@@ -23,8 +23,9 @@ export function createStoryIntroCard(storyProperties) {
   storyIntroTitle.textContent = storyProperties.title;
   card.appendChild(storyIntroTitle);
 
+  // set intro view
   card.addEventListener("click", () => {
-    setParams("chapter", "intro");
+    setParams("chapter", null);
     toggleNavigationElements(false);
     updateChapterContent(storyProperties, true);
     createCustomRadiusShader(storyProperties.coords, 1000);
@@ -56,6 +57,7 @@ export function createChapterCard(chapter) {
   chapterTitle.textContent = chapter.title;
   card.appendChild(chapterTitle);
 
+  // set current chapter
   card.addEventListener("click", () => {
     setParams("chapter", chapter.title);
     toggleNavigationElements(true);

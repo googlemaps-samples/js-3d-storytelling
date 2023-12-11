@@ -81,7 +81,7 @@
   display: inline-flex;
 }
 
-.chapter .intro-navigation #start-button {
+.chapter .intro-navigation #start-story {
   border-radius: var(--spacing-medium);
   background-color: var(--accent-color);
   color: var(--text-color-white);
@@ -90,6 +90,11 @@
   padding: var(--spacing-small) var(--spacing-medium);
   padding-right: var(--spacing-extra-small);
   align-items: center;
+}
+
+.chapter .detail-navigation #play-story svg,
+.chapter .detail-navigation #play-story path {
+  fill: #1a73e8;
 }
 
 .chapter .intro-navigation {

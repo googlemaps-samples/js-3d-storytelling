@@ -1,31 +1,42 @@
 import { story } from "../main.js";
 import { getParams, setParams } from "../utils/params.js";
+import { loadSvg } from "../utils/svg.js";
 
 // Html elements
 /** The nav element shown on the intro details overlay
- * @type {HTMLNavvElement}
+ * @type {HTMLNavElement}
  */
 const introNavigation = document.querySelector(".intro-navigation");
 
 /** The nav element shown on the story details overlay
- * @type {HTMLNavvElement}
+ * @type {HTMLNavElement}
  */
 const detailNavigation = document.querySelector(".detail-navigation");
 
 /** The button to start the story / leave the intro overlay with
- * @type {HTMLNavvElement}
+ * @type {HTMLButtonElement}
  */
-const startButton = introNavigation.querySelector("#start-button");
+const startButton = introNavigation.querySelector("#start-story");
+
+/** The button to play the story chapter by chapter
+ * @type {HTMLButtonElement}
+ */
+const playButton = detailNavigation.querySelector("#play-story");
 
 /** The button to progress the story backward with
- * @type {HTMLNavvElement}
+ * @type {HTMLButtonElement}
  */
 const backButton = detailNavigation.querySelector("#chapter-backward");
 
 /** The button to progress the story forward with
- * @type {HTMLNavvElement}
+ * @type {HTMLButtonElement}
  */
 const forwardButton = detailNavigation.querySelector("#chapter-forward");
+
+/**
+ * The id used to identify the timeout instance for the story progression
+ */
+let intervalId = null;
 
 /**
  * Initializes and manages chapter navigation for a story.
@@ -42,7 +53,8 @@ export function initChapterNavigation() {
   );
 
   // Set up event listeners
-  startButton.addEventListener("click", startStory);
+  startButton.addEventListener("click", setFirstChapter);
+  playButton.addEventListener("click", startStoryProgression);
   forwardButton.addEventListener("click", setNextChapter);
   backButton.addEventListener("click", setPreviousChapter);
 
@@ -56,13 +68,57 @@ export function initChapterNavigation() {
 /**
  * Activates the first chapter in the story and updates the configuration.
  */
-function startStory() {
+function setFirstChapter() {
   const firstChapterTitle = story.chapters[0].title;
   setParams("chapter", firstChapterTitle);
   toggleNavigationElements(firstChapterTitle);
   updateChapterContent(story.chapters[0], false);
 }
+/**
+ * Starts the progression of the story.
+ *
+ * @return {Promise<void>} This function does not return anything.
+ */
+async function startStoryProgression() {
+  const pauseIcon = await loadSvg("round-pause-button");
+  const playIcon = await loadSvg("round-play-button");
 
+  /**
+   * Stops the progression of the function.
+   */
+  function stopProgression() {
+    clearTimeout(intervalId);
+    intervalId = null;
+    playButton.innerHTML = playIcon;
+  }
+
+  /**
+   * Progresses to the next chapter and stops progression if the current chapter is the last one.
+   *
+   * @param {type} paramName - description of parameter
+   * @return {type} description of return value
+   */
+  function progress() {
+    setNextChapter();
+    if (getCurrentChapterIndex() === story.chapters.length - 1) {
+      stopProgression();
+    }
+  }
+
+  // Set up the interval
+  if (intervalId) {
+    // If the interval is already active, stop it
+    stopProgression();
+  } else {
+    // If the interval is not active, start it
+    intervalId = setInterval(progress, 5000);
+    playButton.innerHTML = pauseIcon;
+  }
+}
+
+/**
+ * Sets the previous chapter as the current chapter.
+ */
 const setPreviousChapter = () => {
   const newChapterIndex = getCurrentChapterIndex() - 1;
 
@@ -76,6 +132,9 @@ const setPreviousChapter = () => {
   }
 };
 
+/**
+ * Continues to the next chapter in the story.
+ */
 const setNextChapter = () => {
   const newChapterIndex = getCurrentChapterIndex() + 1;
 
