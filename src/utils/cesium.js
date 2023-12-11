@@ -216,6 +216,15 @@ function createAttribution() {
 }
 
 /**
+ * Removes the custom radius shader from the tileset.
+ */
+export function removeCustomRadiusShader() {
+  if (tileset.customShader) {
+    tileset.customShader = undefined;
+  }
+}
+
+/**
  * Adds a custom shader for the tiles to darken all tiles outside the radius around the center.
  *
  * @param {google.maps.LatLngLiteral} coordinates - The center coordinates.

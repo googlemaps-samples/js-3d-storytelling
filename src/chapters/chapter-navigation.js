@@ -1,5 +1,9 @@
 import { story } from "../main.js";
-import { performFlyTo } from "../utils/cesium.js";
+import {
+  createCustomRadiusShader,
+  performFlyTo,
+  removeCustomRadiusShader,
+} from "../utils/cesium.js";
 import { getParams, setParams } from "../utils/params.js";
 import { loadSvg } from "../utils/svg.js";
 
@@ -9,6 +13,8 @@ import { loadSvg } from "../utils/svg.js";
  * @readonly
  */
 const TIME_PER_CHAPTER = 3000;
+
+const CHAPTER_RADIUS = 250;
 
 // SVG icons
 const PAUSE_ICON = await loadSvg("round-pause-button");
@@ -158,6 +164,7 @@ export function resetToIntro() {
   setParams("chapter", null);
   updateChapterContent(story.properties);
   activateNavigationElement("intro");
+  removeCustomRadiusShader();
   performFlyTo(story.properties.coords, {
     duration: 1,
   });
@@ -173,6 +180,8 @@ export function updateChapter(chapterIndex) {
 
   setParams("chapter", story.chapters[chapterIndex].title);
   updateChapterContent(story.chapters[chapterIndex], false);
+  activateNavigationElement("details");
+  createCustomRadiusShader(coords, CHAPTER_RADIUS);
   performFlyTo(coords, {
     duration: 2,
   });

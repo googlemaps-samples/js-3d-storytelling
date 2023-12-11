@@ -3,6 +3,7 @@ import { createCustomRadiusShader } from "../utils/cesium.js";
 import { setParams } from "../utils/params.js";
 import {
   activateNavigationElement,
+  resetToIntro,
   updateChapter,
   updateChapterContent,
 } from "./chapter-navigation.js";
@@ -26,12 +27,7 @@ export function createStoryIntroCard(storyProperties) {
   card.appendChild(storyIntroTitle);
 
   // set intro view
-  card.addEventListener("click", () => {
-    setParams("chapter");
-    activateNavigationElement("intro");
-    updateChapterContent(storyProperties, true);
-    createCustomRadiusShader(storyProperties.coords, 1000);
-  });
+  card.addEventListener("click", resetToIntro);
 
   return card;
 }
