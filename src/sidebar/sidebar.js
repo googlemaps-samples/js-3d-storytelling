@@ -1,7 +1,7 @@
-import { story, updateUI } from "../main.js";
+import { story } from "../main.js";
 import { getCameraOptions } from "../utils/cesium.js";
 
-import { getChapterDetails, setStory, addStory } from "../utils/config.js";
+import { getStoryDetails } from "../utils/config.js";
 /**
  * Options for radio buttons in the sidebar.
  * @typedef {Object} LocationMenuOptions
@@ -40,7 +40,7 @@ export function updateSidebar() {
   updateLocationList(chapters);
 }
 
-function updateLocationList(chapters) {
+export function updateLocationList(chapters) {
   // Fill the location list with the chapters data
   const locationListContainer = document.querySelector(".location-list");
 
@@ -83,6 +83,32 @@ function updateStoryDetails(properties) {
     properties.imageUrl ?? null;
   storyDetailsForm.querySelector('input[name="imageCredit"]').value =
     properties.imageCredit ?? null;
+
+  // In the story details form, the user can change the story properties.
+  // As there is no submit button, we submit the form when the user changes an input.
+  storyDetailsForm.addEventListener("input", () => {
+    storyDetailsForm.requestSubmit();
+  });
+
+  // Code for story-details-form submission
+  storyDetailsForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    // Get updated story details
+    const updatedStoryDetails = getStoryDetails();
+
+    // Update story properties
+    const updatedStoryProperties = {
+      ...story.properties,
+      ...updatedStoryDetails,
+    };
+
+    // Update story
+    story.properties = updatedStoryProperties;
+
+    // Save updated object back to local storage
+    localStorage.setItem("story", JSON.stringify(story));
+  });
 }
 
 /**
@@ -104,6 +130,7 @@ function createLocationTile(chapter) {
   // Set attributes and content
   li.className = "location-list-item";
   li.draggable = true;
+  li.id = chapter.id;
 
   p.textContent = chapter.title;
 
@@ -452,6 +479,9 @@ function handleEditAction(chapter) {
 
   const editForm = document.querySelector("form[name='edit-chapter-form']");
 
+  // Set which chapter the form belongs to
+  editForm.setAttribute("key", chapter.id);
+
   // Fill the form inputs with the chapter data
   editForm.querySelector('input[name="title"]').value = chapter.title ?? null;
   editForm.querySelector('input[name="content"]').value =
@@ -465,6 +495,7 @@ function handleEditAction(chapter) {
   const cameraOptionsInput = editForm.querySelector(
     'input[name="camera-options"]'
   );
+
   cameraOptionsInput.value = JSON.stringify(chapter.cameraOptions) ?? null;
 
   // Update input for camera options on save camera position button click
@@ -474,26 +505,41 @@ function handleEditAction(chapter) {
       cameraOptionsInput.value = JSON.stringify(getCameraOptions());
     });
 
+  // Add event listener that listens to changes to the chapter properties
+  editForm.addEventListener("input", (event) => {
+    const selectedChapterKey = editForm.getAttribute("key");
+
+    // Find index of chapter to be updated
+    const selectedChapterIndex = story.chapters.findIndex(
+      (chapter) => Number(selectedChapterKey) === Number(chapter.id)
+    );
+
+    // Get the update input value
+    const inputName = event.target.name;
+
+    // Update the chapter
+    story.chapters[selectedChapterIndex][inputName] = event.target.value;
+  });
+
   // Code for edit-from submission
+  // The form is submitted when the user clicks the leave-edit-mode button
   editForm.addEventListener(
     "submit",
     async (event) => {
       event.preventDefault();
 
-      const updatedChapterDetails = getChapterDetails();
-
-      const updatedChapter = {
-        ...chapter,
-        ...updatedChapterDetails,
-      };
-      setStory(updatedChapter);
-
-      // Remove custom data-attribute from the container
-      container.removeAttribute("data-mode");
+      localStorage.setItem("story", JSON.stringify(story));
     },
+
     // Remove the event listener after the submit
     { once: true }
   );
+
+  const LeaveEditFormButton = document.querySelector("button.leave-edit-mode");
+
+  LeaveEditFormButton.addEventListener("click", () => {
+    container.removeAttribute("data-mode");
+  });
 }
 
 /**
@@ -504,20 +550,7 @@ function handleEditAction(chapter) {
  * @param {number} id - The id of the chapter to be deleted.
  */
 function handleDeleteAction(id) {
-  // Get story from local storage
-  // const story = JSON.parse(localStorage.getItem("story"));
-
-  // Find the chapter to be deleted
-  const chapterIndex = story.chapters.findIndex(
-    (chapter) => Number(chapter.id) === Number(id)
-  );
-
-  // Delete chapter
-  story.chapters.splice(chapterIndex, 1);
-
+  delete story.chapters[id];
   // Save updated object back to local storage
   localStorage.setItem("story", JSON.stringify(story));
-
-  // Update UI
-  updateUI(story);
 }

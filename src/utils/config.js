@@ -1,4 +1,5 @@
-import { updateUI, story } from "../main.js";
+import { updateChapterContent } from "../chapters/chapter-navigation.js";
+
 /**
  * Function to deep freeze an object.
  *
@@ -53,34 +54,11 @@ export async function loadConfig(configUrl) {
     // Parse the JSON data
     const configData = await configResponse.json();
 
-    // Freeze the config object with all its properties
-    deepFreeze(configData);
-
     return configData;
   } catch (error) {
     // Handle and report any errors during the process.
     throw `Failed to load and parse configuration data: ${error}`;
   }
-}
-
-/**
- * Updates the story chapter and saves it to local storage.
- * @param {Object} updatedChapter - The chapter object to be updated.
- * @returns {void}
- */
-export async function setStory(updatedChapter) {
-  // Find the chapter to be updated
-  const chapterIndex = story.chapters.findIndex(
-    (chapter) => Number(chapter.id) === Number(updatedChapter.id)
-  );
-
-  // Update chapter
-  story.chapters[chapterIndex] = updatedChapter;
-
-  // Save updated object back to local storage
-  localStorage.setItem("story", JSON.stringify(story));
-
-  updateUI();
 }
 
 /**
@@ -112,6 +90,15 @@ export const getChapterDetails = () => {
   return getFormData(locationConfigForm);
 };
 
+/**
+ * Returns the updated chapter data from the edit chapter form.
+ */
+export const getStoryDetails = () => {
+  const storyDetailsForm = document.querySelector(
+    'form[name="story-details-form"]'
+  );
+  return getFormData(storyDetailsForm);
+};
 /**
  * Returns the data of an HTML form element in form of an object.
  *
@@ -159,3 +146,168 @@ const getFormData = (form) => {
     return result;
   }, {});
 };
+
+/**
+ * Proxy handler for handling get, set and delete operations on story object.
+ * @type {ProxyHandler}
+ */
+export const storyProxyHandler = {
+  /**
+   * Retrieves the value of a property from the target object.
+   * If the value is an object, it creates a new Proxy for that object.
+   * @param {Object} target - The target object.
+   * @param {string} key - The key of the property to retrieve.
+   */
+  get(target, key) {
+    const value = target[key];
+    if (typeof value === "object" && value !== null) {
+      return new Proxy(value, storyProxyHandler);
+    }
+    return value;
+  },
+
+  /**
+   * Sets the updated value of a property on the target object.
+   * @param {Object} target - The target object.
+   * @param {string} property - The key to set the value for.
+   * @returns {boolean} - Returns true if the value was successfully set.
+   */
+  set(target, property, updatedValue) {
+    // Update the value
+    target[property] = updatedValue;
+
+    // Check if the property is the chapters array
+    if (property === "properties") {
+      // Update chapter details
+      updateChapterContent(target.properties, target, true);
+
+      // Update the intro card
+      const card = cardsContainer.querySelector(`.story-intro`);
+
+      // Update headline in intro-card
+      const headline = card.querySelector("h1");
+
+      headline.textContent = updatedValue.title;
+    } else {
+      // Update chapter card
+      updateChapterCard(target, property, updatedValue);
+
+      // Update the location list item in the sidebar
+      updateLocationListItem(target, updatedValue);
+    }
+
+    return true;
+  },
+
+  /**
+   * Deletes a property from the chapter object and updates the UI accordingly.
+   *
+   * @param {Array} chapters - The chapter object from which the property will be deleted.
+   * @param {string} deletedChapterId - The id of the property to be deleted.
+   * @returns {boolean} - Returns true if the property was successfully deleted.
+   */
+  deleteProperty(chapters, deletedChapterId) {
+    // Find index of chapter to be deleted
+    const deletedChapterIndex = chapters.findIndex(
+      (chapter) => Number(chapter.id) === Number(deletedChapterId)
+    );
+
+    // Remove chapter from story
+    chapters.splice(deletedChapterIndex, 1);
+
+    // We need to update the UI
+    // Instead of re-rendering the whole UI, we can just remove the deleted chapter from the location list and chapters bar
+
+    // Remove chapter from location list
+    deleteLocationListItem(deletedChapterId);
+
+    // Remove chapter from chapters bar
+    deleteChapterCard(deletedChapterId);
+
+    return true;
+  },
+};
+
+/**
+ * Deletes a chapter card from the DOM.
+ *
+ * @param {string} deletedChapterId - The ID of the chapter card to be deleted.
+ */
+function deleteChapterCard(deletedChapterId) {
+  // Get cards container
+  const cardsContainer = document.querySelector("#chapters-bar .cards");
+
+  // Get card to be deleted
+  const card = cardsContainer.querySelector(`.card[id="${deletedChapterId}"]`);
+
+  // Remove card
+  cardsContainer.removeChild(card);
+}
+
+/**
+ * Deletes a location list item from the DOM.
+ *
+ * @param {string} deletedChapterId - The ID of the chapter to be deleted.
+ */
+function deleteLocationListItem(deletedChapterId) {
+  // Get location list container
+  const locationListContainer = document.querySelector(".location-list");
+
+  // Get location list item to be deleted
+  const locationListItem = locationListContainer.querySelector(
+    `.location-list-item[id="${deletedChapterId}"]`
+  );
+
+  // Remove location list item
+  locationListContainer.removeChild(locationListItem);
+}
+
+/**
+ * Updates the chapter card with the specified target, property, and updated value.
+ * @param {HTMLElement} target - The target element.
+ * @param {string} property - The property to be updated.
+ * @param {string} updatedValue - The updated value.
+ */
+function updateChapterCard(target, property, updatedValue) {
+  // Get cards container
+  const cardsContainer = document.querySelector("#chapters-bar .cards");
+
+  // Get card to be updated
+  const card = cardsContainer.querySelector(`.card[id="${target.id}"]`);
+
+  // Get element to be updated
+  const element = card.querySelector(`[data-input-name="${property}"]`) || null;
+
+  // Update element
+
+  // Check if element is an image
+  // If so, update the src attribute
+  // Otherwise, update the text content
+  if (property === "imageUrl") {
+    element.src = updatedValue;
+  } else {
+    element.textContent = updatedValue;
+  }
+}
+
+/**
+ * Updates the value of a location list item.
+ *
+ * @param {HTMLElement} target - The target location list item to be updated.
+ * @param {string} updatedValue - The updated value to be set.
+ */
+function updateLocationListItem(target, updatedValue) {
+  // Get location list container
+  const locationListContainer = document.querySelector(".location-list");
+
+  // Get location list item to be updated
+  const locationListItem = locationListContainer.querySelector(
+    `.location-list-item[id="${target.id}"]`
+  );
+
+  // Get element to be updated
+  const element = locationListItem.querySelector("p");
+
+  // Update element
+  element.textContent = updatedValue;
+}

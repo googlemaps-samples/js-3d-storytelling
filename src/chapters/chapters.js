@@ -42,17 +42,21 @@ export function createStoryIntroCard(storyProperties) {
 export function createChapterCard(chapter) {
   const card = document.createElement("article");
   card.classList.add("card", "chapter-card");
+  card.id = chapter.id;
 
   const chapterImage = document.createElement("img");
+  chapterImage.setAttribute("data-input-name", "imageUrl");
   chapterImage.src = chapter.imageUrl;
   card.appendChild(chapterImage);
 
   const chapterDate = document.createElement("p");
+  chapterDate.setAttribute("data-input-name", "dateTime");
   chapterDate.classList.add("date");
   chapterDate.textContent = chapter.dateTime;
   card.appendChild(chapterDate);
 
   const chapterTitle = document.createElement("h2");
+  chapterTitle.setAttribute("data-input-name", "title");
   chapterTitle.textContent = chapter.title;
   card.appendChild(chapterTitle);
 
