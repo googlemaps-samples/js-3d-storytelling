@@ -1,90 +1,115 @@
+import { story } from "../main.js";
 import { getParams, setParams } from "../utils/params.js";
+
+// Html elements
+/** The nav element shown on the intro details overlay
+ * @type {HTMLNavvElement}
+ */
+const introNavigation = document.querySelector(".intro-navigation");
+
+/** The nav element shown on the story details overlay
+ * @type {HTMLNavvElement}
+ */
+const detailNavigation = document.querySelector(".detail-navigation");
+
+/** The button to start the story / leave the intro overlay with
+ * @type {HTMLNavvElement}
+ */
+const startButton = introNavigation.querySelector("#start-button");
+
+/** The button to progress the story backward with
+ * @type {HTMLNavvElement}
+ */
+const backButton = detailNavigation.querySelector("#chapter-backward");
+
+/** The button to progress the story forward with
+ * @type {HTMLNavvElement}
+ */
+const forwardButton = detailNavigation.querySelector("#chapter-forward");
 
 /**
  * Initializes and manages chapter navigation for a story.
  * This function sets up navigation elements for the introduction and chapters of a story.
  * It determines the current chapter based on URL parameters and updates the UI accordingly.
- * @param {Story} story - The story object containing chapters and related data.
  */
-export function initChapterNavigation(story) {
-  const introNavigation = document.querySelector(".intro-navigation");
-  const detailNavigation = document.querySelector(".detail-navigation");
-
+export function initChapterNavigation() {
+  // Get the current chapter based on URL parameters
   const params = getParams();
   const chapterParam = params.get("chapter");
-  const chapterData = findChapterByTitle(story, chapterParam);
+  //Finds and returns a chapter from the story based on its title.
+  const chapterData = story.chapters.find(
+    (chapter) => chapter.title === chapterParam
+  );
 
-  toggleNavigationElements(introNavigation, detailNavigation, chapterParam);
+  // Set up event listeners
+  startButton.addEventListener("click", startStory);
+  forwardButton.addEventListener("click", setNextChapter);
+  backButton.addEventListener("click", setPreviousChapter);
 
-  if (chapterData) {
-    updateChapterContent(chapterData, story); // set current chapter data
-  } else {
-    updateChapterContent(story.properties, story, true); // Reset to story intro
-    setupStartButton(story, introNavigation, detailNavigation);
-  }
-}
-
-/**
- * Finds and returns a chapter from the story based on its title.
- * @param {Story} story - The story object.
- * @param {string} chapterTitle - The title of the chapter.
- * @return {Object|null} - The found chapter object or null if not found.
- */
-function findChapterByTitle(story, chapterTitle) {
-  return story.chapters.find((chapter) => chapter.title === chapterTitle);
-}
-
-/**
- * Toggles the active state of navigation elements based on chapter presence.
- * @param {HTMLElement} introNav - The introduction navigation element.
- * @param {HTMLElement} detailNav - The detailed navigation element.
- * @param {string|null} chapterParam - The current chapter parameter.
- */
-function toggleNavigationElements(introNav, detailNav, chapterParam) {
-  setNavigationActive(introNav, !chapterParam);
-  setNavigationActive(detailNav, Boolean(chapterParam));
-}
-
-/**
- * Sets up the start button and its event listener for the introduction navigation.
- * @param {HTMLElement} introNavigation - The intro navigation element.
- * @param {Story} story - The story object.
- * @param {HTMLElement} detailNavigation - The detail navigation element.
- */
-function setupStartButton(story, introNavigation, detailNavigation) {
-  const startButton = introNavigation.querySelector("#start-button");
-  startButton.addEventListener("click", () => {
-    startStory(story, introNavigation, detailNavigation);
-  });
+  // Initialize chapter content based on URL parameters
+  chapterData
+    ? toggleNavigationElements(true)
+    : toggleNavigationElements(false);
+  updateChapterContent(chapterData || story.properties, !chapterData);
 }
 
 /**
  * Activates the first chapter in the story and updates the configuration.
- * @param {Story} story - The story object.
  */
-function startStory(story, introNavigation, detailNavigation) {
+function startStory() {
   const firstChapterTitle = story.chapters[0].title;
   setParams("chapter", firstChapterTitle);
-  toggleNavigationElements(introNavigation, detailNavigation, true);
-  updateChapterContent(story.chapters[0], story);
+  toggleNavigationElements(firstChapterTitle);
+  updateChapterContent(story.chapters[0], false);
+}
+
+const setPreviousChapter = () => {
+  const newChapterIndex = getCurrentChapterIndex() - 1;
+
+  if (newChapterIndex >= 0) {
+    setParams("chapter", story.chapters[newChapterIndex].title);
+    updateChapterContent(story.chapters[newChapterIndex], false);
+  } else {
+    setParams("chapter", null);
+    updateChapterContent(story.properties);
+    toggleNavigationElements(null);
+  }
+};
+
+const setNextChapter = () => {
+  const newChapterIndex = getCurrentChapterIndex() + 1;
+
+  if (newChapterIndex < story.chapters.length) {
+    setParams("chapter", story.chapters[newChapterIndex].title);
+    updateChapterContent(story.chapters[newChapterIndex], false);
+  }
+};
+
+/**
+ * Toggles the active state of navigation elements based on chapter presence.
+ * @param {string|null} chapterParam - The current chapter parameter.
+ */
+export function toggleNavigationElements(chapterParam) {
+  introNavigation.classList.toggle("active", !chapterParam);
+  detailNavigation.classList.toggle("active", Boolean(chapterParam));
 }
 
 /**
- * Sets the active state of a navigation element.
- * @param {HTMLElement} navElement - The navigation element to modify.
- * @param {boolean} isActive - Whether the navigation element should be active.
+ * Returns the index of the current chapter.
+ * @returns {number} - The index of the current chapter.
  */
-function setNavigationActive(navElement, isActive) {
-  navElement.classList.toggle("active", isActive);
-}
+const getCurrentChapterIndex = () => {
+  const params = getParams();
+  const chapterParam = params.get("chapter");
+  return story.chapters.findIndex((chapter) => chapter.title === chapterParam);
+};
 
 /**
  * Updates the content of the chapter detail section.
- * @param {Chapter} chapterData - The data object containing chapter details.
- * @param {Story} story - The story object.
+ * @param {Chapter} chapterData - The data object containing chapter details
  * @param {boolean} [isIntro=true] - Flag indicating if the current view is the introduction.
  */
-function updateChapterContent(chapterData, story, isIntro = true) {
+export function updateChapterContent(chapterData, isIntro = true) {
   const chapterDetail = document.querySelector(".chapter-detail");
 
   chapterDetail.querySelector(".story-title").textContent = isIntro
@@ -108,4 +133,20 @@ function updateChapterContent(chapterData, story, isIntro = true) {
     : `Image credit: ${chapterData.imageCredit}`;
 
   chapterDetail.querySelector(".attribution").textContent = imageCredit;
+
+  // update chapter index
+  const chapterIndex = getCurrentChapterIndex();
+  const chapterIndexDisplay = `${chapterIndex + 1} / ${story.chapters.length}`;
+  detailNavigation.querySelector("#chapter-index").textContent =
+    chapterIndexDisplay;
+
+  // if the last chapter is reached, disable the forward button
+  // Check if the current chapter is the last chapter
+  if (chapterIndex + 1 === story.chapters.length) {
+    // Disable the forward button
+    forwardButton.disabled = true;
+  } else {
+    // Enable the forward button
+    forwardButton.disabled = false;
+  }
 }

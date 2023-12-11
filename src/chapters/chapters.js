@@ -1,6 +1,9 @@
-import { updateChapterDetail } from "../detail.js";
 import { createCustomRadiusShader } from "../utils/cesium.js";
 import { setParams } from "../utils/params.js";
+import {
+  toggleNavigationElements,
+  updateChapterContent,
+} from "./chapter-navigation.js";
 
 /**
  * Returns a story intro card as HTML element.
@@ -20,9 +23,10 @@ export function createStoryIntroCard(storyProperties) {
   storyIntroTitle.textContent = storyProperties.title;
   card.appendChild(storyIntroTitle);
 
-  card.addEventListener("click", (event) => {
+  card.addEventListener("click", () => {
     setParams("chapter", "intro");
-    updateChapterDetail("intro");
+    toggleNavigationElements(false);
+    updateChapterContent(storyProperties, true);
     createCustomRadiusShader(storyProperties.coords, 1000);
   });
 
@@ -52,9 +56,10 @@ export function createChapterCard(chapter) {
   chapterTitle.textContent = chapter.title;
   card.appendChild(chapterTitle);
 
-  card.addEventListener("click", (event) => {
+  card.addEventListener("click", () => {
     setParams("chapter", chapter.title);
-    updateChapterDetail(chapter.title);
+    toggleNavigationElements(true);
+    updateChapterContent(chapter, false);
     createCustomRadiusShader(chapter.coords, 100);
   });
 

@@ -74,6 +74,7 @@
   width: 100%;
   padding: var(--spacing-medium);
   justify-content: end;
+  user-select: none;
 }
 
 .chapter nav.active {
@@ -110,8 +111,12 @@
   height: 24px;
 }
 
-.chapter .detail-navigation #chapter-forward {
+.chapter .detail-navigation #chapter-forward-icon {
   rotate: 180deg;
+}
+
+.chapter .detail-navigation #chapter-forward-button:disabled {
+  opacity: 0.5;
 }
 
 #chapters-bar {

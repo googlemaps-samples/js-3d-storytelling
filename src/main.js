@@ -48,7 +48,7 @@ async function main() {
 
     addSidebarToggleHandler();
     initDragAndDrop();
-    initChapterNavigation(story);
+    initChapterNavigation();
     addChaptersBar(story);
   } catch (error) {
     console.error(error);
