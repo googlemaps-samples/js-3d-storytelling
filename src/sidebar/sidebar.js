@@ -1,7 +1,7 @@
-import { story } from "../main.js";
+import { story, updateUI } from "../main.js";
 import { getCameraOptions } from "../utils/cesium.js";
 
-import { getChapterDetails, setStory } from "../utils/config.js";
+import { getChapterDetails, setStory, addStory } from "../utils/config.js";
 /**
  * Options for radio buttons in the sidebar.
  * @typedef {Object} LocationMenuOptions
@@ -164,6 +164,8 @@ export async function initAutoComplete() {
     options
   );
 
+  let location = null;
+
   // Listen to location changes
   autocomplete.addListener("place_changed", () => {
     const selectedPlace = autocomplete.getPlace();
@@ -172,15 +174,29 @@ export async function initAutoComplete() {
     if (!selectedPlace.geometry) {
       return;
     }
-    // Todo: do something with the location
-    const { location } = selectedPlace.geometry;
+    location = selectedPlace.geometry.location;
+
+    locationSubmitButton.disabled = false;
   });
 
-  // Disable form submission button when the input field is empty
+  const locationSubmitButton = document.querySelector(".add-location");
+
+  // If input field is empty clear existing location and disable form submission button
   locationInput.addEventListener("input", () => {
-    const locationSubmitButton = document.querySelector(".add-location");
-    locationSubmitButton.disabled = locationInput.value === "";
+    if (locationInput.value === "") {
+      location = null;
+      locationSubmitButton.disabled = true;
+    }
   });
+
+  // Handle submit location button click
+  locationSubmitButton.addEventListener("click", () =>
+    // Adds new chapter to story
+    addStory({
+      title: locationInput.value,
+      coords: location.toJSON(),
+    })
+  );
 }
 // A reference to the currently open dialog
 let currentOpenedMenu = null;
