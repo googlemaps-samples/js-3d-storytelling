@@ -1,3 +1,7 @@
+import { getCameraOptions } from "../utils/cesium.js";
+import { updateUI } from "../main.js";
+
+import { getChapterDetails, setStory } from "../utils/config.js";
 /**
  * Options for radio buttons in the sidebar.
  * @typedef {Object} LocationMenuOptions
@@ -29,24 +33,21 @@ export function addSidebarToggleHandler() {
  *
  * @param {Array} chapters - The chapters containing location information.
  */
-export function updatePlaces(chapters) {
-  const tilesContainer = document.querySelector(".location-list");
-  chapters.forEach((chapter) => {
-    const tile = createLocationTile(chapter);
-    tilesContainer.appendChild(tile);
-  });
+export function updateSidebarLocationList(chapters) {
+  const locationListContainer = document.querySelector(".location-list");
+
+  locationListContainer.replaceChildren(
+    ...chapters.map((chapter) => createLocationTile(chapter))
+  );
 
   // The sidebar enables the user to add or edit new locations to the story.
   // Here we initialize the sidebar functionality.
 
   // Enable the drag and drop functionality for the location tiles
-  initDraggableTiles();
+  initDragAndDrop();
 
   // Enable the edit menu for the each location tile
-  initLocationDialog();
-
-  // Enable the form submission when a radio button is selected
-  addChangeEventListener(chapters);
+  createEditMenus(chapters);
 }
 
 /**
@@ -72,16 +73,17 @@ function createLocationTile(chapter) {
   p.textContent = chapter.title;
 
   form.method = "dialog";
+  form.name = "location-menu";
   form.dataset.name = chapter.title;
-  form.setAttribute("key", chapter.title);
+  form.setAttribute("key", chapter.id);
 
   Object.values(locationMenuOptions).forEach((option, index) => {
     const input = document.createElement("input");
     const label = document.createElement("label");
 
-    const uniqueId = `${chapter.title}-${option}-${index}`;
+    const uniqueId = `${chapter.id}-${option}-${index}`;
 
-    input.setAttribute("key", `${chapter.title}-${index}`);
+    input.setAttribute("key", `${chapter.id}-${index}`);
     input.type = "radio";
     input.id = uniqueId;
 
@@ -146,14 +148,16 @@ export async function initAutoComplete() {
   });
 }
 // A reference to the currently open dialog
-let currentDialog = null;
+let currentOpenedMenu = null;
 // A reference to the abort controller used to cancel the events on dialog close
 let locationMenuEventController;
 
 /**
- * Initializes the sidebar functionality.
+ * Creates edit menus for chapters in the sidebar.
+ *
+ * @param {Array} chapters - The array of chapters.
  */
-function initLocationDialog() {
+function createEditMenus(chapters) {
   // Add event listener to all details elements in the sidebar
   const details = document.querySelectorAll("#sidebar > details");
 
@@ -162,21 +166,24 @@ function initLocationDialog() {
   });
 
   // Cache all dialog show buttons
-  const dialogShowButtons = document.querySelectorAll("dialog + button");
+  const editMenuShowButtons = document.querySelectorAll("dialog + button");
 
   // Add event listener to all dialog show buttons
-  dialogShowButtons.forEach((button) => {
+  editMenuShowButtons.forEach((button) => {
     const dialog = button.previousElementSibling;
     button.addEventListener("click", (event) => {
-      if (currentDialog) {
-        closeDialog(currentDialog);
+      if (currentOpenedMenu) {
+        closeMenu(currentOpenedMenu);
       }
       event.stopPropagation();
-      currentDialog = dialog;
+      currentOpenedMenu = dialog;
       dialog.show();
-      createDialogCloseListeners(dialog);
+      createLocationMenuCloseListeners(dialog);
     });
   });
+
+  // Enable the menu options event listeners
+  addEditMenuEventListeners(chapters);
 }
 
 /**
@@ -198,26 +205,28 @@ const toggleDetailsSection = (event) => {
  * Creates event listeners for closing a dialog.
  * @param {HTMLElement} dialog - The dialog element to be closed.
  */
-function createDialogCloseListeners(dialog) {
+function createLocationMenuCloseListeners(dialog) {
   locationMenuEventController = new AbortController();
 
+  // closes the dialog when the escape key is pressed
   document.addEventListener(
     "keydown",
     (event) => {
       const { key } = event;
       if (key === "Escape" && dialog) {
-        closeDialog(dialog);
+        closeMenu(dialog);
       }
     },
     { signal: locationMenuEventController.signal }
   );
 
+  // closes the dialog when the user clicks outside of the dialog
   document.addEventListener(
     "click",
     (event) => {
       const { target } = event;
       if (!dialog.contains(target)) {
-        closeDialog(dialog);
+        closeMenu(dialog);
       }
     },
     { signal: locationMenuEventController.signal }
@@ -225,24 +234,24 @@ function createDialogCloseListeners(dialog) {
 }
 
 // Helper function to close the dialog and aborts any ongoing event listeners
-function closeDialog(dialog) {
+function closeMenu(dialog) {
   dialog.close();
   locationMenuEventController.abort();
-  currentDialog = null;
+  currentOpenedMenu = null;
 }
 
 /**
  * Initializes the draggable location tiles functionality.
  */
-export function initDraggableTiles() {
+export function initDragAndDrop() {
   // Represents the collection of draggable location tiles.
-  const draggableTiles = document.querySelectorAll(".location-list-item");
+  const draggableLocations = document.querySelectorAll(".location-list-item");
 
   // Represents the container of the location tiles.
-  const tilesContainer = document.querySelector(".location-list");
+  const locationList = document.querySelector(".location-list");
 
   // Add event listeners to all draggable tiles
-  draggableTiles.forEach((draggable) => {
+  draggableLocations.forEach((draggable) => {
     draggable.addEventListener("dragstart", () => {
       draggable.classList.add("dragging");
     });
@@ -253,15 +262,15 @@ export function initDraggableTiles() {
   });
 
   //
-  tilesContainer.addEventListener("dragover", (event) => {
+  locationList.addEventListener("dragover", (event) => {
     event.preventDefault();
 
-    const nextElement = getDragAfterElement(tilesContainer, event.clientY);
+    const nextElement = getNextElement(locationList, event.clientY);
     const draggable = document.querySelector(".dragging");
     if (nextElement == null) {
-      tilesContainer.appendChild(draggable);
+      locationList.appendChild(draggable);
     } else {
-      tilesContainer.insertBefore(draggable, nextElement);
+      locationList.insertBefore(draggable, nextElement);
     }
   });
 }
@@ -273,7 +282,7 @@ export function initDraggableTiles() {
  * @param {number} draggedElementPositionY - The vertical position of the dragged element.
  * @returns {HTMLElement} - The element after which the dragged element should be inserted.
  */
-function getDragAfterElement(container, draggedElementPositionY) {
+function getNextElement(container, draggedElementPositionY) {
   const draggableElements = [
     ...container.querySelectorAll(".location-list-item:not(.dragging)"),
   ];
@@ -301,57 +310,64 @@ function getDragAfterElement(container, draggedElementPositionY) {
  * When a radio input is changed, the form is submitted and the dialog is closed.
  * @param {Array} chapters - An array of chapter objects.
  */
-function addChangeEventListener(chapters) {
-  var forms = document.querySelectorAll('form[method="dialog"]');
-  forms.forEach(function (form) {
+function addEditMenuEventListeners(chapters) {
+  const editMenus = document.querySelectorAll('form[name="location-menu"]');
+  editMenus.forEach(function (editMenu) {
     // Attach a change event listener to each form
-    form.addEventListener("change", function (event) {
-      var target = event.target;
+    editMenu.addEventListener("change", function (event) {
+      const target = event.target;
 
       // Check if the changed element is a radio input
       if (target.type === "radio") {
         // Submit the form
-        form.requestSubmit();
+        editMenu.requestSubmit();
 
         // The dialog element is automatically closed when the form is submitted
         // so we need to abort the event listeners here
         locationMenuEventController.abort();
-        currentDialog = null;
+        currentOpenedMenu = null;
 
-        // Reset the form
-        form.reset();
+        // Reset the edit menu
+        editMenu.reset();
       }
     });
 
-    // Attach a submit event listener to each form
-    form.addEventListener("submit", function () {
+    // Attach a submit event listener to each editMenu
+    editMenu.addEventListener("submit", function () {
       // Get which radio input was selected
-      const selectedAction = form.querySelector(
+      const selectedAction = editMenu.querySelector(
         'input[type="radio"]:checked'
       ).value;
 
       // Get which chapter the form belongs to
-      const selectedChapterKey = form.getAttribute("key");
+      const selectedChapterKey = editMenu.getAttribute("key");
 
       const selectedChapter = chapters.find(
-        (chapter) => selectedChapterKey === chapter.title
+        (chapter) => Number(selectedChapterKey) === Number(chapter.id)
       );
 
-      handleFormDialogSubmit(selectedAction, selectedChapter);
+      handleEditMenuSubmit(selectedAction, selectedChapter);
     });
   });
 }
 
-function handleFormDialogSubmit(action, selectedChapter) {
+/**
+ * Handles the submit action of the edit menu.
+ *
+ * @param {string} action - The action to perform.
+ * @param {string} selectedChapter - The selected chapter.
+ */
+function handleEditMenuSubmit(action, selectedChapter) {
   switch (action) {
+    // This case opens the edit form
     case locationMenuOptions.edit:
-      // Code for handling edit option
       handleEditAction(selectedChapter);
-
       break;
+
+    // This case deletes the chapter
     case locationMenuOptions.delete:
-      console.log("Delete");
-      // Code for handling delete option
+      handleDeleteAction(selectedChapter.id);
+
       break;
     default:
       console.warn("Invalid option type");
@@ -361,6 +377,14 @@ function handleFormDialogSubmit(action, selectedChapter) {
   return null;
 }
 
+/**
+ * Handles the edit action for a chapter
+ * 1. Opens the edit form
+ * 2. Fills the form with the chapter data
+ * 3. Submits the form and updates the chapter data
+ *
+ * @param {Object} chapter - The chapter object to be edited.
+ */
 function handleEditAction(chapter) {
   const container = document.querySelector(".locations-container");
 
@@ -375,27 +399,74 @@ function handleEditAction(chapter) {
   // Add custom data-attribute to the container
   container.setAttribute("data-mode", locationMenuOptions.edit);
 
-  const form = document.querySelector(".chapter-form.edit");
+  const editForm = document.querySelector("form[name='edit-chapter-form']");
 
   // Fill the form inputs with the chapter data
-  form.querySelector('input[name="title"]').value = chapter.title;
-  form.querySelector('input[name="description"]').value = chapter.content;
-  form.querySelector('input[name="author"]').value = chapter.imageCredit;
-  form.querySelector('input[name="date"]').value = chapter.dateTime;
-  form.querySelector(".url-input input").value = chapter.imageUrl;
-  form.querySelector(".image-credit-container input").value =
-    chapter.imageCredit;
+  editForm.querySelector('input[name="title"]').value = chapter.title ?? null;
+  editForm.querySelector('input[name="content"]').value =
+    chapter.content ?? null;
+  editForm.querySelector('input[name="dateTime"]').value =
+    chapter.dateTime ?? null;
+  editForm.querySelector('input[name="imageUrl"]').value =
+    chapter.imageUrl ?? null;
+  editForm.querySelector('input[name="imageCredit"]').value =
+    chapter.imageCredit ?? null;
+  const cameraOptionsInput = editForm.querySelector(
+    'input[name="camera-options"]'
+  );
+  cameraOptionsInput.value = JSON.stringify(chapter.cameraOptions) ?? null;
+
+  // Update input for camera options on save camera position button click
+  document
+    .getElementById("save-camera-position-button")
+    .addEventListener("click", () => {
+      cameraOptionsInput.value = JSON.stringify(getCameraOptions());
+    });
 
   // Code for edit-from submission
-  const editForm = document.querySelector(".chapter-form.edit");
-  editForm.addEventListener("submit", (event) => {
-    event.preventDefault();
+  editForm.addEventListener(
+    "submit",
+    async (event) => {
+      event.preventDefault();
 
-    // Todo: update chapter data
-    const formData = new FormData(editForm);
+      const updatedChapterDetails = getChapterDetails();
 
-    // Close edit form
-    editForm.reset();
-    container.setAttribute("data-mode", "");
-  });
+      const updatedChapter = {
+        ...chapter,
+        ...updatedChapterDetails,
+      };
+      setStory(updatedChapter);
+
+      // Remove custom data-attribute from the container
+      container.removeAttribute("data-mode");
+    },
+    // Remove the event listener after the submit
+    { once: true }
+  );
+}
+
+/**
+ * Handles the delete action for a chapter.
+ * Removes the chapter with the specified id from the story,
+ * updates the localStorage and updates the UI.
+ *
+ * @param {number} id - The id of the chapter to be deleted.
+ */
+function handleDeleteAction(id) {
+  // Get story from local storage
+  const story = JSON.parse(localStorage.getItem("story"));
+
+  // Find the chapter to be deleted
+  const chapterIndex = story.chapters.findIndex(
+    (chapter) => Number(chapter.id) === Number(id)
+  );
+
+  // Delete chapter
+  story.chapters.splice(chapterIndex, 1);
+
+  // Save updated object back to local storage
+  localStorage.setItem("story", JSON.stringify(story));
+
+  // Update UI
+  updateUI(story);
 }

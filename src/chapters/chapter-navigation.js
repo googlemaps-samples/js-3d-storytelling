@@ -142,7 +142,6 @@ export function updateChapterContent(chapterData, isIntro = true) {
 
   // if the last chapter is reached, disable the forward button
   // Check if the current chapter is the last chapter
-  const forwardButton = document.querySelector("#chapter-forward-button");
   if (chapterIndex + 1 === story.chapters.length) {
     // Disable the forward button
     forwardButton.disabled = true;
