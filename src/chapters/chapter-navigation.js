@@ -179,7 +179,8 @@ export function resetToIntro() {
   updateChapterContent(story.properties);
   activateNavigationElement("intro");
   removeCustomRadiusShader();
-  performFlyTo(story.properties.coords, {
+  performFlyTo({
+    coords: story.properties.coords,
     duration: 1,
   });
 }
@@ -196,7 +197,8 @@ export function updateChapter(chapterIndex) {
   updateChapterContent(story.chapters[chapterIndex], false);
   activateNavigationElement("details");
   createCustomRadiusShader(coords, HIGHLIGHT_RADIUS);
-  performFlyTo(coords, {
+  performFlyTo({
+    coords,
     duration: 2,
   });
 }
