@@ -1,6 +1,6 @@
 import { story } from "../main.js";
 import {
-  createLocationTile,
+  createLocationItem,
   initDragAndDrop,
   createEditMenus,
 } from "../sidebar/sidebar.js";
@@ -200,7 +200,7 @@ export const storyProxyHandler = {
         const locationListContainer = document.querySelector(".location-list");
 
         // Add new location tile to the location list
-        locationListContainer.append(createLocationTile(updatedValue));
+        locationListContainer.append(createLocationItem(updatedValue));
 
         // Todo: Refactor initDragAndDrop and createEditMenus to be called only once
         // Initialize drag and drop with new chapter tile

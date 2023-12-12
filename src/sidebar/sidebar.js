@@ -45,16 +45,16 @@ export function updateLocationList(chapters) {
   const locationListContainer = document.querySelector(".location-list");
 
   locationListContainer.replaceChildren(
-    ...chapters.map((chapter) => createLocationTile(chapter))
+    ...chapters.map((chapter) => createLocationItem(chapter))
   );
 
   // The sidebar enables the user to add or edit new locations to the story.
   // Here we initialize the sidebar functionality.
 
-  // Enable the drag and drop functionality for the location tiles
+  // Enable the drag and drop functionality for the location items
   initDragAndDrop();
 
-  // Enable the edit menu for the each location tile
+  // Enable the edit menu for the each location item
   createEditMenus(chapters);
 }
 
@@ -112,12 +112,12 @@ function updateStoryDetails(properties) {
 }
 
 /**
- * Creates a location tile element for a given chapter.
+ * Creates a location item element for a given chapter.
  *
  * @param {Object} chapter - The chapter object containing the title.
- * @returns {HTMLElement} - The created location tile element.
+ * @returns {HTMLElement} - The created location item element.
  */
-export function createLocationTile(chapter) {
+export function createLocationItem(chapter) {
   // Create elements
   const li = document.createElement("li");
   const p = document.createElement("p");
@@ -326,16 +326,16 @@ function closeMenu(dialog) {
 }
 
 /**
- * Initializes the draggable location tiles functionality.
+ * Initializes the draggable location items functionality.
  */
 export function initDragAndDrop() {
   // Get all draggable location list items
   const locationItems = document.querySelectorAll(".location-list-item");
 
-  // Get the location list where the tiles can be dropped
+  // Get the location list where the items can be dropped
   const locationList = document.querySelector(".location-list");
 
-  // Add event listeners to all draggable tiles
+  // Add event listeners to all draggable items
   locationItems.forEach((item) => {
     item.addEventListener("dragstart", () => {
       item.classList.add("dragging");
@@ -346,7 +346,7 @@ export function initDragAndDrop() {
     });
   });
 
-  // Add event listeners to the location list where the tiles can be dropped
+  // Add event listeners to the location list where the items can be dropped
   locationList.addEventListener("dragover", (event) => {
     event.preventDefault();
 
