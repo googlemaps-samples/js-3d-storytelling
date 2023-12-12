@@ -4,6 +4,7 @@ import {
   performFlyTo,
   removeCustomRadiusShader,
 } from "../utils/cesium.js";
+import { setSelectedMarker } from "../utils/create-markers.js";
 import { getParams, setParams } from "../utils/params.js";
 import { loadSvg } from "../utils/svg.js";
 
@@ -186,11 +187,11 @@ export function resetToIntro() {
 /**
  * Updates the current chapter of the story based on the given chapter index.
  * @param {number} chapterIndex - The index of the chapter to be updated.
- * @return {undefined} This function does not return a value.
  */
 export function updateChapter(chapterIndex) {
   const { coords } = story.chapters[chapterIndex];
 
+  setSelectedMarker(chapterIndex);
   setParams("chapter", story.chapters[chapterIndex].title);
   updateChapterContent(story.chapters[chapterIndex], false);
   activateNavigationElement("details");

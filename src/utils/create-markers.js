@@ -123,23 +123,25 @@ function getMarkerEntityConfiguration({ position, id, markerSvg }) {
 
 /**
  * Sets the selected marker and scales it to 1 while scaling the previous marker back to the default scale.
- * @param {Cesium.Entity} marker - The entity object representing the selected marker.
+ * @param {number} markerId - The id given to the entity object representing the selected marker.
  */
-export function setSelectedMarker(marker) {
-  const selectedMarker =
+export function setSelectedMarker(markerId) {
+  const newMarker = cesiumViewer.entities.getById(markerId);
+  const currentMarker =
     selectedMarkerId && cesiumViewer.entities.getById(selectedMarkerId);
 
-  if (selectedMarker) {
-    selectedMarker.billboard.scale = defaultMarkerScale;
+  // Scale the previous selected marker back to the default scale
+  if (currentMarker) {
+    currentMarker.billboard.scale = defaultMarkerScale;
   }
 
-  if (marker) {
-    // Scale the new selected marker to 1
-    marker.billboard.scale = 1;
+  // Scale the new selected marker to 1
+  if (newMarker) {
+    newMarker.billboard.scale = 1;
   }
 
   // Update the selected marker ID
-  selectedMarkerId = marker?.id || null;
+  selectedMarkerId = newMarker?.id || null;
 }
 
 /**
@@ -168,15 +170,9 @@ async function handleClickOnMarker(click) {
   const marker = primitive.id;
   const markerId = marker.id;
 
-  // if the same marker is clicked again, set the selected marker to null and close the sidebar
-  if (selectedMarkerId === markerId) {
-    setSelectedMarker(null);
-  } else {
-    setSelectedMarker(marker);
-    updateChapter(
-      story.chapters.findIndex((chapter) => chapter.title === markerId)
-    );
-  }
+  if (selectedMarkerId === markerId) return;
+
+  updateChapter(markerId);
 }
 
 /**
@@ -230,7 +226,7 @@ async function createMarkers(markerCoords) {
     const markerSvg = await createMarkerSvg();
 
     // add the line and the marker
-    const markerEntity = cesiumViewer.entities.add({
+    cesiumViewer.entities.add({
       ...getPolylineConfiguration({ start: coord, end: coordWithHeightOffset }),
       ...getMarkerEntityConfiguration({
         position: coordWithHeightOffset,
@@ -241,7 +237,7 @@ async function createMarkers(markerCoords) {
 
     // Select the marker if it was rerendered and already selected before
     if (selectedMarkerId === id) {
-      setSelectedMarker(markerEntity);
+      setSelectedMarker(id);
     }
   });
 
