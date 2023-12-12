@@ -1,4 +1,6 @@
-import { cesiumViewer, performFlyTo } from "./cesium.js";
+import { updateChapter } from "../chapters/chapter-navigation.js";
+import { story } from "../main.js";
+import { cesiumViewer } from "./cesium.js";
 
 // The size of the marker in relation to the original SVG size.
 // We are scaling it down to help preserve clarity when increasing marker size for the selected marker.
@@ -121,23 +123,25 @@ function getMarkerEntityConfiguration({ position, id, markerSvg }) {
 
 /**
  * Sets the selected marker and scales it to 1 while scaling the previous marker back to the default scale.
- * @param {Cesium.Entity} marker - The entity object representing the selected marker.
+ * @param {number} markerId - The id given to the entity object representing the selected marker.
  */
-export function setSelectedMarker(marker) {
-  const selectedMarker =
+export function setSelectedMarker(markerId) {
+  const newMarker = cesiumViewer.entities.getById(markerId);
+  const currentMarker =
     selectedMarkerId && cesiumViewer.entities.getById(selectedMarkerId);
 
-  if (selectedMarker) {
-    selectedMarker.billboard.scale = defaultMarkerScale;
+  // Scale the previous selected marker back to the default scale
+  if (currentMarker) {
+    currentMarker.billboard.scale = defaultMarkerScale;
   }
 
-  if (marker) {
-    // Scale the new selected marker to 1
-    marker.billboard.scale = 1;
+  // Scale the new selected marker to 1
+  if (newMarker) {
+    newMarker.billboard.scale = 1;
   }
 
   // Update the selected marker ID
-  selectedMarkerId = marker?.id || null;
+  selectedMarkerId = newMarker?.id || null;
 }
 
 /**
@@ -145,10 +149,10 @@ export function setSelectedMarker(marker) {
  * When a marker is clicked, there are multiple things happening:
  * 1. The camera is moved to the marker position
  * 2. The clicked marker is scaled up and the previously clicked marker is scaled down
+ *
  * @param {object} click - The click event object
- * @param {id: string; coords: google.maps.LatLngLiteral[]} markerCoords - the current markers on the map
  */
-async function handleClickOnMarker(click, coords) {
+async function handleClickOnMarker(click) {
   // Raycast from click position returning intercepting object
   const pickedObject = cesiumViewer.scene.pick(click.position);
   // check if "primitive" property is available... (not available when clicking sky for example)
@@ -165,26 +169,18 @@ async function handleClickOnMarker(click, coords) {
 
   const marker = primitive.id;
   const markerId = marker.id;
-  const currentMarker = coords.find(({ id }) => id === markerId);
 
-  // if the same marker is clicked again, set the selected marker to null and close the sidebar
   if (selectedMarkerId === markerId) {
-    setSelectedMarker(null);
-  } else {
-    setSelectedMarker(marker);
+    return;
   }
 
-  // move the camera to the clicked marker
-  await performFlyTo(currentMarker.coords, {
-    duration: 1,
-  });
+  updateChapter(markerId);
 }
 
 /**
  * Adds an event handler to the viewer which is used to pick an object that is under the 2d context of the mouse/pointer.
- * @param {id: string; coords: google.maps.LatLngLiteral[]} markerCoords - the current markers on the map
  */
-function createMarkerClickHandler(markerCoords) {
+function createMarkerClickHandler() {
   if (markerClickHandler) {
     markerClickHandler.destroy();
   }
@@ -199,7 +195,7 @@ function createMarkerClickHandler(markerCoords) {
 
   // Basically an onClick statement
   markerClickHandler.setInputAction((click) => {
-    handleClickOnMarker(click, markerCoords);
+    handleClickOnMarker(click);
   }, Cesium.ScreenSpaceEventType.LEFT_CLICK); // This defines that we want to listen for a click event
 }
 
@@ -232,7 +228,7 @@ async function createMarkers(markerCoords) {
     const markerSvg = await createMarkerSvg();
 
     // add the line and the marker
-    const markerEntity = cesiumViewer.entities.add({
+    cesiumViewer.entities.add({
       ...getPolylineConfiguration({ start: coord, end: coordWithHeightOffset }),
       ...getMarkerEntityConfiguration({
         position: coordWithHeightOffset,
@@ -243,12 +239,12 @@ async function createMarkers(markerCoords) {
 
     // Select the marker if it was rerendered and already selected before
     if (selectedMarkerId === id) {
-      setSelectedMarker(markerEntity);
+      setSelectedMarker(id);
     }
   });
 
   // add a click handler to the viewer which handles the click only when clicking on a billboard (Marker) instance
-  createMarkerClickHandler(markerCoords);
+  createMarkerClickHandler();
 }
 
 export default createMarkers;
