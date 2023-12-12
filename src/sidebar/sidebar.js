@@ -77,8 +77,6 @@ function updateStoryDetails(properties) {
     properties.createdBy ?? null;
   storyDetailsForm.querySelector('input[name="date"]').value =
     properties.date ?? null;
-  storyDetailsForm.querySelector('input[name="startButtonText"]').value =
-    properties.startButtonText ?? null;
   storyDetailsForm.querySelector('input[name="imageUrl"]').value =
     properties.imageUrl ?? null;
   storyDetailsForm.querySelector('input[name="imageCredit"]').value =

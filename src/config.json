@@ -5,8 +5,7 @@
     "date": "1967",
     "description": "The Summer of Love was a social phenomenon that occurred during the summer of 1967 when as many as 100,000 people, mostly young people sporting hippie fashions, converged in San Francisco's neighborhood of Haight-Ashbury.",
     "createdBy": "Hunter S. Thompson",
-    "startButtonText": "Start exploring the Summer of Love",
-    "coords": { "lat": 37.775, "lng": -122.44 },
+    "coords": { "latitude": 37.775, "longitude": -122.44 },
     "imageCredit": "Hunter",
     "cameraOptions": {
       "height": 1000,
