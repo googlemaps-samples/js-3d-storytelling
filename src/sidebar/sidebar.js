@@ -366,8 +366,6 @@ export function initDragAndDrop() {
     const nextLocationItemId = event.target.nextSibling?.id ?? null;
 
     updateChapterBarCards(draggedLocationItemId, nextLocationItemId);
-
-    // Todo: update the story chapters array
   });
 }
 
@@ -392,7 +390,65 @@ function updateChapterBarCards(draggedLocationItemId, nextLocationItemId) {
   } else {
     cardsContainer.insertBefore(targetChapter, nextChapter);
   }
+
+  // Update the story object
+
+  // Find the dragged chapter in the story object
+  const draggedChapterIndex = story.chapters.findIndex(
+    (chapter) => Number(chapter.id) === Number(draggedLocationItemId)
+  );
+
+  // Find the next chapter in the story object
+  const nextChapterIndex = nextLocationItemId
+    ? story.chapters.findIndex(
+        (chapter) => Number(chapter.id) === Number(nextLocationItemId)
+      )
+    : story.chapters.length;
+
+  // Reorder the chapters in the story object
+  const reOrderedChapters = moveChapter(
+    story.chapters,
+    nextChapterIndex,
+    draggedChapterIndex
+  );
+
+  // Update the story object
+  story.chapters = reOrderedChapters;
+
+  // Save updated object back to local storage
+  localStorage.setItem("story", JSON.stringify(story));
 }
+
+/**
+ * Moves an item within an array to a new position.
+ *
+ * @param {Array} chapters - The array containing the items.
+ * @param {number} nextChapterIndex - The index of the next chapter.
+ * @param {number} draggedChapterIndex - The index of the dragged chapter.
+ * @returns {Array} - The updated array with the item moved to the new position.
+ */
+const moveChapter = (chapters, nextChapterIndex, draggedChapterIndex) => {
+  // Create a copy of the array to avoid mutating the original array
+  const chaptersCopy = [...chapters];
+
+  // Get the chapter that should be moved
+  const chapter = chaptersCopy[draggedChapterIndex];
+
+  // Remove the chapter from the array
+  chaptersCopy.splice(draggedChapterIndex, 1);
+
+  // If the dragged chapter is moved to a position before the next chapter,
+  // the index position where the chapter should be inserted is decreased by 1 because the dragged chapter was removed from the array
+  const nextChapterPosition =
+    draggedChapterIndex > nextChapterIndex
+      ? nextChapterIndex
+      : nextChapterIndex + -1;
+
+  // Insert the item at the new position
+  chaptersCopy.splice(nextChapterPosition, 0, chapter);
+
+  return chaptersCopy;
+};
 
 /**
  * Finds the element after which a dragged element should be inserted on the y-coordinate of the event.

@@ -176,7 +176,12 @@ export const storyProxyHandler = {
     // Update the value
     target[property] = updatedValue;
 
-    // Check if the property is the chapters array
+    // Check if changed property is the chapters array
+    // If so, we return here because we updated the chapter order after drag and drop
+    if (property === "chapters") {
+      return true;
+    }
+
     if (property === "properties") {
       // Update chapter details
       updateChapterContent(target.properties, target, true);
