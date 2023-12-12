@@ -1,4 +1,4 @@
-import { resetToIntro, updateChapter } from "../chapters/chapter-navigation.js";
+import { updateChapter } from "../chapters/chapter-navigation.js";
 import { story } from "../main.js";
 import { cesiumViewer } from "./cesium.js";
 
