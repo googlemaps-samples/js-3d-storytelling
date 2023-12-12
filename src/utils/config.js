@@ -1,3 +1,10 @@
+import { story } from "../main.js";
+import {
+  createLocationTile,
+  initDragAndDrop,
+  createEditMenus,
+} from "../sidebar/sidebar.js";
+import { createChapterCard } from "../chapters/chapters.js";
 import { updateChapterContent } from "../chapters/chapter-navigation.js";
 
 /**
@@ -65,7 +72,7 @@ export async function loadConfig(configUrl) {
  * @param {Object} newChapter - The chapter object to be added.
  * @returns {void}
  */
-export async function addStory(newChapter) {
+export function addStory(newChapter) {
   const chapterIds = story.chapters.map(({ id }) => id).filter(Boolean);
   // Increment hightest existing chapter id by one
   const newChapterId = Math.max(...chapterIds) + 1;
@@ -75,8 +82,6 @@ export async function addStory(newChapter) {
 
   // Save updated object back to local storage
   localStorage.setItem("story", JSON.stringify(story));
-
-  updateUI();
 }
 
 /**
@@ -172,6 +177,41 @@ export const storyProxyHandler = {
    * @returns {boolean} - Returns true if the value was successfully set.
    */
   set(target, property, updatedValue) {
+    // Check if the property being is the length property
+    // If so, return true to ignore changes to the length property (for example when adding a new chapter)
+    if (property === "length") {
+      return true;
+    }
+
+    if (Array.isArray(target)) {
+      const isNewChapter = !target.includes(updatedValue.id);
+
+      if (isNewChapter) {
+        // Add new chapter to story
+        target.push(updatedValue);
+
+        // Add card elements to the bar container
+        const cardsContainer = document.querySelector(".cards");
+
+        const chapterCard = createChapterCard(updatedValue);
+        cardsContainer.appendChild(chapterCard);
+
+        // Create new chapter tile
+        const locationListContainer = document.querySelector(".location-list");
+
+        // Add new location tile to the location list
+        locationListContainer.append(createLocationTile(updatedValue));
+
+        // Todo: Refactor initDragAndDrop and createEditMenus to be called only once
+        // Initialize drag and drop with new chapter tile
+        initDragAndDrop();
+
+        // Create edit menus
+        createEditMenus();
+        return true;
+      }
+    }
+
     // Update the value
     target[property] = updatedValue;
 

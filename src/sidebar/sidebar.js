@@ -1,7 +1,7 @@
 import { story } from "../main.js";
 import { getCameraOptions } from "../utils/cesium.js";
+import { getStoryDetails, addStory } from "../utils/config.js";
 
-import { getStoryDetails } from "../utils/config.js";
 /**
  * Options for radio buttons in the sidebar.
  * @typedef {Object} LocationMenuOptions
@@ -117,7 +117,7 @@ function updateStoryDetails(properties) {
  * @param {Object} chapter - The chapter object containing the title.
  * @returns {HTMLElement} - The created location tile element.
  */
-function createLocationTile(chapter) {
+export function createLocationTile(chapter) {
   // Create elements
   const li = document.createElement("li");
   const p = document.createElement("p");
@@ -198,7 +198,8 @@ export async function initAutoComplete() {
     const selectedPlace = autocomplete.getPlace();
 
     // Catch user pressed enter key without selecting a place in the list
-    if (!selectedPlace.geometry) {
+    if (!selectedPlace?.geometry) {
+      locationSubmitButton.disabled = true;
       return;
     }
     location = selectedPlace.geometry.location;
@@ -219,10 +220,17 @@ export async function initAutoComplete() {
   // Handle submit location button click
   locationSubmitButton.addEventListener("click", () =>
     // Adds new chapter to story
-    addStory({
-      title: locationInput.value,
-      coords: location.toJSON(),
-    })
+    {
+      /* Adds new chapter to story*/
+      addStory({
+        title: locationInput.value,
+        coords: location.toJSON(),
+      });
+
+      // Reset input field
+      autocomplete.set("place", null);
+      locationInput.value = "";
+    }
   );
 }
 // A reference to the currently open dialog
@@ -232,10 +240,9 @@ let locationMenuEventController;
 
 /**
  * Creates edit menus for chapters in the sidebar.
- *
- * @param {Array} chapters - The array of chapters.
  */
-function createEditMenus(chapters) {
+export function createEditMenus() {
+  const { chapters } = story;
   // Add event listener to all details elements in the sidebar
   const details = document.querySelectorAll("#sidebar > details");
 
