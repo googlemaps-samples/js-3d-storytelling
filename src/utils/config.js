@@ -285,6 +285,10 @@ function updateChapterCard(target, property, updatedValue) {
   // Get element to be updated
   const element = card.querySelector(`[data-input-name="${property}"]`) || null;
 
+  if (!element) {
+    return;
+  }
+
   // Update element
 
   // Check if element is an image
