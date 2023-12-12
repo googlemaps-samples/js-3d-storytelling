@@ -57,7 +57,7 @@ const forwardButton = detailNavigation.querySelector("#chapter-forward");
 
 /**
  * The id used to identify the timeout instance for the story progression
- * @type {number | null} 
+ * @type {number | null}
  */
 let intervalId = null;
 
