@@ -10,25 +10,22 @@ import { loadSvg } from "../utils/svg.js";
 
 /**
  * The time in milliseconds between each chapter progression
- * @type {number}
  * @readonly
  */
 const TIME_PER_CHAPTER = 3000;
-
 /**
  * The radius size of the  highlighted area
+ * @readonly
  */
 const HIGHLIGHT_RADIUS = 250;
 
 // SVG icons
 /**
  * Icon shown to pause the autoplay
- * @type {Promise<string>}
  */
 const PAUSE_ICON = await loadSvg("round-pause-button");
 /**
  * Icon shown to pause the autoplay
- * @type {Promise<string>}
  */
 const PLAY_ICON = await loadSvg("round-play-button");
 
@@ -37,27 +34,22 @@ const PLAY_ICON = await loadSvg("round-play-button");
  * @type {HTMLNavElement}
  */
 const introNavigation = document.querySelector(".intro-navigation");
-
 /** The nav element shown on the story details overlay
  * @type {HTMLNavElement}
  */
 const detailNavigation = document.querySelector(".detail-navigation");
-
 /** The button to start the story / leave the intro overlay with
  * @type {HTMLButtonElement}
  */
 const startButton = introNavigation.querySelector("#start-story");
-
 /** The button to play the story chapter by chapter
  * @type {HTMLButtonElement}
  */
 const autoplayButton = detailNavigation.querySelector("#autoplay-story");
-
 /** The button to progress the story backward with
  * @type {HTMLButtonElement}
  */
 const backButton = detailNavigation.querySelector("#chapter-backward");
-
 /** The button to progress the story forward with
  * @type {HTMLButtonElement}
  */
@@ -65,6 +57,7 @@ const forwardButton = detailNavigation.querySelector("#chapter-forward");
 
 /**
  * The id used to identify the timeout instance for the story progression
+ * @type {number | null} 
  */
 let intervalId = null;
 
