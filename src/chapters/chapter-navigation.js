@@ -264,13 +264,49 @@ export function updateChapterContent(chapterData, isIntro = true) {
     ? story.properties.description
     : chapterData.content;
 
-  chapterDetail.querySelector(".date").textContent = chapterData.date;
+  chapterDetail.querySelector(".date").textContent = isIntro
+    ? ""
+    : chapterData.date;
+
   chapterDetail.querySelector(".place").textContent = chapterData.place;
   chapterDetail.querySelector(".hero").src = chapterData.imageUrl;
 
-  const imageCredit = isIntro
-    ? story.properties.createdBy
-    : `Image credit: ${chapterData.imageCredit}`;
+  const imageCredit = chapterData.imageCredit
+    ? `Image credit: ${chapterData.imageCredit}`
+    : "";
 
-  chapterDetail.querySelector(".attribution").textContent = imageCredit;
+  const storyIntroImageCreditContainer = document.querySelector(
+    ".story-intro-attribution"
+  );
+  const imageCreditContainer = chapterDetail.querySelector(".attribution");
+
+  const storyIntroAuthor = document.querySelector(".story-intro-author");
+
+  storyIntroAuthor.textContent = isIntro
+    ? `by: ${story.properties.createdBy}`
+    : "";
+
+  const storyIntroDate = document.querySelector(".story-intro-date");
+
+  storyIntroDate.textContent = isIntro ? story.properties.date : "";
+
+  storyIntroImageCreditContainer.textContent = isIntro ? imageCredit : "";
+
+  imageCreditContainer.textContent = isIntro ? "" : imageCredit;
+
+  // update chapter index
+  const chapterIndex = getCurrentChapterIndex();
+  const chapterIndexDisplay = `${chapterIndex + 1} / ${story.chapters.length}`;
+  detailNavigation.querySelector("#chapter-index").textContent =
+    chapterIndexDisplay;
+
+  // if the last chapter is reached, disable the forward button
+  // Check if the current chapter is the last chapter
+  if (chapterIndex + 1 === story.chapters.length) {
+    // Disable the forward button
+    forwardButton.disabled = true;
+  } else {
+    // Enable the forward button
+    forwardButton.disabled = false;
+  }
 }
