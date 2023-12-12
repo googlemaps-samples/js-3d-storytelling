@@ -144,7 +144,7 @@ export function setSelectedMarker(markerId) {
   }
 
   // Update the selected marker ID
-  selectedMarkerId = newMarker?.id || null;
+  selectedMarkerId = markerId;
 }
 
 /**
