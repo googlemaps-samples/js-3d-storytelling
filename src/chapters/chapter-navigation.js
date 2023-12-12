@@ -165,16 +165,23 @@ const setNextChapter = () => {
 
 /**
  * Resets the application to the introductory state.
- * @return {void}
  */
 export function resetToIntro() {
+  const { coords, cameraOptions } = story.properties;
+  const { pitch, heading } = cameraOptions;
+
   setParams("chapter", null);
   updateChapterContent(story.properties);
   activateNavigationElement("intro");
   removeCustomRadiusShader();
   performFlyTo({
-    coords: story.properties.coords,
+    coords,
     duration: 1,
+    customOffset: {
+      roll: 0,
+      pitch: Cesium.Math.toRadians(pitch),
+      heading,
+    },
   });
 }
 
@@ -183,7 +190,8 @@ export function resetToIntro() {
  * @param {number} chapterIndex - The index of the chapter to be updated.
  */
 export function updateChapter(chapterIndex) {
-  const { coords } = story.chapters[chapterIndex];
+  const { coords, cameraOptions } = story.chapters[chapterIndex];
+  const { pitch, heading } = cameraOptions;
 
   setSelectedMarker(chapterIndex);
   setParams("chapter", story.chapters[chapterIndex].title);
@@ -193,6 +201,11 @@ export function updateChapter(chapterIndex) {
   performFlyTo({
     coords,
     duration: 2,
+    customOffset: {
+      roll: 0,
+      pitch: Cesium.Math.toRadians(pitch),
+      heading,
+    },
   });
 }
 
