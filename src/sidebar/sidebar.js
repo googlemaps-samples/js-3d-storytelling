@@ -221,7 +221,7 @@ export async function initAutoComplete() {
   locationSubmitButton.addEventListener("click", () =>
     // Adds new chapter to story
     {
-      /* Adds new chapter to story*/
+      // Adds new chapter to story
       addStory({
         title: locationInput.value,
         coords: location.toJSON(),

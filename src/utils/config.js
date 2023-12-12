@@ -196,10 +196,8 @@ export const storyProxyHandler = {
         const chapterCard = createChapterCard(updatedValue);
         cardsContainer.appendChild(chapterCard);
 
-        // Create new chapter tile
-        const locationListContainer = document.querySelector(".location-list");
-
         // Add new location tile to the location list
+        const locationListContainer = document.querySelector(".location-list");
         locationListContainer.append(createLocationItem(updatedValue));
 
         // Todo: Refactor initDragAndDrop and createEditMenus to be called only once
