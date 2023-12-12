@@ -170,7 +170,9 @@ async function handleClickOnMarker(click) {
   const marker = primitive.id;
   const markerId = marker.id;
 
-  if (selectedMarkerId === markerId) return;
+  if (selectedMarkerId === markerId) {
+    return;
+  }
 
   updateChapter(markerId);
 }
