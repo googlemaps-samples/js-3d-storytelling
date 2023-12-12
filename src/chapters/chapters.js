@@ -56,10 +56,13 @@ export function createChapterCard(chapter) {
   chapterDate.textContent = chapter.dateTime;
   card.appendChild(chapterDate);
 
+  const chapterTitleContainer = document.createElement("div");
+  card.appendChild(chapterTitleContainer);
+
   const chapterTitle = document.createElement("h2");
   chapterTitle.setAttribute("data-input-name", "title");
   chapterTitle.textContent = chapter.title;
-  card.appendChild(chapterTitle);
+  chapterTitleContainer.appendChild(chapterTitle);
 
   // set current chapter
   card.addEventListener("click", () => {
