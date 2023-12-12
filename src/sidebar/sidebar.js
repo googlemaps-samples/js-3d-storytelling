@@ -335,12 +335,21 @@ export function initDragAndDrop() {
 
   // Add event listeners to all draggable tiles
   locationItems.forEach((item) => {
-    item.addEventListener("dragstart", () => {
-      item.classList.add("dragging");
+    item.addEventListener("dragstart", (event) => {
+      if (event.target !== item) {
+        event.preventDefault();
+      } else {
+        item.classList.add("dragging");
+      }
     });
 
-    item.addEventListener("dragend", () => {
-      item.classList.remove("dragging");
+    item.addEventListener("dragend", (event) => {
+      if (event.target !== item) {
+        event.preventDefault();
+      } else {
+        event.stopPropagation();
+        item.classList.remove("dragging");
+      }
     });
   });
 
