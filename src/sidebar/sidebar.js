@@ -84,7 +84,7 @@ function updateStoryDetails(properties) {
   storyDetailsForm.querySelector('input[name="imageCredit"]').value =
     properties.imageCredit ?? null;
 
-  // Update input for story camera options on save camera position button click
+  // Add event listener to save the camera position to story
   document
     .getElementById("save-story-camera-position-button")
     .addEventListener("click", () => {
@@ -548,6 +548,7 @@ function handleEditAction(chapter) {
     (chapter) => Number(selectedChapterKey) === Number(chapter.id)
   );
 
+  // Add event listener to save the camera position to chapter
   document
     .getElementById("save-chapter-camera-position-button")
     .addEventListener("click", () => {
