@@ -38,7 +38,6 @@ function deepFreeze(object) {
  * @throws {string} If an error occurs during the fetch or parsing, a descriptive error message is thrown.
  *
  * @example
- *  Usage example:
  * const configUrl = "path/to/config.json";
  * try {
  *   const configData = await loadConfig(configUrl);

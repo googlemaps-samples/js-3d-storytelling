@@ -31,5 +31,5 @@ interface StoryProperties {
 // Define the NeighbourhoodStory as an array of Segments
 interface Story {
   chapters: Chapter[];
-  properties: StroyProperties;
+  properties: StoryProperties;
 }

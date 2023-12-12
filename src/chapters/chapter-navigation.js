@@ -1,6 +1,36 @@
 import { story } from "../main.js";
+import {
+  createCustomRadiusShader,
+  performFlyTo,
+  removeCustomRadiusShader,
+} from "../utils/cesium.js";
+import { setSelectedMarker } from "../utils/create-markers.js";
 import { getParams, setParams } from "../utils/params.js";
 import { loadSvg } from "../utils/svg.js";
+
+/**
+ * The time in milliseconds between each chapter progression
+ * @type {number}
+ * @readonly
+ */
+const TIME_PER_CHAPTER = 3000;
+
+/**
+ * The radius size of the  highlighted area
+ */
+const HIGHLIGHT_RADIUS = 250;
+
+// SVG icons
+/**
+ * Icon shown to pause the autoplay
+ * @type {Promise<string>}
+ */
+const PAUSE_ICON = await loadSvg("round-pause-button");
+/**
+ * Icon shown to pause the autoplay
+ * @type {Promise<string>}
+ */
+const PLAY_ICON = await loadSvg("round-play-button");
 
 // Html elements
 /** The nav element shown on the intro details overlay
@@ -21,7 +51,7 @@ const startButton = introNavigation.querySelector("#start-story");
 /** The button to play the story chapter by chapter
  * @type {HTMLButtonElement}
  */
-const playButton = detailNavigation.querySelector("#play-story");
+const autoplayButton = detailNavigation.querySelector("#autoplay-story");
 
 /** The button to progress the story backward with
  * @type {HTMLButtonElement}
@@ -53,66 +83,62 @@ export function initChapterNavigation() {
   );
 
   // Set up event listeners
-  startButton.addEventListener("click", setFirstChapter);
-  playButton.addEventListener("click", startStoryProgression);
-  forwardButton.addEventListener("click", setNextChapter);
-  backButton.addEventListener("click", setPreviousChapter);
+  startButton.addEventListener("click", () => {
+    activateNavigationElement("details");
+    updateChapter(0);
+  });
+
+  forwardButton.addEventListener("click", () => {
+    setNextChapter();
+    stopAutoplay();
+  });
+
+  backButton.addEventListener("click", () => {
+    setPreviousChapter();
+    stopAutoplay();
+  });
+
+  autoplayButton.addEventListener("click", autoplayClickHandler);
 
   // Initialize chapter content based on URL parameters
   chapterData
-    ? toggleNavigationElements(true)
-    : toggleNavigationElements(false);
+    ? activateNavigationElement("details")
+    : activateNavigationElement("intro");
+
   updateChapterContent(chapterData || story.properties, !chapterData);
 }
 
 /**
- * Activates the first chapter in the story and updates the configuration.
+ * Stops the autoplay chapter progression of the story.
  */
-function setFirstChapter() {
-  const firstChapterTitle = story.chapters[0].title;
-  setParams("chapter", firstChapterTitle);
-  toggleNavigationElements(firstChapterTitle);
-  updateChapterContent(story.chapters[0], false);
+function stopAutoplay() {
+  autoplayButton.innerHTML = PLAY_ICON;
+  clearTimeout(intervalId);
+  intervalId = null;
 }
+
 /**
- * Starts the progression of the story.
- *
- * @return {Promise<void>} This function does not return anything.
+ * Progresses to the next chapter and stops progression if the current chapter is the last one.
+ * @param {type} paramName - description of parameter
  */
-async function startStoryProgression() {
-  const pauseIcon = await loadSvg("round-pause-button");
-  const playIcon = await loadSvg("round-play-button");
-
-  /**
-   * Stops the progression of the function.
-   */
-  function stopProgression() {
-    clearTimeout(intervalId);
-    intervalId = null;
-    playButton.innerHTML = playIcon;
+function setNextAutoplayStep() {
+  setNextChapter();
+  if (getCurrentChapterIndex() === story.chapters.length - 1) {
+    stopAutoplay();
   }
+}
 
-  /**
-   * Progresses to the next chapter and stops progression if the current chapter is the last one.
-   *
-   * @param {type} paramName - description of parameter
-   * @return {type} description of return value
-   */
-  function progress() {
-    setNextChapter();
-    if (getCurrentChapterIndex() === story.chapters.length - 1) {
-      stopProgression();
-    }
-  }
-
-  // Set up the interval
+/**
+ * Starts the autoplay chapter progression.
+ */
+function autoplayClickHandler() {
+  // If the interval is already active, stop it
   if (intervalId) {
-    // If the interval is already active, stop it
-    stopProgression();
+    stopAutoplay();
   } else {
     // If the interval is not active, start it
-    intervalId = setInterval(progress, 5000);
-    playButton.innerHTML = pauseIcon;
+    intervalId = setInterval(setNextAutoplayStep, TIME_PER_CHAPTER);
+    autoplayButton.innerHTML = PAUSE_ICON;
   }
 }
 
@@ -122,13 +148,12 @@ async function startStoryProgression() {
 const setPreviousChapter = () => {
   const newChapterIndex = getCurrentChapterIndex() - 1;
 
+  // If the new chapter index is positive, update the current chapter
   if (newChapterIndex >= 0) {
-    setParams("chapter", story.chapters[newChapterIndex].title);
-    updateChapterContent(story.chapters[newChapterIndex], false);
+    updateChapter(newChapterIndex);
+    // when going back further in the chapters, go back to teh intro
   } else {
-    setParams("chapter", null);
-    updateChapterContent(story.properties);
-    toggleNavigationElements(null);
+    resetToIntro();
   }
 };
 
@@ -138,19 +163,53 @@ const setPreviousChapter = () => {
 const setNextChapter = () => {
   const newChapterIndex = getCurrentChapterIndex() + 1;
 
+  // If the new chapter index is less than the total number of chapters, update the current chapter
+  // (Then did not reach end of chapters)
   if (newChapterIndex < story.chapters.length) {
-    setParams("chapter", story.chapters[newChapterIndex].title);
-    updateChapterContent(story.chapters[newChapterIndex], false);
+    updateChapter(newChapterIndex);
   }
 };
 
 /**
- * Toggles the active state of navigation elements based on chapter presence.
- * @param {string|null} chapterParam - The current chapter parameter.
+ * Resets the application to the introductory state.
+ * @return {void}
  */
-export function toggleNavigationElements(chapterParam) {
-  introNavigation.classList.toggle("active", !chapterParam);
-  detailNavigation.classList.toggle("active", Boolean(chapterParam));
+export function resetToIntro() {
+  setParams("chapter", null);
+  updateChapterContent(story.properties);
+  activateNavigationElement("intro");
+  removeCustomRadiusShader();
+  performFlyTo({
+    coords: story.properties.coords,
+    duration: 1,
+  });
+}
+
+/**
+ * Updates the current chapter of the story based on the given chapter index.
+ * @param {number} chapterIndex - The index of the chapter to be updated.
+ */
+export function updateChapter(chapterIndex) {
+  const { coords } = story.chapters[chapterIndex];
+
+  setSelectedMarker(chapterIndex);
+  setParams("chapter", story.chapters[chapterIndex].title);
+  updateChapterContent(story.chapters[chapterIndex], false);
+  activateNavigationElement("details");
+  createCustomRadiusShader(coords, HIGHLIGHT_RADIUS);
+  performFlyTo({
+    coords,
+    duration: 2,
+  });
+}
+
+/**
+ * Sets the active classname on the navigation elements based on chapter presence.
+ * @param {'intro' | 'details'} chapterParam - The navigation element to be toggled.
+ */
+export function activateNavigationElement(navName) {
+  introNavigation.classList.toggle("active", navName === "intro");
+  detailNavigation.classList.toggle("active", navName === "details");
 }
 
 /**
@@ -164,11 +223,36 @@ const getCurrentChapterIndex = () => {
 };
 
 /**
+ * Updates the details navigation. This includes the chapter index and
+ * the forward button (if the current chapter is the last).
+ */
+function updateDetailsNavigation() {
+  // Update chapter index
+  const chapterIndex = getCurrentChapterIndex() + 1;
+  // Displays the current chapter index
+  detailNavigation.querySelector(
+    "#chapter-index"
+  ).textContent = `${chapterIndex} / ${story.chapters.length}`;
+
+  // If the last chapter is reached, disable the forward button
+  // Check if the current chapter is the last chapter
+  if (chapterIndex === story.chapters.length) {
+    // Disable the forward button
+    forwardButton.disabled = true;
+  } else {
+    // Enable the forward button
+    forwardButton.disabled = false;
+  }
+}
+
+/**
  * Updates the content of the chapter detail section.
  * @param {Chapter} chapterData - The data object containing chapter details
  * @param {boolean} [isIntro=true] - Flag indicating if the current view is the introduction.
  */
 export function updateChapterContent(chapterData, isIntro = true) {
+  updateDetailsNavigation();
+
   const chapterDetail = document.querySelector(".chapter-detail");
 
   chapterDetail.querySelector(".story-title").textContent = isIntro

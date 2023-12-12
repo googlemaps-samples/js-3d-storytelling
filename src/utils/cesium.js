@@ -1,4 +1,5 @@
 import { GOOGLE_MAPS_API_KEY } from "../env.js";
+import { story } from "../main.js";
 
 // Camera height above the target when flying to a point.
 const CAMERA_HEIGHT = 100;
@@ -70,20 +71,21 @@ async function flyToBoundingSphere({ coords, offset, onComplete, duration }) {
 }
 
 /**
- * Performs a fly-to animation on the Cesium viewer to the specified coordinates.
+ * @typedef {Object} FlyToOptions - Options for the fly-to animation.
+ * @property {google.maps.LatLngLiteral} coords - The coordinates to fly to.
+ * @property {number} [duration] - The duration of the fly-to animation in seconds. If undefined, Cesium calculates an ideal duration based on the distance to be traveled by the flight.
  *
- * @param {google.maps.LatLngLiteral} coords - The coordinates to fly to.
- * @param {Object | undefined} options - Options to pass for the fly-to animation.
- * @param {number | undefined} options.duration - The duration of the fly-to animation in seconds. If undefined, Cesium calculates an ideal duration based on the distance to be traveled by the flight.
+ * Performs a fly-to animation on the Cesium viewer to the specified coordinates. *
+ * @param {FlyToOptions} options - The "fly-to" options.
  * @throws {Error} Throws an error if no coordinates are provided.
  */
-export async function performFlyTo(coords, options = {}) {
-  if (!coords) {
+export async function performFlyTo(options = { coords: null }) {
+  if (!options.coords) {
     throw new Error("No coordinates to fly-to provided.");
   }
 
   try {
-    const { duration } = options;
+    const { duration, coords } = options;
 
     // Keep the current camera heading when flying to new coordinates
     const offset = {
@@ -121,7 +123,7 @@ export function getCameraOptions() {
  * configuring its default camera position and orientation, and adding both a 3D
  * tileset and attribution to the viewer.
  */
-export async function initCesiumViewer(storyProperties) {
+export async function initCesiumViewer() {
   // Set the default access token to null to prevent the CesiumJS viewer from requesting an access token
   Cesium.Ion.defaultAccessToken = null;
 
@@ -149,13 +151,13 @@ export async function initCesiumViewer(storyProperties) {
   // Disable free-look, the camera view direction can only be changed through translating or rotating
   cesiumViewer.scene.screenSpaceCameraController.enableLook = false;
 
-  const { coords, cameraOptions } = storyProperties;
+  const { coords, cameraOptions } = story.properties;
 
   // Set the starting position and orientation of the camera
   cesiumViewer.camera.setView({
     destination: Cesium.Cartesian3.fromDegrees(
-      coords.longitude,
-      coords.latitude,
+      coords.lng,
+      coords.lat,
       cameraOptions.height
     ),
     orientation: {
@@ -212,6 +214,15 @@ function createAttribution() {
   img.alt = "Google";
 
   cesiumCredits.prepend(img);
+}
+
+/**
+ * Removes the custom radius shader from the tileset.
+ */
+export function removeCustomRadiusShader() {
+  if (tileset.customShader) {
+    tileset.customShader = undefined;
+  }
 }
 
 /**

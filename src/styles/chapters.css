@@ -102,8 +102,8 @@
   align-items: center;
 }
 
-.chapter .detail-navigation #play-story svg,
-.chapter .detail-navigation #play-story path {
+.chapter .detail-navigation #autoplay-story svg,
+.chapter .detail-navigation #autoplay-story path {
   fill: var(--accent-color);
 }
 

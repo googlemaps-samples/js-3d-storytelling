@@ -1,7 +1,10 @@
+import { story } from "../main.js";
 import { createCustomRadiusShader } from "../utils/cesium.js";
 import { setParams } from "../utils/params.js";
 import {
-  toggleNavigationElements,
+  activateNavigationElement,
+  resetToIntro,
+  updateChapter,
   updateChapterContent,
 } from "./chapter-navigation.js";
 
@@ -24,12 +27,7 @@ export function createStoryIntroCard(storyProperties) {
   card.appendChild(storyIntroTitle);
 
   // set intro view
-  card.addEventListener("click", () => {
-    setParams("chapter");
-    toggleNavigationElements(false);
-    updateChapterContent(storyProperties, true);
-    createCustomRadiusShader(storyProperties.coords, 1000);
-  });
+  card.addEventListener("click", resetToIntro);
 
   return card;
 }
@@ -66,10 +64,10 @@ export function createChapterCard(chapter) {
 
   // set current chapter
   card.addEventListener("click", () => {
-    setParams("chapter", chapter.title);
-    toggleNavigationElements(true);
-    updateChapterContent(chapter, false);
-    createCustomRadiusShader(chapter.coords, 100);
+    const chapterIndex = story.chapters.findIndex(
+      ({ id }) => id === chapter.id
+    );
+    updateChapter(chapterIndex);
   });
 
   return card;
