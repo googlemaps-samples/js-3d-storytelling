@@ -328,16 +328,16 @@ export function initDragAndDrop() {
 
   // Add event listeners to all draggable tiles
   locationItems.forEach((item) => {
-    item.addEventListener("dragstart", function (event) {
-      if (event.target !== this) {
+    item.addEventListener("dragstart", (event) => {
+      if (event.target !== item) {
         event.preventDefault();
       } else {
         item.classList.add("dragging");
       }
     });
 
-    item.addEventListener("dragend", function (event) {
-      if (event.target !== this) {
+    item.addEventListener("dragend", (event) => {
+      if (event.target !== item) {
         event.preventDefault();
       } else {
         event.stopPropagation();
