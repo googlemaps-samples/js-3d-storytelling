@@ -170,10 +170,12 @@ export function resetToIntro() {
   const { coords, cameraOptions } = story.properties;
   const { pitch, heading } = cameraOptions;
 
-  setParams("chapter", null);
-  updateChapterContent(story.properties);
-  activateNavigationElement("intro");
-  removeCustomRadiusShader();
+  setParams("chapter", null); // Clear the chapter parameter
+  setSelectedMarker(null); // "Deselect" current marker
+  updateChapterContent(story.properties); // Update the chapter details content
+  activateNavigationElement("intro"); // Activate the introduction navigation
+  removeCustomRadiusShader(); // Remove the custom radius shader
+  // Fly back to the starting position
   performFlyTo({
     coords,
     duration: 1,
@@ -193,11 +195,12 @@ export function updateChapter(chapterIndex) {
   const { coords, cameraOptions } = story.chapters[chapterIndex];
   const { pitch, heading } = cameraOptions;
 
-  setSelectedMarker(chapterIndex);
-  setParams("chapter", story.chapters[chapterIndex].title);
-  updateChapterContent(story.chapters[chapterIndex], false);
-  activateNavigationElement("details");
-  createCustomRadiusShader(coords, HIGHLIGHT_RADIUS);
+  setSelectedMarker(chapterIndex); // Set the selected marker
+  setParams("chapter", story.chapters[chapterIndex].title); // Set the chapter parameter
+  updateChapterContent(story.chapters[chapterIndex], false); // Update the chapter details content
+  activateNavigationElement("details"); // Activate the details navigation
+  createCustomRadiusShader(coords, HIGHLIGHT_RADIUS); // Create the custom radius shader
+  // Fly to the new chapter location
   performFlyTo({
     coords,
     duration: 2,
