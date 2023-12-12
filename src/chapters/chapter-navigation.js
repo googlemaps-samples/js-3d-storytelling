@@ -14,10 +14,21 @@ import { loadSvg } from "../utils/svg.js";
  */
 const TIME_PER_CHAPTER = 3000;
 
-const CHAPTER_RADIUS = 250;
+/**
+ * The radius size of the  highlighted area
+ */
+const HIGHLIGHT_RADIUS = 250;
 
 // SVG icons
+/**
+ * Icon shown to pause the autoplay
+ * @type {Promise<string>}
+ */
 const PAUSE_ICON = await loadSvg("round-pause-button");
+/**
+ * Icon shown to pause the autoplay
+ * @type {Promise<string>}
+ */
 const PLAY_ICON = await loadSvg("round-play-button");
 
 // Html elements
@@ -99,7 +110,7 @@ export function initChapterNavigation() {
 /**
  * Stops the autoplay chapter progression of the story.
  */
-async function stopAutoplay() {
+function stopAutoplay() {
   autoplayButton.innerHTML = PLAY_ICON;
   clearTimeout(intervalId);
   intervalId = null;
@@ -108,7 +119,6 @@ async function stopAutoplay() {
 /**
  * Progresses to the next chapter and stops progression if the current chapter is the last one.
  * @param {type} paramName - description of parameter
- * @return {type} description of return value
  */
 function setNextAutoplayStep() {
   setNextChapter();
@@ -119,9 +129,8 @@ function setNextAutoplayStep() {
 
 /**
  * Starts the autoplay chapter progression.
- * @return {Promise<void>} This function does not return anything.
  */
-async function autoplayClickHandler() {
+function autoplayClickHandler() {
   // If the interval is already active, stop it
   if (intervalId) {
     stopAutoplay();
@@ -138,8 +147,10 @@ async function autoplayClickHandler() {
 const setPreviousChapter = () => {
   const newChapterIndex = getCurrentChapterIndex() - 1;
 
+  // If the new chapter index is positive, update the current chapter
   if (newChapterIndex >= 0) {
     updateChapter(newChapterIndex);
+    // when going back further in the chapters, go back to teh intro
   } else {
     resetToIntro();
   }
@@ -151,6 +162,8 @@ const setPreviousChapter = () => {
 const setNextChapter = () => {
   const newChapterIndex = getCurrentChapterIndex() + 1;
 
+  // If the new chapter index is less than the total number of chapters, update the current chapter
+  // (Then did not reach end of chapters)
   if (newChapterIndex < story.chapters.length) {
     updateChapter(newChapterIndex);
   }
@@ -176,19 +189,19 @@ export function resetToIntro() {
  * @return {undefined} This function does not return a value.
  */
 export function updateChapter(chapterIndex) {
-  const coords = story.chapters[chapterIndex].coords;
+  const { coords } = story.chapters[chapterIndex];
 
   setParams("chapter", story.chapters[chapterIndex].title);
   updateChapterContent(story.chapters[chapterIndex], false);
   activateNavigationElement("details");
-  createCustomRadiusShader(coords, CHAPTER_RADIUS);
+  createCustomRadiusShader(coords, HIGHLIGHT_RADIUS);
   performFlyTo(coords, {
     duration: 2,
   });
 }
 
 /**
- * Toggles the active state of navigation elements based on chapter presence.
+ * Sets the active classname on the navigation elements based on chapter presence.
  * @param {'intro' | 'details'} chapterParam - The navigation element to be toggled.
  */
 export function activateNavigationElement(navName) {
@@ -211,15 +224,16 @@ const getCurrentChapterIndex = () => {
  * the forward button (if the current chapter is the last).
  */
 function updateDetailsNavigation() {
-  // update chapter index
-  const chapterIndex = getCurrentChapterIndex();
-  const chapterIndexDisplay = `${chapterIndex + 1} / ${story.chapters.length}`;
-  detailNavigation.querySelector("#chapter-index").textContent =
-    chapterIndexDisplay;
+  // Update chapter index
+  const chapterIndex = getCurrentChapterIndex() + 1;
+  // Displays the current chapter index
+  detailNavigation.querySelector(
+    "#chapter-index"
+  ).textContent = `${chapterIndex} / ${story.chapters.length}`;
 
-  // if the last chapter is reached, disable the forward button
+  // If the last chapter is reached, disable the forward button
   // Check if the current chapter is the last chapter
-  if (chapterIndex + 1 === story.chapters.length) {
+  if (chapterIndex === story.chapters.length) {
     // Disable the forward button
     forwardButton.disabled = true;
   } else {
