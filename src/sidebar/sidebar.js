@@ -84,6 +84,13 @@ function updateStoryDetails(properties) {
   storyDetailsForm.querySelector('input[name="imageCredit"]').value =
     properties.imageCredit ?? null;
 
+  // Update input for story camera options on save camera position button click
+  document
+    .getElementById("save-story-camera-position-button")
+    .addEventListener("click", () => {
+      story.properties.cameraOptions = getCameraOptions();
+    });
+
   // In the story details form, the user can change the story properties.
   // As there is no submit button, we submit the form when the user changes an input.
   storyDetailsForm.addEventListener("input", () => {
@@ -533,33 +540,27 @@ function handleEditAction(chapter) {
     chapter.imageUrl ?? null;
   editForm.querySelector('input[name="imageCredit"]').value =
     chapter.imageCredit ?? null;
-  const cameraOptionsInput = editForm.querySelector(
-    'input[name="camera-options"]'
+
+  const selectedChapterKey = editForm.getAttribute("key");
+
+  // Find index of chapter to be updated
+  const selectedChapterIndex = story.chapters.findIndex(
+    (chapter) => Number(selectedChapterKey) === Number(chapter.id)
   );
 
-  cameraOptionsInput.value = JSON.stringify(chapter.cameraOptions) ?? null;
-
-  // Update input for camera options on save camera position button click
   document
-    .getElementById("save-camera-position-button")
+    .getElementById("save-chapter-camera-position-button")
     .addEventListener("click", () => {
-      cameraOptionsInput.value = JSON.stringify(getCameraOptions());
+      story.chapters[selectedChapterIndex].cameraOptions = getCameraOptions();
     });
 
   // Add event listener that listens to changes to the chapter properties
   editForm.addEventListener("input", (event) => {
-    const selectedChapterKey = editForm.getAttribute("key");
-
-    // Find index of chapter to be updated
-    const selectedChapterIndex = story.chapters.findIndex(
-      (chapter) => Number(selectedChapterKey) === Number(chapter.id)
-    );
-
-    // Get the update input value
-    const inputName = event.target.name;
+    // Get the update input name and value
+    const { name: inputName, value: inputValue } = event.target;
 
     // Update the chapter
-    story.chapters[selectedChapterIndex][inputName] = event.target.value;
+    story.chapters[selectedChapterIndex][inputName] = inputValue;
   });
 
   // Code for edit-from submission
