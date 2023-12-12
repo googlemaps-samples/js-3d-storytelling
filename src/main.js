@@ -18,8 +18,10 @@ import { initChapterNavigation } from "./chapters/chapter-navigation.js";
 // or request some file from another host, by changing the config url parameter.
 //
 // You could also implement your (dynamic) configuration loading function here.
-// Create a handler for the proxy
-
+/**
+ * The story configuration object
+ * @type {Story}
+ */
 let storyConfig;
 
 const isStoryInLocalStorage = Boolean(localStorage.getItem("story"));
@@ -36,15 +38,15 @@ if (isStoryInLocalStorage) {
  * Creates a proxy object for the story object.
  * This allows us to intercept these operations and update the UI accordingly without having to re-render the whole UI.
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
- * @type {Proxy}
+ * @type {Story}
  */
 export let story = new Proxy(storyConfig, storyProxyHandler);
 
-const { properties, chapters } = story;
+const { chapters } = story;
 
 async function main() {
   try {
-    await initCesiumViewer(properties);
+    await initCesiumViewer();
     await initGoogleMaps();
     await initAutoComplete();
     updateSidebar(story);

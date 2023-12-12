@@ -77,8 +77,6 @@ function updateStoryDetails(properties) {
     properties.createdBy ?? null;
   storyDetailsForm.querySelector('input[name="date"]').value =
     properties.date ?? null;
-  storyDetailsForm.querySelector('input[name="startButtonText"]').value =
-    properties.startButtonText ?? null;
   storyDetailsForm.querySelector('input[name="imageUrl"]').value =
     properties.imageUrl ?? null;
   storyDetailsForm.querySelector('input[name="imageCredit"]').value =
@@ -366,8 +364,6 @@ export function initDragAndDrop() {
     const nextLocationItemId = event.target.nextSibling?.id ?? null;
 
     updateChapterBarCards(draggedLocationItemId, nextLocationItemId);
-
-    // Todo: update the story chapters array
   });
 }
 
@@ -392,7 +388,59 @@ function updateChapterBarCards(draggedLocationItemId, nextLocationItemId) {
   } else {
     cardsContainer.insertBefore(targetChapter, nextChapter);
   }
+
+  // Reorder the chapters
+  const reorderedChapters = moveChapter(
+    story.chapters,
+    draggedLocationItemId,
+    nextLocationItemId
+  );
+
+  // Update the story object
+  story.chapters = reorderedChapters;
+
+  // Save updated object back to local storage
+  localStorage.setItem("story", JSON.stringify(story));
 }
+
+/**
+ * Moves a chapter within an array of chapters.
+ *
+ * @param {Array} chapters - The array of chapters.
+ * @param {number} draggedLocationItemId - The ID of the dragged chapter.
+ * @param {number} nextLocationItemId - The ID of the next sibling of the dragged chapter.
+ * @returns {Array} - The updated array of chapters with the dragged chapter moved to the desired position.
+ */
+const moveChapter = (chapters, draggedLocationItemId, nextLocationItemId) => {
+  // Create shallow copy of original array
+  // We do this because we don't want to change the original chapters array yet
+  const copiedChapters = chapters.slice();
+
+  // Find the index of the dragged chapter
+  const movedChapterIndex = copiedChapters.findIndex(
+    (chapter) => Number(chapter.id) === Number(draggedLocationItemId)
+  );
+
+  // Get the dragged chapter and remove it from the array
+  const movedChapter = copiedChapters.splice(movedChapterIndex, 1)[0];
+
+  // Find the index of the chapter where the dragged chapter should be inserted
+  // If the nextLocationItemId is null, the dragged chapter should be inserted at the end of the array
+  const toIndex = nextLocationItemId
+    ? copiedChapters.findIndex(
+        (chapter) => Number(chapter.id) === Number(nextLocationItemId)
+      )
+    : copiedChapters.length;
+
+  if (toIndex === -1) {
+    console.warn("Invalid index");
+  }
+
+  // Insert the dragged chapter at the correct position
+  copiedChapters.splice(toIndex, 0, movedChapter);
+
+  return copiedChapters;
+};
 
 /**
  * Finds the element after which a dragged element should be inserted on the y-coordinate of the event.
