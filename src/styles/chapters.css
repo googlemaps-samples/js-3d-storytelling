@@ -19,6 +19,7 @@
 }
 
 .chapter .chapter-detail {
+  width: 100%;
   padding: var(--spacing-medium) var(--spacing-medium-large) 0px
     var(--spacing-medium-large);
 }
@@ -56,8 +57,15 @@
 
 .chapter .hero {
   height: 160px;
+  width: 100%;
   border-radius: var(--spacing-small);
   margin-bottom: var(--spacing-small);
+}
+
+.chapter .hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .chapter .description {
