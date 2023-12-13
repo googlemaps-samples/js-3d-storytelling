@@ -263,9 +263,12 @@ export function updateChapterContent(chapterData, isIntro = true) {
   updateDetailsNavigation();
   const chapterDetail = document.querySelector(".chapter-detail");
 
-  setTextContent(".story-title", isIntro ? "" : chapterData.title);
+  setTextContent(".story-title", isIntro ? "" : story.properties.title);
   setTextContent("h2", isIntro ? story.properties.title : chapterData.title);
-  setTextContent(".description", isIntro ? story.properties.description : chapterData.content);
+  setTextContent(
+    ".description",
+    isIntro ? story.properties.description : chapterData.content
+  );
   setTextContent(".date", isIntro ? "" : chapterData.date);
   setTextContent(".place", chapterData.place);
 
@@ -273,12 +276,17 @@ export function updateChapterContent(chapterData, isIntro = true) {
   chapterDetail.querySelector(".hero").src = chapterData.imageUrl;
 
   // Update image credit
-  const imageCredit = chapterData.imageCredit ? `Image credit: ${chapterData.imageCredit}` : "";
+  const imageCredit = chapterData.imageCredit
+    ? `Image credit: ${chapterData.imageCredit}`
+    : "";
   setTextContent(".story-intro-attribution", isIntro ? imageCredit : "");
   setTextContent(".attribution", isIntro ? "" : imageCredit);
 
   // Update author and date in intro
-  setTextContent(".story-intro-author", isIntro ? `by: ${story.properties.createdBy}` : "");
+  setTextContent(
+    ".story-intro-author",
+    isIntro ? `by: ${story.properties.createdBy}` : ""
+  );
   setTextContent(".story-intro-date", isIntro ? story.properties.date : "");
 
   // Update chapter index and forward button state

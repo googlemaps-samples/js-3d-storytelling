@@ -7,6 +7,19 @@ import {
 import { createChapterCard } from "../chapters/chapters.js";
 import { updateChapterContent } from "../chapters/chapter-navigation.js";
 
+// Properties of a chapter that can be edited
+const chapterProperties = [
+  "title",
+  "content",
+  "imageUrl",
+  "dateTime",
+  "imageCredit",
+  "marker-checkbox",
+  "vignette-checkbox",
+  "radius",
+  "cameraOptions",
+];
+
 /**
  * Function to deep freeze an object.
  *
@@ -233,12 +246,18 @@ export const storyProxyHandler = {
       const headline = card.querySelector("h1");
 
       headline.textContent = updatedValue.title;
-    } else {
+    }
+
+    // Check if changed property is a chapter property
+    if (chapterProperties.includes(property)) {
       // Update chapter card
       updateChapterCard(target, property, updatedValue);
 
+      // Update chapter details
+      updateChapterContent(target, false);
+
+      // Update location list item
       if (property === "title") {
-        // Update location list item
         updateLocationListItem(target.id, updatedValue);
       }
     }
