@@ -91,6 +91,7 @@ function updateStoryDetails(properties) {
     .getElementById("save-story-camera-position-button")
     .addEventListener("click", () => {
       story.properties.cameraOptions = getCameraOptions();
+      storyDetailsForm.requestSubmit();
     });
 
   // In the story details form, the user can change the story properties.

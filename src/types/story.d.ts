@@ -25,7 +25,6 @@ interface StoryProperties {
   date: string; // A date associated with the story
   description: string; // The description text
   createdBy: string; // The author
-  coords: google.maps.LatLngLiteral; // Latitude and longitude coordinates using Google Maps type
   cameraOptions: CesiumCameraOptions; // Basic Cesium camera options
 }
 // Define the NeighbourhoodStory as an array of Segments

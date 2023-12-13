@@ -5,14 +5,13 @@
     "date": "1967",
     "description": "The Summer of Love was a social phenomenon that occurred during the summer of 1967 when as many as 100,000 people, mostly young people sporting hippie fashions, converged in San Francisco's neighborhood of Haight-Ashbury.",
     "createdBy": "Hunter S. Thompson",
-    "coords": {
-      "lat": 37.775,
-      "lng": -122.44
-    },
     "imageCredit": "Hunter",
     "cameraOptions": {
-      "height": 1000,
-      "position": 0,
+      "position": {
+        "x": -2708127.031960028,
+        "y": -4260747.583520751,
+        "z": 3886346.825328216
+      },
       "heading": -90,
       "pitch": -45,
       "roll": 0
@@ -32,7 +31,11 @@
       },
       "address": "The Filmore | 1805 Geary Blvd",
       "cameraOptions": {
-        "position": 0,
+        "position": {
+          "x": -2706472.5713478313,
+          "y": -4261528.277488908,
+          "z": 3885143.750529967
+        },
         "heading": 0,
         "pitch": 0,
         "roll": 0
@@ -51,7 +54,11 @@
       },
       "address": "Golden Gate Park Polo Fields",
       "cameraOptions": {
-        "position": 0,
+        "position": {
+          "x": -2711640.650566521,
+          "y": -4258735.18508072,
+          "z": 3884701.711825666
+        },
         "heading": 0,
         "pitch": 0,
         "roll": 0
@@ -70,7 +77,11 @@
       },
       "address": "635 Ashbury St, San Francisco",
       "cameraOptions": {
-        "position": 0,
+        "position": {
+          "x": -2708816.441862877,
+          "y": -4260665.191511936,
+          "z": 3884656.008266213
+        },
         "heading": 0,
         "pitch": 0,
         "roll": 0
