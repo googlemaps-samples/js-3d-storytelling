@@ -246,7 +246,9 @@ export async function initAutoComplete() {
 }
 // A reference to the currently open dialog
 let currentOpenedMenu = null;
-// A reference to the abort controller used to cancel the events on dialog close
+/** A reference to the abort controller used to cancel the events on dialog close
+ * @type {AbortController}
+ */
 let locationMenuEventController;
 
 /**
@@ -573,6 +575,10 @@ function handleEditMenuSubmit(action, selectedChapter) {
   return null;
 }
 
+/**
+ * A reference to the abort controller used to cancel the events on edit form close
+ * @type {AbortController}
+ */
 let editFormEventController;
 
 /**
