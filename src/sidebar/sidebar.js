@@ -666,17 +666,15 @@ function handleEditAction(chapter) {
       event.preventDefault();
 
       localStorage.setItem("story", JSON.stringify(story));
+
+      editFormEventController.abort();
+
+      container.removeAttribute("data-mode");
     },
 
     // Remove the event listener after the submit
     { once: true }
   );
-
-  const LeaveEditFormButton = document.querySelector("button.leave-edit-mode");
-
-  LeaveEditFormButton.addEventListener("click", () => {
-    container.removeAttribute("data-mode");
-  });
 }
 
 /**
