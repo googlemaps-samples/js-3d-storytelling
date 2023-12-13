@@ -70,10 +70,10 @@ let intervalId = null;
 export function initChapterNavigation() {
   // Get the current chapter based on URL parameters
   const params = getParams();
-  const chapterParam = params.get("chapter");
+  const chapterParam = params.get("chapterId");
   //Finds and returns a chapter from the story based on its title.
   const chapterData = story.chapters.find(
-    (chapter) => chapter.title === chapterParam
+    (chapter) => chapter.id === chapterParam
   );
 
   // Set up event listeners
@@ -171,7 +171,7 @@ export function resetToIntro() {
   const { coords, cameraOptions } = story.properties;
   const { pitch, heading } = cameraOptions;
 
-  setParams("chapter", null); // Clear the chapter parameter
+  setParams("chapterId", null); // Clear the chapter parameter
   setSelectedMarker(null); // "Deselect" current marker
   updateChapterContent(story.properties); // Update the chapter details content
   activateNavigationElement("intro"); // Activate the introduction navigation
@@ -197,7 +197,7 @@ export function updateChapter(chapterIndex) {
   const { pitch, heading } = cameraOptions;
 
   setSelectedMarker(chapterIndex); // Set the selected marker
-  setParams("chapter", story.chapters[chapterIndex].title); // Set the chapter parameter
+  setParams("chapterId", story.chapters[chapterIndex].id); // Set the chapter parameter
   updateChapterContent(story.chapters[chapterIndex], false); // Update the chapter details content
   activateNavigationElement("details"); // Activate the details navigation
   createCustomRadiusShader(coords, HIGHLIGHT_RADIUS); // Create the custom radius shader
@@ -226,10 +226,9 @@ export function activateNavigationElement(navName) {
  * Returns the index of the current chapter.
  * @returns {number} - The index of the current chapter.
  */
-const getCurrentChapterIndex = () => {
+export const getCurrentChapterIndex = () => {
   const params = getParams();
-  const chapterParam = params.get("chapter");
-  return story.chapters.findIndex((chapter) => chapter.title === chapterParam);
+  return Number(params.get("chapterId"));
 };
 
 /**
@@ -264,9 +263,12 @@ export function updateChapterContent(chapterData, isIntro = true) {
   updateDetailsNavigation();
   const chapterDetail = document.querySelector(".chapter-detail");
 
-  setTextContent(".story-title", isIntro ? "" : chapterData.title);
+  setTextContent(".story-title", isIntro ? "" : story.properties.title);
   setTextContent("h2", isIntro ? story.properties.title : chapterData.title);
-  setTextContent(".description", isIntro ? story.properties.description : chapterData.content);
+  setTextContent(
+    ".description",
+    isIntro ? story.properties.description : chapterData.content
+  );
   setTextContent(".date", isIntro ? "" : chapterData.date);
   setTextContent(".place", chapterData.place);
 
@@ -274,12 +276,17 @@ export function updateChapterContent(chapterData, isIntro = true) {
   chapterDetail.querySelector(".hero").src = chapterData.imageUrl;
 
   // Update image credit
-  const imageCredit = chapterData.imageCredit ? `Image credit: ${chapterData.imageCredit}` : "";
+  const imageCredit = chapterData.imageCredit
+    ? `Image credit: ${chapterData.imageCredit}`
+    : "";
   setTextContent(".story-intro-attribution", isIntro ? imageCredit : "");
   setTextContent(".attribution", isIntro ? "" : imageCredit);
 
   // Update author and date in intro
-  setTextContent(".story-intro-author", isIntro ? `by: ${story.properties.createdBy}` : "");
+  setTextContent(
+    ".story-intro-author",
+    isIntro ? `by: ${story.properties.createdBy}` : ""
+  );
   setTextContent(".story-intro-date", isIntro ? story.properties.date : "");
 
   // Update chapter index and forward button state
