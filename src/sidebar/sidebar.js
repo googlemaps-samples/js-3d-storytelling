@@ -573,6 +573,8 @@ function handleEditMenuSubmit(action, selectedChapter) {
   return null;
 }
 
+let editFormEventController;
+
 /**
  * Handles the edit action for a chapter
  * 1. Opens the edit form
@@ -582,15 +584,21 @@ function handleEditMenuSubmit(action, selectedChapter) {
  * @param {Object} chapter - The chapter object to be edited.
  */
 function handleEditAction(chapter) {
+  editFormEventController = new AbortController();
+
   const container = document.querySelector(".locations-container");
 
   // Get the radius input element
   const radiusInput = document.querySelector("#radius");
 
   // Update the slider progress when the value changed
-  radiusInput.addEventListener("input", () => {
-    radiusInput.style.setProperty("--value", radiusInput.value);
-  });
+  radiusInput.addEventListener(
+    "input",
+    () => {
+      radiusInput.style.setProperty("--value", radiusInput.value);
+    },
+    { signal: editFormEventController.signal }
+  );
 
   // Add custom data-attribute to the container
   container.setAttribute("data-mode", locationMenuOptions.edit);
@@ -623,24 +631,32 @@ function handleEditAction(chapter) {
   // Add event listener to save the camera position to chapter
   document
     .getElementById("save-chapter-camera-position-button")
-    .addEventListener("click", () => {
-      story.chapters[selectedChapterIndex].cameraOptions = getCameraOptions();
-    });
+    .addEventListener(
+      "click",
+      () => {
+        story.chapters[selectedChapterIndex].cameraOptions = getCameraOptions();
+      },
+      { signal: editFormEventController.signal }
+    );
 
   // Add event listener that listens to changes to the chapter properties
-  editForm.addEventListener("input", (event) => {
-    // Get the update input name and value
-    const { name: inputName, value: inputValue } = event.target;
+  editForm.addEventListener(
+    "input",
+    (event) => {
+      // Get the update input name and value
+      const { name: inputName, value: inputValue } = event.target;
 
-    // update the preview image
-    if (inputName === "imageUrl") {
-      editForm.querySelector(".image-credit-container img").src =
-        inputValue ?? null;
-    }
+      // update the preview image
+      if (inputName === "imageUrl") {
+        editForm.querySelector(".image-credit-container img").src =
+          inputValue ?? null;
+      }
 
-    // Update the chapter
-    story.chapters[selectedChapterIndex][inputName] = inputValue;
-  });
+      // Update the chapter
+      story.chapters[selectedChapterIndex][inputName] = inputValue;
+    },
+    { signal: editFormEventController.signal }
+  );
 
   // Code for edit-from submission
   // The form is submitted when the user clicks the leave-edit-mode button
