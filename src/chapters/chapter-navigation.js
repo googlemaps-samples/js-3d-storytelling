@@ -7,6 +7,7 @@ import {
 import { setSelectedMarker } from "../utils/create-markers.js";
 import { getParams, setParams } from "../utils/params.js";
 import { loadSvg } from "../utils/svg.js";
+import { setTextContent } from "../utils/ui.js";
 
 /**
  * The time in milliseconds between each chapter progression
@@ -261,64 +262,38 @@ function updateDetailsNavigation() {
  */
 export function updateChapterContent(chapterData, isIntro = true) {
   updateDetailsNavigation();
-
   const chapterDetail = document.querySelector(".chapter-detail");
 
-  chapterDetail.querySelector(".story-title").textContent = isIntro
-    ? ""
-    : story.properties.title;
+  setTextContent(".story-title", isIntro ? "" : chapterData.title);
+  setTextContent("h2", isIntro ? story.properties.title : chapterData.title);
+  setTextContent(".description", isIntro ? story.properties.description : chapterData.content);
+  setTextContent(".date", isIntro ? "" : chapterData.date);
+  setTextContent(".place", chapterData.place);
 
-  chapterDetail.querySelector("h2").textContent = isIntro
-    ? story.properties.title
-    : chapterData.title;
-
-  chapterDetail.querySelector(".description").textContent = isIntro
-    ? story.properties.description
-    : chapterData.content;
-
-  chapterDetail.querySelector(".date").textContent = isIntro
-    ? ""
-    : chapterData.date;
-
-  chapterDetail.querySelector(".place").textContent = chapterData.place;
+  // Update image
   chapterDetail.querySelector(".hero").src = chapterData.imageUrl;
 
-  const imageCredit = chapterData.imageCredit
-    ? `Image credit: ${chapterData.imageCredit}`
-    : "";
+  // Update image credit
+  const imageCredit = chapterData.imageCredit ? `Image credit: ${chapterData.imageCredit}` : "";
+  setTextContent(".story-intro-attribution", isIntro ? imageCredit : "");
+  setTextContent(".attribution", isIntro ? "" : imageCredit);
 
-  const storyIntroImageCreditContainer = document.querySelector(
-    ".story-intro-attribution"
-  );
-  const imageCreditContainer = chapterDetail.querySelector(".attribution");
+  // Update author and date in intro
+  setTextContent(".story-intro-author", isIntro ? `by: ${story.properties.createdBy}` : "");
+  setTextContent(".story-intro-date", isIntro ? story.properties.date : "");
 
-  const storyIntroAuthor = document.querySelector(".story-intro-author");
+  // Update chapter index and forward button state
+  updateChapterIndexAndNavigation();
+}
 
-  storyIntroAuthor.textContent = isIntro
-    ? `by: ${story.properties.createdBy}`
-    : "";
-
-  const storyIntroDate = document.querySelector(".story-intro-date");
-
-  storyIntroDate.textContent = isIntro ? story.properties.date : "";
-
-  storyIntroImageCreditContainer.textContent = isIntro ? imageCredit : "";
-
-  imageCreditContainer.textContent = isIntro ? "" : imageCredit;
-
-  // update chapter index
+/**
+ * Updates the chapter index display and the state of the forward navigation button.
+ */
+function updateChapterIndexAndNavigation() {
   const chapterIndex = getCurrentChapterIndex();
   const chapterIndexDisplay = `${chapterIndex + 1} / ${story.chapters.length}`;
-  detailNavigation.querySelector("#chapter-index").textContent =
-    chapterIndexDisplay;
+  setTextContent("#chapter-index", chapterIndexDisplay);
 
-  // if the last chapter is reached, disable the forward button
-  // Check if the current chapter is the last chapter
-  if (chapterIndex + 1 === story.chapters.length) {
-    // Disable the forward button
-    forwardButton.disabled = true;
-  } else {
-    // Enable the forward button
-    forwardButton.disabled = false;
-  }
+  // Update forward button state
+  forwardButton.disabled = chapterIndex + 1 === story.chapters.length;
 }
