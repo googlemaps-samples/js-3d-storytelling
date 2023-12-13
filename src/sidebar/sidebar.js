@@ -79,6 +79,8 @@ function updateStoryDetails(properties) {
     properties.date ?? null;
   storyDetailsForm.querySelector('input[name="imageUrl"]').value =
     properties.imageUrl ?? null;
+  storyDetailsForm.querySelector(".image-credit-container img").src =
+    properties.imageUrl ?? null;
   storyDetailsForm.querySelector('input[name="imageCredit"]').value =
     properties.imageCredit ?? null;
 
@@ -110,6 +112,10 @@ function updateStoryDetails(properties) {
 
     // Update story
     story.properties = updatedStoryProperties;
+
+    // update the preview image
+    storyDetailsForm.querySelector(".image-credit-container img").src =
+      updatedStoryProperties.imageUrl ?? null;
 
     // Save updated object back to local storage
     localStorage.setItem("story", JSON.stringify(story));
@@ -602,6 +608,8 @@ function handleEditAction(chapter) {
     chapter.dateTime ?? null;
   editForm.querySelector('input[name="imageUrl"]').value =
     chapter.imageUrl ?? null;
+  editForm.querySelector(".image-credit-container img").src =
+    chapter.imageUrl ?? null;
   editForm.querySelector('input[name="imageCredit"]').value =
     chapter.imageCredit ?? null;
 
@@ -623,6 +631,12 @@ function handleEditAction(chapter) {
   editForm.addEventListener("input", (event) => {
     // Get the update input name and value
     const { name: inputName, value: inputValue } = event.target;
+
+    // update the preview image
+    if (inputName === "imageUrl") {
+      editForm.querySelector(".image-credit-container img").src =
+        inputValue ?? null;
+    }
 
     // Update the chapter
     story.chapters[selectedChapterIndex][inputName] = inputValue;
