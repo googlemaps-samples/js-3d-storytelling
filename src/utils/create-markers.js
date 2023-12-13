@@ -148,6 +148,44 @@ export function setSelectedMarker(markerId) {
 }
 
 /**
+ * Hide marker billboard.
+ * @param {number} markerId - The entity ID for the marker billboard
+ */
+export function removeMarker(markerId) {
+  console.log(markerId);
+  console.log(cesiumViewer.entities.removeById(markerId));
+}
+
+/**
+ * Hide marker billboard.
+ * @param {number} markerId - The entity ID for the marker billboard
+ */
+export function hideMarker(markerId) {
+  // If no markerID is provided, the getter returns undefined
+  const marker = cesiumViewer.entities.getById(markerId);
+
+  if (!marker) {
+    return;
+  }
+
+  marker.show = false;
+}
+
+/**
+ * Show marker billboard.
+ * @param {number} markerId - The entity ID for the marker billboard
+ */
+export function showMarker(markerId) {
+  // If no markerID is provided, the getter returns undefined
+  const marker = cesiumViewer.entities.getById(markerId);
+
+  if (!marker) {
+    return;
+  }
+  marker.show = true;
+}
+
+/**
  * Handles the marker click
  * When a marker is clicked, there are multiple things happening:
  * 1. The camera is moved to the marker position
@@ -204,15 +242,15 @@ function createMarkerClickHandler() {
 
 /**
  * Creates markers for each coordinate and attaches them to the viewer.
- * @param {id: string; coords: google.maps.LatLngLiteral[]} coordinates - marker coordinates.
+ * @param {Chapter[]} coordinates - marker coordinates.
  */
-async function createMarkers(markerCoords) {
+export async function createMarkers(chapter) {
   if (!cesiumViewer) {
     console.error("Error creating markers: `cesiumViewer` is undefined");
     return;
   }
 
-  const markerCoordinates = markerCoords.map(({ coords }) => {
+  const markerCoordinates = chapter.map(({ coords }) => {
     const { lng, lat } = coords;
     return Cesium.Cartesian3.fromDegrees(lng, lat);
   });
@@ -227,8 +265,8 @@ async function createMarkers(markerCoords) {
   coordsWithAdjustedHeight.forEach(async (coord, index) => {
     // add vertical offset between marker and terrain to allow for a line to be rendered in between
     const coordWithHeightOffset = addHeightOffset(coord, 28);
-    const { id } = markerCoords[index];
-    const markerSvg = await createMarkerSvg();
+    const { id } = chapter[index];
+    const markerSvg = await createMarkerSvg(id);
 
     // add the line and the marker
     cesiumViewer.entities.add({
