@@ -228,7 +228,14 @@ export function activateNavigationElement(navName) {
  */
 export const getCurrentChapterIndex = () => {
   const params = getParams();
-  return Number(params.get("chapterId"));
+  const chapterId = params.get("chapterId");
+
+  // Get the index of the current chapter
+  const chapterIndex = story.chapters.findIndex(
+    (chapter) => Number(chapter.id) === Number(chapterId)
+  );
+
+  return chapterIndex;
 };
 
 /**
