@@ -262,6 +262,7 @@
   justify-content: center;
   width: 3rem;
   height: 3rem;
+  border-radius: 50%;
 }
 
 #chapters-bar .navigation-button.previous {
@@ -275,14 +276,9 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-color: var(--text-color-white);
+  border-radius: inherit;
+  background-color: #fff;
   opacity: 0.6;
-  width: inherit;
-  height: inherit;
-  border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 #chapters-bar .navigation-button:hover::before,
 #chapters-bar .navigation-button:focus-visible::before {
