@@ -221,7 +221,7 @@ export const storyProxyHandler = {
 
     if (property === "properties") {
       // Update chapter details
-      updateChapterContent(target.properties, target, true);
+      updateChapterContent(target.properties, true);
 
       // Get cards container
       const cardsContainer = document.querySelector("#chapters-bar .cards");
@@ -237,8 +237,10 @@ export const storyProxyHandler = {
       // Update chapter card
       updateChapterCard(target, property, updatedValue);
 
-      // Update the location list item in the sidebar
-      updateLocationListItem(target, updatedValue);
+      if (property === "title") {
+        // Update location list item
+        updateLocationListItem(target.id, updatedValue);
+      }
     }
 
     return true;
@@ -342,16 +344,16 @@ function updateChapterCard(target, property, updatedValue) {
 /**
  * Updates the value of a location list item.
  *
- * @param {HTMLElement} target - The target location list item to be updated.
+ * @param {string} targetId - The target location list item id to be updated.
  * @param {string} updatedValue - The updated value to be set.
  */
-function updateLocationListItem(target, updatedValue) {
+function updateLocationListItem(targetId, updatedValue) {
   // Get location list container
   const locationListContainer = document.querySelector(".location-list");
 
   // Get location list item to be updated
   const locationListItem = locationListContainer.querySelector(
-    `.location-list-item[id="${target.id}"]`
+    `.location-list-item[id="${targetId}"]`
   );
 
   // Get element to be updated
