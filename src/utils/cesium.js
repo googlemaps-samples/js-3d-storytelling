@@ -72,8 +72,9 @@ async function flyToBoundingSphere({ coords, offset, onComplete, duration }) {
 
 /**
  * @typedef {Object} FlyToOptions - Options for the fly-to animation.
- * @property {google.maps.LatLngLiteral} coords - The coordinates to fly to.
+ * @property {google.maps.LatLngLiteral} [coords] - The coordinates to fly to.
  * @property {number} [duration] - The duration of the fly-to animation in seconds. If undefined, Cesium calculates an ideal duration based on the distance to be traveled by the flight.
+ * @property {Cesium.HeadingPitchRange} [customOffset] - The offset from the target in the local east-north-up reference frame centered at the target.
  *
  * Performs a fly-to animation on the Cesium viewer to the specified coordinates. *
  * @param {FlyToOptions} options - The "fly-to" options.
@@ -85,12 +86,13 @@ export async function performFlyTo(options = { coords: null }) {
   }
 
   try {
-    const { duration, coords } = options;
+    const { duration, coords, customOffset } = options;
 
     // Keep the current camera heading when flying to new coordinates
     const offset = {
       ...CAMERA_OFFSET,
       heading: cesiumViewer.camera.heading,
+      ...customOffset,
     };
 
     await flyToBoundingSphere({

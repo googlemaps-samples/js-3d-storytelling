@@ -10,25 +10,22 @@ import { loadSvg } from "../utils/svg.js";
 
 /**
  * The time in milliseconds between each chapter progression
- * @type {number}
  * @readonly
  */
 const TIME_PER_CHAPTER = 3000;
-
 /**
  * The radius size of the  highlighted area
+ * @readonly
  */
 const HIGHLIGHT_RADIUS = 250;
 
 // SVG icons
 /**
  * Icon shown to pause the autoplay
- * @type {Promise<string>}
  */
 const PAUSE_ICON = await loadSvg("round-pause-button");
 /**
  * Icon shown to pause the autoplay
- * @type {Promise<string>}
  */
 const PLAY_ICON = await loadSvg("round-play-button");
 
@@ -37,27 +34,22 @@ const PLAY_ICON = await loadSvg("round-play-button");
  * @type {HTMLNavElement}
  */
 const introNavigation = document.querySelector(".intro-navigation");
-
 /** The nav element shown on the story details overlay
  * @type {HTMLNavElement}
  */
 const detailNavigation = document.querySelector(".detail-navigation");
-
 /** The button to start the story / leave the intro overlay with
  * @type {HTMLButtonElement}
  */
 const startButton = introNavigation.querySelector("#start-story");
-
 /** The button to play the story chapter by chapter
  * @type {HTMLButtonElement}
  */
 const autoplayButton = detailNavigation.querySelector("#autoplay-story");
-
 /** The button to progress the story backward with
  * @type {HTMLButtonElement}
  */
 const backButton = detailNavigation.querySelector("#chapter-backward");
-
 /** The button to progress the story forward with
  * @type {HTMLButtonElement}
  */
@@ -65,6 +57,7 @@ const forwardButton = detailNavigation.querySelector("#chapter-forward");
 
 /**
  * The id used to identify the timeout instance for the story progression
+ * @type {number | null}
  */
 let intervalId = null;
 
@@ -172,16 +165,25 @@ const setNextChapter = () => {
 
 /**
  * Resets the application to the introductory state.
- * @return {void}
  */
 export function resetToIntro() {
-  setParams("chapter", null);
-  updateChapterContent(story.properties);
-  activateNavigationElement("intro");
-  removeCustomRadiusShader();
+  const { coords, cameraOptions } = story.properties;
+  const { pitch, heading } = cameraOptions;
+
+  setParams("chapter", null); // Clear the chapter parameter
+  setSelectedMarker(null); // "Deselect" current marker
+  updateChapterContent(story.properties); // Update the chapter details content
+  activateNavigationElement("intro"); // Activate the introduction navigation
+  removeCustomRadiusShader(); // Remove the custom radius shader
+  // Fly back to the starting position
   performFlyTo({
-    coords: story.properties.coords,
+    coords,
     duration: 1,
+    customOffset: {
+      roll: 0,
+      pitch: Cesium.Math.toRadians(pitch),
+      heading,
+    },
   });
 }
 
@@ -190,16 +192,23 @@ export function resetToIntro() {
  * @param {number} chapterIndex - The index of the chapter to be updated.
  */
 export function updateChapter(chapterIndex) {
-  const { coords } = story.chapters[chapterIndex];
+  const { coords, cameraOptions } = story.chapters[chapterIndex];
+  const { pitch, heading } = cameraOptions;
 
-  setSelectedMarker(chapterIndex);
-  setParams("chapter", story.chapters[chapterIndex].title);
-  updateChapterContent(story.chapters[chapterIndex], false);
-  activateNavigationElement("details");
-  createCustomRadiusShader(coords, HIGHLIGHT_RADIUS);
+  setSelectedMarker(chapterIndex); // Set the selected marker
+  setParams("chapter", story.chapters[chapterIndex].title); // Set the chapter parameter
+  updateChapterContent(story.chapters[chapterIndex], false); // Update the chapter details content
+  activateNavigationElement("details"); // Activate the details navigation
+  createCustomRadiusShader(coords, HIGHLIGHT_RADIUS); // Create the custom radius shader
+  // Fly to the new chapter location
   performFlyTo({
     coords,
     duration: 2,
+    customOffset: {
+      roll: 0,
+      pitch: Cesium.Math.toRadians(pitch),
+      heading,
+    },
   });
 }
 
