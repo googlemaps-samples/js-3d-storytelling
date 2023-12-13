@@ -588,7 +588,8 @@ button.download-config {
 }
 .field-wrapper input:not([disabled]):focus ~ .field-placeholder,
 .field-wrapper input:not(:placeholder-shown) ~ .field-placeholder {
-  transform: scale(0.75) translateY(-26px) translateX(-8px);
+  transform: scale(0.75) translateY(-26px) translateX(0px);
+  transform-origin: left;
 }
 
 .field-wrapper input:not([disabled]):focus ~ .field-placeholder span.label,
