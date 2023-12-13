@@ -1,3 +1,4 @@
+import { updateChapter } from "../chapters/chapter-navigation.js";
 import { story } from "../main.js";
 import { getCameraOptions } from "../utils/cesium.js";
 import { getStoryDetails, addStory } from "../utils/config.js";
@@ -633,6 +634,9 @@ function handleEditAction(chapter) {
   const selectedChapterIndex = story.chapters.findIndex(
     (chapter) => Number(selectedChapterKey) === Number(chapter.id)
   );
+
+  // Update chapter when opening edit form
+  updateChapter(selectedChapterIndex);
 
   // Add event listener to save the camera position to chapter
   document

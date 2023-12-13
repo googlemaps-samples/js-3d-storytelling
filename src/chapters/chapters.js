@@ -1,12 +1,5 @@
 import { story } from "../main.js";
-import { createCustomRadiusShader } from "../utils/cesium.js";
-import { setParams } from "../utils/params.js";
-import {
-  activateNavigationElement,
-  resetToIntro,
-  updateChapter,
-  updateChapterContent,
-} from "./chapter-navigation.js";
+import { resetToIntro, updateChapter } from "./chapter-navigation.js";
 
 /**
  * Returns a story intro card as HTML element.
