@@ -55,9 +55,10 @@ function encodeSvgToDataUri(svgElement) {
 
 /**
  * Creates a marker SVG for a given location.
+ * @param {string} The type of marker.
  * @returns {string} The marker SVG's data URI.
  */
-async function createMarkerSvg() {
+async function createMarkerSvg(markerType) {
   const baseSvgElement = await fetchSvgContent("assets/icons/marker.svg");
 
   // Configurations for the base and icon SVG elements
@@ -65,6 +66,7 @@ async function createMarkerSvg() {
     height: "60",
     width: "80",
     stroke: "white",
+    fill: markerType === "place-marker" ? "red" : "#13B5C7",
   };
 
   setSvgAttributes(baseSvgElement, baseConfig);
