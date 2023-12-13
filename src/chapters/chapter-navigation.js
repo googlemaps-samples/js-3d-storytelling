@@ -7,6 +7,7 @@ import {
 import { setSelectedMarker } from "../utils/create-markers.js";
 import { getParams, setParams } from "../utils/params.js";
 import { loadSvg } from "../utils/svg.js";
+import { setTextContent } from "../utils/ui.js";
 
 /**
  * The time in milliseconds between each chapter progression
@@ -283,18 +284,6 @@ export function updateChapterContent(chapterData, isIntro = true) {
 
   // Update chapter index and forward button state
   updateChapterIndexAndNavigation();
-}
-
-/**
- * Sets the text content of an element selected by a selector.
- * @param {string} selector - The CSS selector for the element
- * @param {string} text - The text to set
- */
-function setTextContent(selector, text) {
-  const element = document.querySelector(selector);
-  if (element) {
-    element.textContent = text;
-  }
 }
 
 /**
