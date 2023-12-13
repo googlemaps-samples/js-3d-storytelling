@@ -12,7 +12,7 @@ export function getParams() {
 export const setParams = (parameter, value) => {
   const params = getParams();
 
-  if (value) {
+  if (value !== null && value !== undefined) {
     if (Array.isArray(value)) {
       // Delete array parameter values and add new array values
       params.delete(parameter);
