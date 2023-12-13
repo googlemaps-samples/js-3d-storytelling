@@ -1,7 +1,7 @@
 import { story } from "../main.js";
 import { getCameraOptions } from "../utils/cesium.js";
+import { getStoryDetails, addStory } from "../utils/config.js";
 
-import { getStoryDetails } from "../utils/config.js";
 /**
  * Options for radio buttons in the sidebar.
  * @typedef {Object} LocationMenuOptions
@@ -45,16 +45,16 @@ export function updateLocationList(chapters) {
   const locationListContainer = document.querySelector(".location-list");
 
   locationListContainer.replaceChildren(
-    ...chapters.map((chapter) => createLocationTile(chapter))
+    ...chapters.map((chapter) => createLocationItem(chapter))
   );
 
   // The sidebar enables the user to add or edit new locations to the story.
   // Here we initialize the sidebar functionality.
 
-  // Enable the drag and drop functionality for the location tiles
+  // Enable the drag and drop functionality for the location items
   initDragAndDrop();
 
-  // Enable the edit menu for the each location tile
+  // Enable the edit menu for the each location item
   createEditMenus(chapters);
 }
 
@@ -117,12 +117,12 @@ function updateStoryDetails(properties) {
 }
 
 /**
- * Creates a location tile element for a given chapter.
+ * Creates a location item element for a given chapter.
  *
  * @param {Object} chapter - The chapter object containing the title.
- * @returns {HTMLElement} - The created location tile element.
+ * @returns {HTMLElement} - The created location item element.
  */
-function createLocationTile(chapter) {
+export function createLocationItem(chapter) {
   // Create elements
   const li = document.createElement("li");
   const p = document.createElement("p");
@@ -203,7 +203,8 @@ export async function initAutoComplete() {
     const selectedPlace = autocomplete.getPlace();
 
     // Catch user pressed enter key without selecting a place in the list
-    if (!selectedPlace.geometry) {
+    if (!selectedPlace?.geometry) {
+      locationSubmitButton.disabled = true;
       return;
     }
     location = selectedPlace.geometry.location;
@@ -224,10 +225,17 @@ export async function initAutoComplete() {
   // Handle submit location button click
   locationSubmitButton.addEventListener("click", () =>
     // Adds new chapter to story
-    addStory({
-      title: locationInput.value,
-      coords: location.toJSON(),
-    })
+    {
+      // Adds new chapter to story
+      addStory({
+        title: locationInput.value,
+        coords: location.toJSON(),
+      });
+
+      // Reset input field
+      autocomplete.set("place", null);
+      locationInput.value = "";
+    }
   );
 }
 // A reference to the currently open dialog
@@ -237,10 +245,9 @@ let locationMenuEventController;
 
 /**
  * Creates edit menus for chapters in the sidebar.
- *
- * @param {Array} chapters - The array of chapters.
  */
-function createEditMenus(chapters) {
+export function createEditMenus() {
+  const { chapters } = story;
   // Add event listener to all details elements in the sidebar
   const details = document.querySelectorAll("#sidebar > details");
 
@@ -324,16 +331,16 @@ function closeMenu(dialog) {
 }
 
 /**
- * Initializes the draggable location tiles functionality.
+ * Initializes the draggable location items functionality.
  */
 export function initDragAndDrop() {
   // Get all draggable location list items
   const locationItems = document.querySelectorAll(".location-list-item");
 
-  // Get the location list where the tiles can be dropped
+  // Get the location list where the items can be dropped
   const locationList = document.querySelector(".location-list");
 
-  // Add event listeners to all draggable tiles
+  // Add event listeners to all draggable items
   locationItems.forEach((item) => {
     item.addEventListener("dragstart", (event) => {
       if (event.target !== item) {
@@ -353,7 +360,7 @@ export function initDragAndDrop() {
     });
   });
 
-  // Add event listeners to the location list where the tiles can be dropped
+  // Add event listeners to the location list where the items can be dropped
   locationList.addEventListener("dragover", (event) => {
     event.preventDefault();
 
