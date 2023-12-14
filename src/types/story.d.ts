@@ -5,9 +5,9 @@ type CesiumCameraOptions = {
     direction: Cesium.Cartesian3; // The camera direction in Cartesian coordinates
     up: Cesium.Cartesian3; // The camera up in Cartesian coordinates
   };
-  heading: number; // Heading in radians
-  pitch: number; // Pitch in radians
-  roll: number; // Roll in radians
+  heading: number; // Heading in degrees
+  pitch: number; // Pitch in degrees
+  roll: number; // Roll in degrees
 };
 
 // Define the type for the Segment
