@@ -634,10 +634,10 @@ function handleEditAction(chapter) {
   // Fill the "more settings" form inputs with the chapter data
   // Get the radius input element
 
-  const isVignetteEnabled = chapter.focusOptions.showFocus;
+  const isFocusEnabled = chapter.focusOptions.showFocus;
 
-  editForm.querySelector('input[name="vignette-checkbox"]').checked =
-    isVignetteEnabled;
+  editForm.querySelector('input[name="focus-checkbox"]').checked =
+    isFocusEnabled;
 
   const radiusInput = editForm.querySelector("#radius");
 
@@ -690,7 +690,7 @@ function handleEditAction(chapter) {
       const chapter = story.chapters[selectedChapterIndex];
 
       if (type === "checkbox") {
-        if (name === "vignette-checkbox") {
+        if (name === "focus-checkbox") {
           chapter.focusOptions.showFocus = checked;
         }
 

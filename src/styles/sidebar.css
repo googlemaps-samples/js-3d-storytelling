@@ -253,7 +253,7 @@ summary::after {
 }
 
 .more-settings-container
-  li:has(input[type="checkbox"]#vignette-checkbox:not(:checked))
+  li:has(input[type="checkbox"]#focus-checkbox:not(:checked))
   + li {
   display: none;
 }
