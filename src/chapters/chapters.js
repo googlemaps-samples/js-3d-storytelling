@@ -57,9 +57,7 @@ export function createChapterCard(chapter) {
 
   // set current chapter
   card.addEventListener("click", () => {
-    const chapterIndex = story.chapters.findIndex(
-      ({ id }) => id === chapter.id
-    );
+    const chapterIndex = getChapterIndex(chapter.id);
     updateChapter(chapterIndex);
   });
 
@@ -124,4 +122,8 @@ export function addChaptersBar(story) {
       behavior: "smooth",
     });
   });
+}
+
+export function getChapterIndex(chapterId) {
+  return story.chapters.findIndex(({ id }) => id === chapterId);
 }

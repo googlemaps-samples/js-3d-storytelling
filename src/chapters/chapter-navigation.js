@@ -8,6 +8,7 @@ import { setSelectedMarker } from "../utils/create-markers.js";
 import { getParams, setParams } from "../utils/params.js";
 import { loadSvg } from "../utils/svg.js";
 import { setTextContent } from "../utils/ui.js";
+import { getChapterIndex } from "./chapters.js";
 
 /**
  * The time in milliseconds between each chapter progression
@@ -213,12 +214,13 @@ export function resetToIntro() {
  * @param {number} chapterIndex - The index of the chapter to be updated.
  */
 export function updateChapter(chapterIndex) {
-  const { cameraOptions, coords } = story.chapters[chapterIndex];
+  const chapter = story.chapters[chapterIndex];
+  const { cameraOptions, coords, id: chapterId } = chapter;
   const { position, pitch, heading, roll } = cameraOptions;
 
   setSelectedMarker(chapterIndex); // Set the selected marker
-  setParams("chapterId", story.chapters[chapterIndex].id); // Set the chapter parameter
-  updateChapterContent(story.chapters[chapterIndex], false); // Update the chapter details content
+  setParams("chapterId", chapterId); // Set the chapter parameter
+  updateChapterContent(chapter, false); // Update the chapter details content
   activateNavigationElement("details"); // Activate the details navigation
   createCustomRadiusShader(coords, HIGHLIGHT_RADIUS); // Create the custom radius shader
   // Fly to the new chapter location
@@ -246,17 +248,12 @@ export function activateNavigationElement(navName) {
  * Returns the index of the current chapter.
  * @returns {number} - The index of the current chapter.
  */
-export const getCurrentChapterIndex = () => {
+export function getCurrentChapterIndex() {
   const params = getParams();
   const chapterId = params.get("chapterId");
-
   // Get the index of the current chapter
-  const chapterIndex = story.chapters.findIndex(
-    (chapter) => Number(chapter.id) === Number(chapterId)
-  );
-
-  return chapterIndex;
-};
+  return getChapterIndex(chapterId);
+}
 
 /**
  * Updates the details navigation. This includes the chapter index and

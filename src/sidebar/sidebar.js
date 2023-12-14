@@ -1,13 +1,14 @@
 import { updateChapter, resetToIntro } from "../chapters/chapter-navigation.js";
-import { story } from "../main.js";
+import { getChapterIndex } from "../chapters/chapters.js";
 import { createMarkers, removeMarker } from "../utils/create-markers.js";
+import { getStoryDetails, addStory } from "../utils/config.js";
+import { getParams } from "../utils/params.js";
 import {
   getCameraOptions,
   calculateCameraPositionAndOrientation,
   performFlyTo,
 } from "../utils/cesium.js";
-import { getStoryDetails, addStory } from "../utils/config.js";
-import { getParams } from "../utils/params.js";
+import { story } from "../main.js";
 
 /**
  * Options for radio buttons in the sidebar.
@@ -625,9 +626,7 @@ function handleEditAction(chapter) {
   // Update the slider progress when the value changed
   radiusInput.addEventListener(
     "input",
-    () => {
-      radiusInput.style.setProperty("--value", radiusInput.value);
-    },
+    () => radiusInput.style.setProperty("--value", radiusInput.value),
     { signal: editFormEventController.signal }
   );
 
@@ -653,11 +652,8 @@ function handleEditAction(chapter) {
     chapter.imageCredit ?? null;
 
   const selectedChapterKey = editForm.getAttribute("key");
-
-  // Find index of chapter to be updated
-  const selectedChapterIndex = story.chapters.findIndex(
-    (chapter) => Number(selectedChapterKey) === Number(chapter.id)
-  );
+  const selectedChapterIndex = getChapterIndex(Number(selectedChapterKey));
+  const selectedChapter = story.chapters[selectedChapterIndex];
 
   // Update chapter when opening edit form
   updateChapter(selectedChapterIndex);
@@ -667,9 +663,7 @@ function handleEditAction(chapter) {
     .getElementById("save-chapter-camera-position-button")
     .addEventListener(
       "click",
-      () => {
-        story.chapters[selectedChapterIndex].cameraOptions = getCameraOptions();
-      },
+      () => (selectedChapter.cameraOptions = getCameraOptions()),
       { signal: editFormEventController.signal }
     );
 
@@ -680,14 +674,13 @@ function handleEditAction(chapter) {
       // Get the update input name and value
       const { name: inputName, value: inputValue } = event.target;
 
-      // update the preview image
-      if (inputName === "imageUrl") {
-        editForm.querySelector(".image-credit-container img").src =
-          inputValue ?? null;
-      }
-
       // Update the chapter
-      story.chapters[selectedChapterIndex][inputName] = inputValue;
+      selectedChapter[inputName] = inputValue;
+
+      if (inputName !== "imageUrl") return;
+      // update the preview image
+      editForm.querySelector(".image-credit-container img").src =
+        inputValue ?? null;
     },
     { signal: editFormEventController.signal }
   );
