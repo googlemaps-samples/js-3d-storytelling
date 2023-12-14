@@ -132,9 +132,9 @@ export function getCameraOptions() {
   const { position, heading, pitch, roll } = cesiumViewer.camera;
   return {
     position,
-    heading: Cesium.Math.toDegrees(heading),
-    pitch: Cesium.Math.toDegrees(pitch),
-    roll: Cesium.Math.toDegrees(roll),
+    heading,
+    pitch,
+    roll,
   };
 }
 

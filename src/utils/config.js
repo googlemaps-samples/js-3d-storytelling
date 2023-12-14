@@ -341,6 +341,10 @@ function updateChapterCard(target, property, updatedValue) {
   // Get card to be updated
   const card = cardsContainer.querySelector(`.card[id="${target.id}"]`);
 
+  if (!card) {
+    return;
+  }
+
   // Get element to be updated
   const element = card.querySelector(`[data-input-name="${property}"]`) || null;
 
