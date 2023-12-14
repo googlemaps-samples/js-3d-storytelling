@@ -654,6 +654,12 @@ function handleEditAction(chapter) {
     { signal: editFormEventController.signal }
   );
 
+  const isMarkerVisible =
+    chapter.focusOptions.locationMarkerVisibility === "visible";
+
+  editForm.querySelector('input[name="marker-checkbox"]').checked =
+    isMarkerVisible;
+
   const selectedChapterKey = editForm.getAttribute("key");
 
   // Find index of chapter to be updated
@@ -679,31 +685,30 @@ function handleEditAction(chapter) {
   editForm.addEventListener(
     "input",
     (event) => {
-      // Get the update input name and value
-      const { name: inputName, value: inputValue } = event.target;
+      const { name, value, type, checked } = event.target;
 
-      // if event.target is an input of type checkbox, check if the checkbox is checked
-      // if it is checked, set the value to "active"
-      // if it is not checked, set the value to "inactive"
-      if (event.target.type === "checkbox") {
-        if (event.target.checked) {
-          story.chapters[selectedChapterIndex].focusOptions.highlightMode =
-            "active";
-        } else {
-          story.chapters[selectedChapterIndex].focusOptions.highlightMode =
-            "inactive";
+      // Define the chapter for easier reference
+      const chapter = story.chapters[selectedChapterIndex];
+
+      if (type === "checkbox") {
+        if (name === "vignette-checkbox") {
+          chapter.focusOptions.highlightMode = checked ? "active" : "inactive";
+        }
+
+        if (name === "marker-checkbox") {
+          chapter.focusOptions.locationMarkerVisibility = checked
+            ? "visible"
+            : "hidden";
         }
         return;
       }
 
-      // update the preview image
-      if (inputName === "imageUrl") {
+      if (name === "imageUrl") {
         editForm.querySelector(".image-credit-container img").src =
-          inputValue ?? null;
+          value ?? null;
       }
 
-      // Update the chapter
-      story.chapters[selectedChapterIndex][inputName] = inputValue;
+      chapter[name] = value;
     },
     { signal: editFormEventController.signal }
   );

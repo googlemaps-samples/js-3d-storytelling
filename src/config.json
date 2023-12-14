@@ -43,7 +43,7 @@
       "focusOptions": {
         "highlightRadius": 3000,
         "highlightMode": "inactive",
-        "locationMarkerVisibility": "show"
+        "locationMarkerVisibility": "visible"
       }
     },
     {
@@ -71,7 +71,7 @@
       "focusOptions": {
         "highlightRadius": 250,
         "highlightMode": "active",
-        "locationMarkerVisibility": "show"
+        "locationMarkerVisibility": "visible"
       }
     },
     {
@@ -99,7 +99,7 @@
       "focusOptions": {
         "highlightRadius": 4500,
         "highlightMode": "active",
-        "locationMarkerVisibility": "show"
+        "locationMarkerVisibility": "hidden"
       }
     }
   ]

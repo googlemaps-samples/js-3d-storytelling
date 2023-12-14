@@ -245,13 +245,13 @@ function createMarkerClickHandler() {
  * Creates markers for each chapter's coordinate and attaches them to the viewer.
  * @param {Chapter[]} chapters - the story's chapters.
  */
-export async function createMarkers(chapter) {
+export async function createMarkers(chapters) {
   if (!cesiumViewer) {
     console.error("Error creating markers: `cesiumViewer` is undefined");
     return;
   }
 
-  const markerCoordinates = chapter.map(({ coords }) => {
+  const markerCoordinates = chapters.map(({ coords }) => {
     const { lng, lat } = coords;
     return Cesium.Cartesian3.fromDegrees(lng, lat);
   });
@@ -266,8 +266,11 @@ export async function createMarkers(chapter) {
   coordsWithAdjustedHeight.forEach(async (coord, index) => {
     // add vertical offset between marker and terrain to allow for a line to be rendered in between
     const coordWithHeightOffset = addHeightOffset(coord, 28);
-    const { id } = chapter[index];
+    const { id } = chapters[index];
     const markerSvg = await createMarkerSvg(id);
+
+    const isMarkerVisible =
+      chapters[index].focusOptions.locationMarkerVisibility === "visible";
 
     // add the line and the marker
     cesiumViewer.entities.add({
@@ -277,6 +280,7 @@ export async function createMarkers(chapter) {
         id,
         markerSvg,
       }),
+      show: isMarkerVisible,
     });
 
     // Select the marker if it was rerendered and already selected before

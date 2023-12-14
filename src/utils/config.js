@@ -11,6 +11,8 @@ import {
   removeCustomRadiusShader,
 } from "../utils/cesium.js";
 
+import { hideMarker, showMarker } from "./create-markers.js";
+
 // Properties of a chapter that can be edited
 const chapterProperties = [
   "title",
@@ -203,6 +205,8 @@ export const storyProxyHandler = {
       return true;
     }
 
+    console.log("set", target, property, updatedValue);
+
     if (Array.isArray(target)) {
       const isNewChapter = !target.includes(updatedValue.id);
 
@@ -252,6 +256,23 @@ export const storyProxyHandler = {
           removeCustomRadiusShader();
         }
         target.highlightMode = highlightMode;
+        return true;
+      }
+
+      if (property === "locationMarkerVisibility") {
+        const locationMarkerVisibility = updatedValue;
+        const markerId = this.parent.id; // Get the parent object (chapter) and access its id property
+
+        if (locationMarkerVisibility === "hidden") {
+          hideMarker(markerId);
+        }
+
+        if (locationMarkerVisibility === "visible") {
+          showMarker(markerId);
+        }
+
+        target.locationMarkerVisibility = locationMarkerVisibility;
+
         return true;
       }
       // Update the value

@@ -10,7 +10,7 @@ type CesiumCameraOptions = {
 type focusOptions = {
   highlightRadius: number;
   highlightMode: "active" | "inactive";
-  locationMarkerVisibility: "show" | "hide";
+  locationMarkerVisibility: "visible" | "hidden";
 };
 
 // Define the type for the Segment
