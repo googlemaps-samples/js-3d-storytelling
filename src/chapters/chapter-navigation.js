@@ -68,14 +68,6 @@ let intervalId = null;
  * It determines the current chapter based on URL parameters and updates the UI accordingly.
  */
 export function initChapterNavigation() {
-  // Get the current chapter based on URL parameters
-  const params = getParams();
-  const chapterParam = params.get("chapterId");
-  //Finds and returns a chapter from the story based on its title.
-  const chapterData = story.chapters.find(
-    (chapter) => chapter.id === chapterParam
-  );
-
   // Set up event listeners
   startButton.addEventListener("click", () => {
     activateNavigationElement("details");
@@ -94,12 +86,16 @@ export function initChapterNavigation() {
 
   autoplayButton.addEventListener("click", autoplayClickHandler);
 
+  // Get the current chapter based on URL parameters
+  const params = getParams();
+  const chapterId = params.get("chapterId")
+  
   // Initialize chapter content based on URL parameters
-  chapterData
-    ? activateNavigationElement("details")
-    : activateNavigationElement("intro");
-
-  updateChapterContent(chapterData || story.properties, !chapterData);
+  if (chapterId !== null) {
+    updateChapter(chapterId);
+  } else {
+    resetToIntro();
+  }
 }
 
 /**
