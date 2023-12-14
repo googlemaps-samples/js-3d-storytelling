@@ -6,6 +6,7 @@ import {
   initAutoComplete,
   updateSidebar,
   initDragAndDrop,
+  addDownloadConfigHandler,
 } from "./sidebar/sidebar.js";
 import { addChaptersBar } from "./chapters/chapters.js";
 import { initGoogleMaps } from "./utils/places.js";
@@ -60,6 +61,7 @@ async function main() {
     initDragAndDrop();
     initChapterNavigation();
     addChaptersBar(storyConfig);
+    addDownloadConfigHandler();
   } catch (error) {
     console.error(error);
   }
