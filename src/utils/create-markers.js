@@ -55,9 +55,10 @@ function encodeSvgToDataUri(svgElement) {
 
 /**
  * Creates a marker SVG for a given location.
+ * @param {string} The type of marker.
  * @returns {string} The marker SVG's data URI.
  */
-async function createMarkerSvg() {
+async function createMarkerSvg(markerType) {
   const baseSvgElement = await fetchSvgContent("assets/icons/marker.svg");
 
   // Configurations for the base and icon SVG elements
@@ -65,6 +66,7 @@ async function createMarkerSvg() {
     height: "60",
     width: "80",
     stroke: "white",
+    fill: markerType === "place-marker" ? "red" : "#13B5C7",
   };
 
   setSvgAttributes(baseSvgElement, baseConfig);
@@ -148,6 +150,43 @@ export function setSelectedMarker(markerId) {
 }
 
 /**
+ * Remove single marker billboard.
+ * @param {number} markerId - The entity ID for the marker billboard
+ */
+export function removeMarker(markerId) {
+  cesiumViewer.entities.removeById(markerId);
+}
+
+/**
+ * Hide marker billboard.
+ * @param {number} markerId - The entity ID for the marker billboard
+ */
+export function hideMarker(markerId) {
+  // If no markerID is provided, the getter returns undefined
+  const marker = cesiumViewer.entities.getById(markerId);
+
+  if (!marker) {
+    return;
+  }
+
+  marker.show = false;
+}
+
+/**
+ * Show marker billboard.
+ * @param {number} markerId - The entity ID for the marker billboard
+ */
+export function showMarker(markerId) {
+  // If no markerID is provided, the getter returns undefined
+  const marker = cesiumViewer.entities.getById(markerId);
+
+  if (!marker) {
+    return;
+  }
+  marker.show = true;
+}
+
+/**
  * Handles the marker click
  * When a marker is clicked, there are multiple things happening:
  * 1. The camera is moved to the marker position
@@ -203,16 +242,16 @@ function createMarkerClickHandler() {
 }
 
 /**
- * Creates markers for each coordinate and attaches them to the viewer.
- * @param {id: string; coords: google.maps.LatLngLiteral[]} coordinates - marker coordinates.
+ * Creates markers for each chapter's coordinate and attaches them to the viewer.
+ * @param {Chapter[]} chapters - the story's chapters.
  */
-async function createMarkers(markerCoords) {
+export async function createMarkers(chapter) {
   if (!cesiumViewer) {
     console.error("Error creating markers: `cesiumViewer` is undefined");
     return;
   }
 
-  const markerCoordinates = markerCoords.map(({ coords }) => {
+  const markerCoordinates = chapter.map(({ coords }) => {
     const { lng, lat } = coords;
     return Cesium.Cartesian3.fromDegrees(lng, lat);
   });
@@ -227,8 +266,8 @@ async function createMarkers(markerCoords) {
   coordsWithAdjustedHeight.forEach(async (coord, index) => {
     // add vertical offset between marker and terrain to allow for a line to be rendered in between
     const coordWithHeightOffset = addHeightOffset(coord, 28);
-    const { id } = markerCoords[index];
-    const markerSvg = await createMarkerSvg();
+    const { id } = chapter[index];
+    const markerSvg = await createMarkerSvg(id);
 
     // add the line and the marker
     cesiumViewer.entities.add({

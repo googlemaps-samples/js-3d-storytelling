@@ -1,6 +1,7 @@
 import { updateChapter } from "../chapters/chapter-navigation.js";
 import { story } from "../main.js";
-import { getCameraOptions } from "../utils/cesium.js";
+import { getCameraOptions, performFlyTo } from "../utils/cesium.js";
+import { createMarkers, removeMarker } from "../utils/create-markers.js";
 import { getStoryDetails, addStory } from "../utils/config.js";
 
 /**
@@ -207,6 +208,7 @@ export async function initAutoComplete() {
 
   // Listen to location changes
   autocomplete.addListener("place_changed", () => {
+    removeMarker("place-marker");
     const selectedPlace = autocomplete.getPlace();
 
     // Catch user pressed enter key without selecting a place in the list
@@ -215,6 +217,8 @@ export async function initAutoComplete() {
       return;
     }
     location = selectedPlace.geometry.location;
+    performFlyTo({ coords: location.toJSON() });
+    createMarkers([{ id: "place-marker", coords: location.toJSON() }]);
 
     locationSubmitButton.disabled = false;
   });
@@ -224,6 +228,7 @@ export async function initAutoComplete() {
   // If input field is empty clear existing location and disable form submission button
   locationInput.addEventListener("input", () => {
     if (locationInput.value === "") {
+      removeMarker("place-marker");
       location = null;
       locationSubmitButton.disabled = true;
     }
