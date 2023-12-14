@@ -532,7 +532,12 @@ button.download-config {
   background-color: white;
   padding: var(--spacing-small) var(--spacing-medium-large);
   color: var(--accent-color);
+  border: 1px solid var(--color-light-grey);
   border-radius: var(--custom-border-radius);
+}
+
+.download-config:not(:active):hover {
+  border: 1px solid var(--border-color-hover);
 }
 
 .chapter-form > fieldset {
@@ -616,6 +621,10 @@ button.add-location:before {
 }
 .save-camera-position {
   border: 1px solid var(--color-light-grey);
+}
+
+.save-camera-position:not(:active):hover {
+  border: 1px solid var(--border-color-hover);
 }
 
 .save-camera-position:before {
