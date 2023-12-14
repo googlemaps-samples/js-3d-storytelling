@@ -11,6 +11,7 @@ import { updateChapterContent } from "../chapters/chapter-navigation.js";
 const chapterProperties = [
   "title",
   "content",
+  "address",
   "imageUrl",
   "dateTime",
   "imageCredit",

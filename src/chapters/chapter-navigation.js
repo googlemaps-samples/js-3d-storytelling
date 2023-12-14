@@ -272,8 +272,9 @@ export function updateChapterContent(chapterData, isIntro = true) {
     ".description",
     isIntro ? story.properties.description : chapterData.content
   );
-  setTextContent(".date", isIntro ? "" : chapterData.date);
-  setTextContent(".place", chapterData.place);
+
+  setTextContent(".date", isIntro ? "" : chapterData.dateTime);
+  setTextContent(".place", chapterData.address);
 
   // Update image
   chapterDetail.querySelector(".hero").src = chapterData.imageUrl;
