@@ -1,7 +1,11 @@
 import { updateChapter } from "../chapters/chapter-navigation.js";
 import { story } from "../main.js";
-import { getCameraOptions, performFlyTo } from "../utils/cesium.js";
 import { createMarkers, removeMarker } from "../utils/create-markers.js";
+import {
+  getCameraOptions,
+  calculateCameraPositionAndOrientation,
+  performFlyTo,
+} from "../utils/cesium.js";
 import { getStoryDetails, addStory } from "../utils/config.js";
 
 /**
@@ -91,6 +95,7 @@ function updateStoryDetails(properties) {
     .getElementById("save-story-camera-position-button")
     .addEventListener("click", () => {
       story.properties.cameraOptions = getCameraOptions();
+      storyDetailsForm.requestSubmit();
     });
 
   // In the story details form, the user can change the story properties.
@@ -197,17 +202,17 @@ export function createLocationItem(chapter) {
 export async function initAutoComplete() {
   const locationInput = document.querySelector(".locations-container input");
 
-  // Todo: get correct fields
   const options = { fields: ["geometry"] };
   const autocomplete = new google.maps.places.Autocomplete(
     locationInput,
     options
   );
 
-  let location = null;
+  let coords = null;
+  let cameraOptions = null;
 
   // Listen to location changes
-  autocomplete.addListener("place_changed", () => {
+  autocomplete.addListener("place_changed", async () => {
     removeMarker("place-marker");
     const selectedPlace = autocomplete.getPlace();
 
@@ -216,9 +221,15 @@ export async function initAutoComplete() {
       locationSubmitButton.disabled = true;
       return;
     }
-    location = selectedPlace.geometry.location;
-    performFlyTo({ coords: location.toJSON() });
-    createMarkers([{ id: "place-marker", coords: location.toJSON() }]);
+    coords = selectedPlace.geometry.location.toJSON();
+    // Calculate camera position and orientation based on coords
+    cameraOptions = await calculateCameraPositionAndOrientation(coords);
+    const { position, heading, pitch, roll } = cameraOptions;
+
+    // Fly to calculated position
+    performFlyTo({ position, orientation: { heading, pitch, roll } });
+    // Create temporary marker on selected location
+    createMarkers([{ id: "place-marker", coords }]);
 
     locationSubmitButton.disabled = false;
   });
@@ -229,26 +240,25 @@ export async function initAutoComplete() {
   locationInput.addEventListener("input", () => {
     if (locationInput.value === "") {
       removeMarker("place-marker");
-      location = null;
+      coords = null;
+      cameraOptions = null;
       locationSubmitButton.disabled = true;
     }
   });
 
   // Handle submit location button click
-  locationSubmitButton.addEventListener("click", () =>
+  locationSubmitButton.addEventListener("click", () => {
     // Adds new chapter to story
-    {
-      // Adds new chapter to story
-      addStory({
-        title: locationInput.value,
-        coords: location.toJSON(),
-      });
+    addStory({
+      title: locationInput.value,
+      coords,
+      cameraOptions,
+    });
 
-      // Reset input field
-      autocomplete.set("place", null);
-      locationInput.value = "";
-    }
-  );
+    // Reset input field
+    autocomplete.set("place", null);
+    locationInput.value = "";
+  });
 }
 // A reference to the currently open dialog
 let currentOpenedMenu = null;

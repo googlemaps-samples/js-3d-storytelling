@@ -168,8 +168,8 @@ const setNextChapter = () => {
  * Resets the application to the introductory state.
  */
 export function resetToIntro() {
-  const { coords, cameraOptions } = story.properties;
-  const { pitch, heading } = cameraOptions;
+  const { cameraOptions } = story.properties;
+  const { position, pitch, heading, roll } = cameraOptions;
 
   setParams("chapterId", null); // Clear the chapter parameter
   setSelectedMarker(null); // "Deselect" current marker
@@ -178,13 +178,13 @@ export function resetToIntro() {
   removeCustomRadiusShader(); // Remove the custom radius shader
   // Fly back to the starting position
   performFlyTo({
-    coords,
-    duration: 1,
-    customOffset: {
-      roll: 0,
-      pitch: Cesium.Math.toRadians(pitch),
+    position,
+    orientation: {
+      roll,
+      pitch,
       heading,
     },
+    duration: 1,
   });
 }
 
@@ -193,8 +193,8 @@ export function resetToIntro() {
  * @param {number} chapterIndex - The index of the chapter to be updated.
  */
 export function updateChapter(chapterIndex) {
-  const { coords, cameraOptions } = story.chapters[chapterIndex];
-  const { pitch, heading } = cameraOptions;
+  const { cameraOptions, coords } = story.chapters[chapterIndex];
+  const { position, pitch, heading, roll } = cameraOptions;
 
   setSelectedMarker(chapterIndex); // Set the selected marker
   setParams("chapterId", story.chapters[chapterIndex].id); // Set the chapter parameter
@@ -203,13 +203,13 @@ export function updateChapter(chapterIndex) {
   createCustomRadiusShader(coords, HIGHLIGHT_RADIUS); // Create the custom radius shader
   // Fly to the new chapter location
   performFlyTo({
-    coords,
-    duration: 2,
-    customOffset: {
-      roll: 0,
-      pitch: Cesium.Math.toRadians(pitch),
+    position,
+    orientation: {
+      roll,
+      pitch,
       heading,
     },
+    duration: 2,
   });
 }
 

@@ -1,18 +1,14 @@
 import { GOOGLE_MAPS_API_KEY } from "../env.js";
 import { story } from "../main.js";
 
-// Camera height above the target when flying to a point.
-const CAMERA_HEIGHT = 100;
-
-// Pitch 30 degrees downwards
-const BASE_PITCH = -30;
-
-// Camera heading (rotation), pitch (tilt), and range (distance) for resetting view.
-const CAMERA_OFFSET = {
-  heading: 0, // No rotation offset.
-  pitch: Cesium.Math.toRadians(BASE_PITCH),
-  range: 800, // 800 meters from the center.
-};
+// The radius from the target point to position the camera.
+const RADIUS = 800;
+// Pitch -30 degrees in radians
+const BASE_PITCH_RADIANS = -0.523599;
+// Heading 180 degrees in radians
+const BASE_HEADING_RADIANS = 3.14159;
+// No base roll
+const BASE_ROLL_RADIANS = 0;
 
 /**
  * An export of the CesiumJS viewer instance to be accessed by other modules.
@@ -26,7 +22,61 @@ export let cesiumViewer;
 let tileset = null;
 
 /**
- * Adjusts the height of the given coordinates to be above the surface by the specified offset height.
+ * Asynchronously calculates the camera position and orientation based on the given parameters.
+ *
+ * @param {Object} coords - The coordinates of the target point as an object with properties `lat` (latitude) and `lng` (longitude).
+ *
+ * @returns {Promise<{
+ *   position: Cesium.Cartesian3,
+ *   heading: number,
+ *   pitch: number,
+ *   roll: number
+ * }>} A promise that resolves to an object representing the camera position and orientation with properties:
+ *   - position: A {@link Cesium.Cartesian3} representing the camera position in Earth-fixed coordinates.
+ *   - heading: The heading angle of the camera (in radians).
+ *   - pitch: The pitch angle of the camera (in radians).
+ *   - roll: The roll angle of the camera (in radians).
+ */
+export async function calculateCameraPositionAndOrientation(coords) {
+  // Convert latitude and longitude to Cartesian3 (Earth-fixed coordinates)
+  const center = await adjustCoordinateHeight(coords);
+
+  const headingRadians = BASE_HEADING_RADIANS;
+  const pitchRadians = BASE_PITCH_RADIANS;
+  const rollRadians = BASE_ROLL_RADIANS;
+
+  // Create a local east-north-up coordinate system at the given center point
+  const localEastNorthUp = Cesium.Transforms.eastNorthUpToFixedFrame(center);
+
+  // Calculate the camera's offset in the local east-north-up coordinates
+  // - 'radius * Math.sin(headingRadians)' gives the distance in the east direction
+  // - 'radius * Math.cos(pitchRadians * -1)' gives the distance in the north direction
+  // - 'radius * Math.sin(pitchRadians * -1)' gives the height above the center point
+  const cameraOffset = new Cesium.Cartesian3(
+    RADIUS * Math.sin(headingRadians),
+    RADIUS * Math.cos(pitchRadians * -1),
+    RADIUS * Math.sin(pitchRadians * -1)
+  );
+
+  // Calculate the camera's final position in Earth-fixed coordinates
+  // This is achieved by transforming the local offset to the global coordinate system
+  const cameraPosition = new Cesium.Cartesian3();
+  Cesium.Matrix4.multiplyByPoint(
+    localEastNorthUp,
+    cameraOffset,
+    cameraPosition
+  );
+
+  return {
+    position: cameraPosition,
+    heading: headingRadians,
+    pitch: pitchRadians,
+    roll: rollRadians,
+  };
+}
+
+/**
+ * Asynchronously adjusts the height of the given coordinates to the most detailed terrain height.
  *
  * @param {google.maps.LatLngLiteral} coords - The latitude and longitude coordinates.
  * @return {Promise<Cesium.Cartesian3>} A Cartesian3 object with adjusted height.
@@ -44,65 +94,27 @@ async function adjustCoordinateHeight(coords) {
   return Cesium.Cartesian3.fromRadians(
     cartographic.longitude,
     cartographic.latitude,
-    cartographic.height + CAMERA_HEIGHT
-  );
-}
-
-/**
- * Flies the camera to the given coordinates with the specified offset to the surface.
- *
- * @param {object} options - Pass the params as options object.
- * @param {google.maps.LatLngLiteral} [options.coords] - The coordinates to fly to.
- * @param {Cesium.HeadingPitchRange} [options.offset] - The offset from the target in the local east-north-up reference frame centered at the target.
- * @param {Function | undefined} [options.onComplete] - The function to execute when the flight is complete.
- * @param {number | undefined} [options.duration] - The duration of the fly-to animation in seconds. If undefined, Cesium calculates an ideal duration based on the distance to be traveled by the flight.
- */
-async function flyToBoundingSphere({ coords, offset, onComplete, duration }) {
-  const adjustedCoords = await adjustCoordinateHeight(coords);
-
-  cesiumViewer.camera.flyToBoundingSphere(
-    new Cesium.BoundingSphere(adjustedCoords, 0),
-    {
-      offset,
-      complete: onComplete,
-      duration,
-    }
+    cartographic.height
   );
 }
 
 /**
  * @typedef {Object} FlyToOptions - Options for the fly-to animation.
- * @property {google.maps.LatLngLiteral} [coords] - The coordinates to fly to.
+ * @property {Cartesian3} [position] - The final position of the camera in WGS84 (world) coordinates.
+ * @property {Object} [orientation] - An object that contains heading, pitch and roll properties.
  * @property {number} [duration] - The duration of the fly-to animation in seconds. If undefined, Cesium calculates an ideal duration based on the distance to be traveled by the flight.
- * @property {Cesium.HeadingPitchRange} [customOffset] - The offset from the target in the local east-north-up reference frame centered at the target.
  *
- * Performs a fly-to animation on the Cesium viewer to the specified coordinates. *
+ * Performs a fly-to animation on the Cesium viewer to the specified position.
  * @param {FlyToOptions} options - The "fly-to" options.
- * @throws {Error} Throws an error if no coordinates are provided.
  */
-export async function performFlyTo(options = { coords: null }) {
-  if (!options.coords) {
-    throw new Error("No coordinates to fly-to provided.");
-  }
+export async function performFlyTo(options) {
+  const { position, orientation, duration } = options;
 
-  try {
-    const { duration, coords, customOffset } = options;
-
-    // Keep the current camera heading when flying to new coordinates
-    const offset = {
-      ...CAMERA_OFFSET,
-      heading: cesiumViewer.camera.heading,
-      ...customOffset,
-    };
-
-    await flyToBoundingSphere({
-      coords,
-      offset,
-      duration,
-    });
-  } catch (error) {
-    console.error(`Error performing fly to: ${error}`);
-  }
+  cesiumViewer.camera.flyTo({
+    destination: position,
+    orientation,
+    duration,
+  });
 }
 
 /**
@@ -111,12 +123,12 @@ export async function performFlyTo(options = { coords: null }) {
  * @return {Object} Object containing height, heading, pitch and roll options.
  */
 export function getCameraOptions() {
-  const { positionCartographic, heading, pitch, roll } = cesiumViewer.camera;
+  const { position, heading, pitch, roll } = cesiumViewer.camera;
   return {
-    height: positionCartographic.height,
-    heading: Cesium.Math.toDegrees(heading),
-    pitch: Cesium.Math.toDegrees(pitch),
-    roll: Cesium.Math.toDegrees(roll),
+    position,
+    heading,
+    pitch,
+    roll,
   };
 }
 
@@ -153,19 +165,20 @@ export async function initCesiumViewer() {
   // Disable free-look, the camera view direction can only be changed through translating or rotating
   cesiumViewer.scene.screenSpaceCameraController.enableLook = false;
 
-  const { coords, cameraOptions } = story.properties;
+  const {
+    position: destination,
+    heading,
+    pitch,
+    roll,
+  } = story.properties.cameraOptions;
 
   // Set the starting position and orientation of the camera
   cesiumViewer.camera.setView({
-    destination: Cesium.Cartesian3.fromDegrees(
-      coords.lng,
-      coords.lat,
-      cameraOptions.height
-    ),
+    destination,
     orientation: {
-      heading: cameraOptions.heading, // no heading
-      pitch: Cesium.Math.toRadians(cameraOptions.pitch),
-      roll: 0,
+      heading,
+      pitch,
+      roll,
     },
   });
 
