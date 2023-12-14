@@ -1,4 +1,4 @@
-import { updateChapter } from "../chapters/chapter-navigation.js";
+import { updateChapter, resetToIntro } from "../chapters/chapter-navigation.js";
 import { story } from "../main.js";
 import { createMarkers, removeMarker } from "../utils/create-markers.js";
 import {
@@ -7,6 +7,7 @@ import {
   performFlyTo,
 } from "../utils/cesium.js";
 import { getStoryDetails, addStory } from "../utils/config.js";
+import { getParams } from "../utils/params.js";
 
 /**
  * Options for radio buttons in the sidebar.
@@ -101,6 +102,14 @@ function updateStoryDetails(properties) {
   // In the story details form, the user can change the story properties.
   // As there is no submit button, we submit the form when the user changes an input.
   storyDetailsForm.addEventListener("input", () => {
+    const params = getParams();
+
+    const isIntroSelected = Boolean(!params.get("chapterId"));
+
+    if (!isIntroSelected) {
+      resetToIntro();
+    }
+
     storyDetailsForm.requestSubmit();
   });
 

@@ -88,8 +88,8 @@ export function initChapterNavigation() {
 
   // Get the current chapter based on URL parameters
   const params = getParams();
-  const chapterId = params.get("chapterId")
-  
+  const chapterId = params.get("chapterId");
+
   // Initialize chapter content based on URL parameters
   if (chapterId !== null) {
     updateChapter(chapterId);
@@ -282,14 +282,18 @@ export function updateChapterContent(chapterData, isIntro = true) {
   const imageCredit = chapterData.imageCredit
     ? `Image credit: ${chapterData.imageCredit}`
     : "";
+
   setTextContent(".story-intro-attribution", isIntro ? imageCredit : "");
   setTextContent(".attribution", isIntro ? "" : imageCredit);
 
   // Update author and date in intro
   setTextContent(
     ".story-intro-author",
-    isIntro ? `by: ${story.properties.createdBy}` : ""
+    isIntro && story.properties.createdBy
+      ? `by: ${story.properties.createdBy}`
+      : ""
   );
+
   setTextContent(".story-intro-date", isIntro ? story.properties.date : "");
 
   // Update chapter index and forward button state
