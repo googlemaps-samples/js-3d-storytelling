@@ -88,8 +88,8 @@ export function initChapterNavigation() {
 
   // Get the current chapter based on URL parameters
   const params = getParams();
-  const chapterId = params.get("chapterId")
-  
+  const chapterId = params.get("chapterId");
+
   // Initialize chapter content based on URL parameters
   if (chapterId !== null) {
     updateChapter(chapterId);
@@ -272,8 +272,9 @@ export function updateChapterContent(chapterData, isIntro = true) {
     ".description",
     isIntro ? story.properties.description : chapterData.content
   );
-  setTextContent(".date", isIntro ? "" : chapterData.date);
-  setTextContent(".place", chapterData.place);
+
+  setTextContent(".date", isIntro ? "" : chapterData.dateTime);
+  setTextContent(".place", chapterData.address);
 
   // Update image
   chapterDetail.querySelector(".hero").src = chapterData.imageUrl;
