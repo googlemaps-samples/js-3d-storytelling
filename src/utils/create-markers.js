@@ -150,12 +150,11 @@ export function setSelectedMarker(markerId) {
 }
 
 /**
- * Hide marker billboard.
+ * Remove single marker billboard.
  * @param {number} markerId - The entity ID for the marker billboard
  */
 export function removeMarker(markerId) {
-  console.log(markerId);
-  console.log(cesiumViewer.entities.removeById(markerId));
+  cesiumViewer.entities.removeById(markerId);
 }
 
 /**
@@ -243,8 +242,8 @@ function createMarkerClickHandler() {
 }
 
 /**
- * Creates markers for each coordinate and attaches them to the viewer.
- * @param {Chapter[]} coordinates - marker coordinates.
+ * Creates markers for each chapter's coordinate and attaches them to the viewer.
+ * @param {Chapter[]} chapters - the story's chapters.
  */
 export async function createMarkers(chapter) {
   if (!cesiumViewer) {
