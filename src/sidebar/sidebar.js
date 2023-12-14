@@ -1,7 +1,11 @@
 import { updateChapter } from "../chapters/chapter-navigation.js";
 import { story } from "../main.js";
-import { getCameraOptions, performFlyTo } from "../utils/cesium.js";
 import { createMarkers, removeMarker } from "../utils/create-markers.js";
+import {
+  getCameraOptions,
+  calculateCameraPositionAndOrientation,
+  performFlyTo,
+} from "../utils/cesium.js";
 import { getStoryDetails, addStory } from "../utils/config.js";
 
 /**
@@ -236,20 +240,26 @@ export async function initAutoComplete() {
   });
 
   // Handle submit location button click
-  locationSubmitButton.addEventListener("click", () =>
-    // Adds new chapter to story
-    {
-      // Adds new chapter to story
-      addStory({
-        title: locationInput.value,
-        coords: location.toJSON(),
-      });
+  locationSubmitButton.addEventListener("click", async () => {
+    const coords = location.toJSON();
 
-      // Reset input field
-      autocomplete.set("place", null);
-      locationInput.value = "";
-    }
-  );
+    const { cameraPosition, cameraOrientation } =
+      await calculateCameraPositionAndOrientation(coords);
+
+    // Adds new chapter to story
+    addStory({
+      title: locationInput.value,
+      coords,
+      cameraOptions: {
+        position: cameraPosition,
+        orientation: cameraOrientation,
+      },
+    });
+
+    // Reset input field
+    autocomplete.set("place", null);
+    locationInput.value = "";
+  });
 }
 // A reference to the currently open dialog
 let currentOpenedMenu = null;

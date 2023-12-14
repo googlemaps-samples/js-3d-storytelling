@@ -1,6 +1,10 @@
 // Define the type for basic Cesium camera options
 type CesiumCameraOptions = {
   position: Cesium.Cartesian3; // The camera position in Cartesian coordinates
+  orientation: {
+    direction: Cesium.Cartesian3; // The camera direction in Cartesian coordinates
+    up: Cesium.Cartesian3; // The camera up in Cartesian coordinates
+  };
   heading: number; // Heading in radians
   pitch: number; // Pitch in radians
   roll: number; // Roll in radians

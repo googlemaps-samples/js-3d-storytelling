@@ -1,6 +1,13 @@
 import { GOOGLE_MAPS_API_KEY } from "../env.js";
 import { story } from "../main.js";
 
+// The radius from the target point to position the camera.
+const RADIUS = 800;
+// Pitch 30 degrees
+const BASE_PITCH = 30;
+// No base heading
+const BASE_HEADING = 0;
+
 /**
  * An export of the CesiumJS viewer instance to be accessed by other modules.
  * @type {Cesium.Viewer} The CesiumJS viewer instance.
@@ -11,6 +18,91 @@ export let cesiumViewer;
  * @type {Cesium.Cesium3DTileset} The Google Photorealistic 3D tileset.
  */
 let tileset = null;
+
+/**
+ * Asynchronously calculates the camera position and orientation based on the given parameters.
+ *
+ * @param {Object} coords - The coordinates of the target point as an object with properties `lat` (latitude) and `lng` (longitude).
+ *
+ * @returns {Promise<{
+ *   cameraPosition: Cesium.Cartesian3,
+ *   cameraOrientation: {
+ *     direction: Cesium.Cartesian3,
+ *     up: Cesium.Cartesian3
+ *   }
+ * }>} A promise that resolves to an object representing the camera position and orientation with properties:
+ *   - cameraPosition: A {@link Cesium.Cartesian3} representing the camera position in Earth-fixed coordinates.
+ *   - cameraOrientation: An object with properties:
+ *      - direction: A {@link Cesium.Cartesian3} representing the camera orientation direction vector.
+ *      - up: A {@link Cesium.Cartesian3} representing the up vector of the camera.
+ */
+export async function calculateCameraPositionAndOrientation(coords) {
+  // Convert latitude and longitude to Cartesian3 (Earth-fixed coordinates)
+  const center = await adjustCoordinateHeight(coords);
+
+  // Convert heading and pitch from degrees to radians
+  const headingRadians = Cesium.Math.toRadians(BASE_HEADING);
+  const pitchRadians = Cesium.Math.toRadians(BASE_PITCH);
+
+  // Create a local east-north-up coordinate system at the given center point
+  const localEastNorthUp = Cesium.Transforms.eastNorthUpToFixedFrame(center);
+
+  // Calculate the camera's offset in the local east-north-up coordinates
+  // - 'radius * Math.cos(pitchRadians)' gives the distance in the north direction
+  // - 'radius * Math.sin(pitchRadians)' gives the height above the center point
+  // - 'radius * Math.sin(headingRadians)' gives the distance in the east direction
+  const cameraOffset = new Cesium.Cartesian3(
+    RADIUS * Math.sin(headingRadians),
+    RADIUS * Math.cos(pitchRadians),
+    RADIUS * Math.sin(pitchRadians)
+  );
+
+  // Calculate the camera's final position in Earth-fixed coordinates
+  // This is achieved by transforming the local offset to the global coordinate system
+  const cameraPosition = new Cesium.Cartesian3();
+  Cesium.Matrix4.multiplyByPoint(
+    localEastNorthUp,
+    cameraOffset,
+    cameraPosition
+  );
+
+  const cameraDirection = Cesium.Cartesian3.subtract(
+    center,
+    cameraPosition,
+    new Cesium.Cartesian3()
+  );
+
+  Cesium.Cartesian3.normalize(cameraDirection, cameraDirection);
+  const cameraUp = Cesium.Cartesian3.clone(Cesium.Cartesian3.UNIT_Z);
+
+  return {
+    cameraPosition,
+    cameraOrientation: { direction: cameraDirection, up: cameraUp },
+  };
+}
+
+/**
+ * Asynchronously adjusts the height of the given coordinates to the most detailed terrain height.
+ *
+ * @param {google.maps.LatLngLiteral} coords - The latitude and longitude coordinates.
+ * @return {Promise<Cesium.Cartesian3>} A Cartesian3 object with adjusted height.
+ */
+export async function adjustCoordinateHeight(coords) {
+  const { lat, lng } = coords;
+
+  const cartesian = Cesium.Cartesian3.fromDegrees(lng, lat);
+  const clampedCoords = await cesiumViewer.scene.clampToHeightMostDetailed([
+    cartesian,
+  ]);
+
+  const cartographic = Cesium.Cartographic.fromCartesian(clampedCoords[0]);
+
+  return Cesium.Cartesian3.fromRadians(
+    cartographic.longitude,
+    cartographic.latitude,
+    cartographic.height
+  );
+}
 
 /**
  * @typedef {Object} FlyToOptions - Options for the fly-to animation.
