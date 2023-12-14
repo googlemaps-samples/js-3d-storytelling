@@ -67,10 +67,22 @@
 }
 
 .chapter .hero {
+  display: block;
   height: calc(100% + 2px);
   width: calc(100% + 2px);
   object-fit: cover;
   margin: -1px;
+}
+
+.hero:before {
+  content: "Error loading chapter image";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: var(--background-color-reduced);
+  height: 100%;
+  width: 100%;
 }
 
 .chapter .description {
@@ -192,6 +204,17 @@
   object-fit: cover;
   background-color: var(--color-light-grey);
   margin: -1px;
+}
+
+.card > img:before {
+  content: "No image";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: var(--background-color-reduced);
+  height: 100%;
+  width: 100%;
 }
 
 .chapter-card .date {
