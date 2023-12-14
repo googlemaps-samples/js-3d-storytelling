@@ -81,7 +81,7 @@ export async function calculateCameraPositionAndOrientation(coords) {
  * @param {google.maps.LatLngLiteral} coords - The latitude and longitude coordinates.
  * @return {Promise<Cesium.Cartesian3>} A Cartesian3 object with adjusted height.
  */
-export async function adjustCoordinateHeight(coords) {
+async function adjustCoordinateHeight(coords) {
   const { lat, lng } = coords;
 
   const cartesian = Cesium.Cartesian3.fromDegrees(lng, lat);
