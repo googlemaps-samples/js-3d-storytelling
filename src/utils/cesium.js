@@ -3,10 +3,10 @@ import { story } from "../main.js";
 
 // The radius from the target point to position the camera.
 const RADIUS = 800;
-// Pitch 30 degrees
-const BASE_PITCH = 30;
+// Pitch 30 degrees in radians
+const BASE_PITCH_RADIANS = 0.523599;
 // No base heading
-const BASE_HEADING = 0;
+const BASE_HEADING_RADIANS = 0;
 
 /**
  * An export of the CesiumJS viewer instance to be accessed by other modules.
@@ -41,8 +41,8 @@ export async function calculateCameraPositionAndOrientation(coords) {
   const center = await adjustCoordinateHeight(coords);
 
   // Convert heading and pitch from degrees to radians
-  const headingRadians = Cesium.Math.toRadians(BASE_HEADING);
-  const pitchRadians = Cesium.Math.toRadians(BASE_PITCH);
+  const headingRadians = BASE_HEADING_RADIANS;
+  const pitchRadians = BASE_PITCH_RADIANS;
 
   // Create a local east-north-up coordinate system at the given center point
   const localEastNorthUp = Cesium.Transforms.eastNorthUpToFixedFrame(center);
@@ -171,15 +171,20 @@ export async function initCesiumViewer() {
   // Disable free-look, the camera view direction can only be changed through translating or rotating
   cesiumViewer.scene.screenSpaceCameraController.enableLook = false;
 
-  const { cameraOptions } = story.properties;
+  const {
+    position: destination,
+    heading,
+    pitch,
+    roll,
+  } = story.properties.cameraOptions;
 
   // Set the starting position and orientation of the camera
   cesiumViewer.camera.setView({
-    destination: cameraOptions.position,
+    destination,
     orientation: {
-      heading: Cesium.Math.toRadians(cameraOptions.heading),
-      pitch: Cesium.Math.toRadians(cameraOptions.pitch),
-      roll: Cesium.Math.toRadians(cameraOptions.roll),
+      heading,
+      pitch,
+      roll,
     },
   });
 

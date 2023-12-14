@@ -180,9 +180,9 @@ export function resetToIntro() {
   performFlyTo({
     position,
     orientation: orientation || {
-      roll: Cesium.Math.toRadians(roll),
-      pitch: Cesium.Math.toRadians(pitch),
-      heading: Cesium.Math.toRadians(heading),
+      roll,
+      pitch,
+      heading,
     },
     duration: 1,
   });
@@ -205,9 +205,9 @@ export function updateChapter(chapterIndex) {
   performFlyTo({
     position,
     orientation: orientation || {
-      roll: Cesium.Math.toRadians(roll),
-      pitch: Cesium.Math.toRadians(pitch),
-      heading: Cesium.Math.toRadians(heading),
+      roll,
+      pitch,
+      heading,
     },
     duration: 2,
   });
