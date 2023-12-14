@@ -19,7 +19,6 @@ const chapterProperties = [
   "vignette-checkbox",
   "radius",
   "cameraOptions",
-  "address",
 ];
 
 /**
