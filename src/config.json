@@ -39,6 +39,11 @@
         "heading": 0,
         "pitch": 0,
         "roll": 0
+      },
+      "focusOptions": {
+        "highlightRadius": 3000,
+        "highlightMode": "inactive",
+        "locationMarkerVisibility": "show"
       }
     },
     {
@@ -62,6 +67,11 @@
         "heading": 0,
         "pitch": 0,
         "roll": 0
+      },
+      "focusOptions": {
+        "highlightRadius": 250,
+        "highlightMode": "active",
+        "locationMarkerVisibility": "show"
       }
     },
     {
@@ -85,6 +95,11 @@
         "heading": 0,
         "pitch": 0,
         "roll": 0
+      },
+      "focusOptions": {
+        "highlightRadius": 4500,
+        "highlightMode": "active",
+        "locationMarkerVisibility": "show"
       }
     }
   ]

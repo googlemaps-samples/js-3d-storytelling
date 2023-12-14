@@ -610,18 +610,6 @@ function handleEditAction(chapter) {
 
   const container = document.querySelector(".locations-container");
 
-  // Get the radius input element
-  const radiusInput = document.querySelector("#radius");
-
-  // Update the slider progress when the value changed
-  radiusInput.addEventListener(
-    "input",
-    () => {
-      radiusInput.style.setProperty("--value", radiusInput.value);
-    },
-    { signal: editFormEventController.signal }
-  );
-
   // Add custom data-attribute to the container
   container.setAttribute("data-mode", locationMenuOptions.edit);
 
@@ -630,7 +618,7 @@ function handleEditAction(chapter) {
   // Set which chapter the form belongs to
   editForm.setAttribute("key", chapter.id);
 
-  // Fill the form inputs with the chapter data
+  // Fill the form text inputs with the chapter data
   editForm.querySelector('input[name="title"]').value = chapter.title ?? null;
   editForm.querySelector('input[name="content"]').value =
     chapter.content ?? null;
@@ -642,6 +630,29 @@ function handleEditAction(chapter) {
     chapter.imageUrl ?? null;
   editForm.querySelector('input[name="imageCredit"]').value =
     chapter.imageCredit ?? null;
+
+  // Fill the "more settings" form inputs with the chapter data
+  // Get the radius input element
+
+  const isVignetteEnabled = chapter.focusOptions.highlightMode === "active";
+
+  editForm.querySelector('input[name="vignette-checkbox"]').checked =
+    isVignetteEnabled;
+
+  const radiusInput = editForm.querySelector("#radius");
+
+  // Initialize the slider with the current radius from the chapter
+  radiusInput.value = chapter.focusOptions.highlightRadius ?? 0;
+  radiusInput.style.setProperty("--value", radiusInput.value);
+
+  // Update the slider progress when the value changed
+  radiusInput.addEventListener(
+    "input",
+    () => {
+      radiusInput.style.setProperty("--value", radiusInput.value);
+    },
+    { signal: editFormEventController.signal }
+  );
 
   const selectedChapterKey = editForm.getAttribute("key");
 
@@ -670,6 +681,20 @@ function handleEditAction(chapter) {
     (event) => {
       // Get the update input name and value
       const { name: inputName, value: inputValue } = event.target;
+
+      // if event.target is an input of type checkbox, check if the checkbox is checked
+      // if it is checked, set the value to "active"
+      // if it is not checked, set the value to "inactive"
+      if (event.target.type === "checkbox") {
+        if (event.target.checked) {
+          story.chapters[selectedChapterIndex].focusOptions.highlightMode =
+            "active";
+        } else {
+          story.chapters[selectedChapterIndex].focusOptions.highlightMode =
+            "inactive";
+        }
+        return;
+      }
 
       // update the preview image
       if (inputName === "imageUrl") {

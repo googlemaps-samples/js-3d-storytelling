@@ -14,11 +14,6 @@ import { setTextContent } from "../utils/ui.js";
  * @readonly
  */
 const TIME_PER_CHAPTER = 3000;
-/**
- * The radius size of the  highlighted area
- * @readonly
- */
-const HIGHLIGHT_RADIUS = 250;
 
 // SVG icons
 /**
@@ -196,7 +191,19 @@ export function updateChapter(chapterIndex) {
   setParams("chapterId", story.chapters[chapterIndex].id); // Set the chapter parameter
   updateChapterContent(story.chapters[chapterIndex], false); // Update the chapter details content
   activateNavigationElement("details"); // Activate the details navigation
-  createCustomRadiusShader(coords, HIGHLIGHT_RADIUS); // Create the custom radius shader
+
+  // Check if the current chapter has a vignette and create or remove the custom radius shader accordingly
+  const hasVignette =
+    story.chapters[chapterIndex].focusOptions.highlightMode === "active";
+
+  if (hasVignette) {
+    const radius = story.chapters[chapterIndex].focusOptions.highlightRadius;
+
+    createCustomRadiusShader(coords, radius); // Create the custom radius shader
+  } else {
+    removeCustomRadiusShader(); // Remove the custom radius shader
+  }
+
   // Fly to the new chapter location
   performFlyTo({
     position,

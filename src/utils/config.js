@@ -6,6 +6,10 @@ import {
 } from "../sidebar/sidebar.js";
 import { createChapterCard } from "../chapters/chapters.js";
 import { updateChapterContent } from "../chapters/chapter-navigation.js";
+import {
+  createCustomRadiusShader,
+  removeCustomRadiusShader,
+} from "../utils/cesium.js";
 
 // Properties of a chapter that can be edited
 const chapterProperties = [
@@ -14,9 +18,9 @@ const chapterProperties = [
   "imageUrl",
   "dateTime",
   "imageCredit",
-  "marker-checkbox",
-  "vignette-checkbox",
+  "highlightMode",
   "radius",
+  "locationMarkerVisibility",
   "cameraOptions",
 ];
 
@@ -178,7 +182,10 @@ export const storyProxyHandler = {
   get(target, key) {
     const value = target[key];
     if (typeof value === "object" && value !== null) {
-      return new Proxy(value, storyProxyHandler);
+      return new Proxy(value, {
+        ...storyProxyHandler,
+        parent: target, // Pass the parent object to the proxy handler as a property (used to access the parent object in the set handler)
+      });
     }
     return value;
   },
@@ -223,6 +230,45 @@ export const storyProxyHandler = {
       }
     }
 
+    // Check if changed property is a chapter property
+    if (chapterProperties.includes(property)) {
+      if (property === "radius") {
+        const radius = updatedValue;
+        const coords = target.coords;
+        createCustomRadiusShader(coords, radius);
+        target.focusOptions.highlightRadius = radius;
+        return true;
+      }
+
+      if (property === "highlightMode") {
+        const highlightMode = updatedValue;
+
+        if (highlightMode === "active") {
+          const radius = target.highlightRadius;
+          const coords = this.parent.coords; // Get the parent object (chapter) and access its coords property
+
+          createCustomRadiusShader(coords, radius);
+        } else {
+          removeCustomRadiusShader();
+        }
+        target.highlightMode = highlightMode;
+        return true;
+      }
+      // Update the value
+      target[property] = updatedValue;
+
+      // Update chapter card
+      updateChapterCard(target, property, updatedValue);
+
+      // Update chapter details
+      updateChapterContent(target, false);
+
+      // Update location list item
+      if (property === "title") {
+        updateLocationListItem(target.id, updatedValue);
+      }
+    }
+
     // Update the value
     target[property] = updatedValue;
 
@@ -246,20 +292,6 @@ export const storyProxyHandler = {
       const headline = card.querySelector("h1");
 
       headline.textContent = updatedValue.title;
-    }
-
-    // Check if changed property is a chapter property
-    if (chapterProperties.includes(property)) {
-      // Update chapter card
-      updateChapterCard(target, property, updatedValue);
-
-      // Update chapter details
-      updateChapterContent(target, false);
-
-      // Update location list item
-      if (property === "title") {
-        updateLocationListItem(target.id, updatedValue);
-      }
     }
 
     return true;

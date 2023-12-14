@@ -252,6 +252,12 @@ summary::after {
   position: absolute;
 }
 
+.more-settings-container
+  li:has(input[type="checkbox"]#vignette-checkbox:not(:checked))
+  + li {
+  display: none;
+}
+
 .locations-container:not([data-mode="edit"]) > .edit {
   display: none;
 }
