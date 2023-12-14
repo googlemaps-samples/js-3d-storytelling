@@ -222,10 +222,13 @@ export async function initAutoComplete() {
       return;
     }
     coords = selectedPlace.geometry.location.toJSON();
+    // Calculate camera position and orientation based on coords
     cameraOptions = await calculateCameraPositionAndOrientation(coords);
     const { position, heading, pitch, roll } = cameraOptions;
 
+    // Fly to calculated position
     performFlyTo({ position, orientation: { heading, pitch, roll } });
+    // Create temporary marker on selected location
     createMarkers([{ id: "place-marker", coords }]);
 
     locationSubmitButton.disabled = false;
