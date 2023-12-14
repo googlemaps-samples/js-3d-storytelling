@@ -634,6 +634,8 @@ function handleEditAction(chapter) {
   editForm.querySelector('input[name="title"]').value = chapter.title ?? null;
   editForm.querySelector('input[name="content"]').value =
     chapter.content ?? null;
+  editForm.querySelector('input[name="address"]').value =
+    chapter.address ?? null;
   editForm.querySelector('input[name="dateTime"]').value =
     chapter.dateTime ?? null;
   editForm.querySelector('input[name="imageUrl"]').value =
