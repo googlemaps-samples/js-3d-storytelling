@@ -634,7 +634,7 @@ function handleEditAction(chapter) {
   // Fill the "more settings" form inputs with the chapter data
   // Get the radius input element
 
-  const isVignetteEnabled = chapter.focusOptions.highlightMode === "active";
+  const isVignetteEnabled = chapter.focusOptions.showFocus;
 
   editForm.querySelector('input[name="vignette-checkbox"]').checked =
     isVignetteEnabled;
@@ -642,7 +642,7 @@ function handleEditAction(chapter) {
   const radiusInput = editForm.querySelector("#radius");
 
   // Initialize the slider with the current radius from the chapter
-  radiusInput.value = chapter.focusOptions.highlightRadius ?? 0;
+  radiusInput.value = chapter.focusOptions.focusRadius ?? 0;
   radiusInput.style.setProperty("--value", radiusInput.value);
 
   // Update the slider progress when the value changed
@@ -654,8 +654,7 @@ function handleEditAction(chapter) {
     { signal: editFormEventController.signal }
   );
 
-  const isMarkerVisible =
-    chapter.focusOptions.locationMarkerVisibility === "visible";
+  const isMarkerVisible = chapter.focusOptions.showLocationMarker;
 
   editForm.querySelector('input[name="marker-checkbox"]').checked =
     isMarkerVisible;
@@ -692,13 +691,11 @@ function handleEditAction(chapter) {
 
       if (type === "checkbox") {
         if (name === "vignette-checkbox") {
-          chapter.focusOptions.highlightMode = checked ? "active" : "inactive";
+          chapter.focusOptions.showFocus = checked;
         }
 
         if (name === "marker-checkbox") {
-          chapter.focusOptions.locationMarkerVisibility = checked
-            ? "visible"
-            : "hidden";
+          chapter.focusOptions.showLocationMarker = checked;
         }
         return;
       }

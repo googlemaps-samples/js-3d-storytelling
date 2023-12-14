@@ -269,8 +269,7 @@ export async function createMarkers(chapters) {
     const { id } = chapters[index];
     const markerSvg = await createMarkerSvg(id);
 
-    const isMarkerVisible =
-      chapters[index].focusOptions.locationMarkerVisibility === "visible";
+    const isMarkerVisible = chapters[index].focusOptions.showLocationMarker;
 
     // add the line and the marker
     cesiumViewer.entities.add({

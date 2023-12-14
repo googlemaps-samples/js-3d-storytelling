@@ -41,9 +41,9 @@
         "roll": 0
       },
       "focusOptions": {
-        "highlightRadius": 3000,
-        "highlightMode": "inactive",
-        "locationMarkerVisibility": "visible"
+        "focusRadius": 3000,
+        "showFocus": false,
+        "showLocationMarker": true
       }
     },
     {
@@ -69,9 +69,9 @@
         "roll": 0
       },
       "focusOptions": {
-        "highlightRadius": 250,
-        "highlightMode": "active",
-        "locationMarkerVisibility": "visible"
+        "focusRadius": 250,
+        "showFocus": true,
+        "showLocationMarker": true
       }
     },
     {
@@ -97,9 +97,9 @@
         "roll": 0
       },
       "focusOptions": {
-        "highlightRadius": 4500,
-        "highlightMode": "active",
-        "locationMarkerVisibility": "hidden"
+        "focusRadius": 4500,
+        "showFocus": true,
+        "showLocationMarker": false
       }
     }
   ]
