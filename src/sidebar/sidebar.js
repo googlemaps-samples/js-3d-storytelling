@@ -723,3 +723,35 @@ function handleDeleteAction(id) {
   // Save updated object back to local storage
   localStorage.setItem("story", JSON.stringify(story));
 }
+
+/**
+ * Adds a click event handler to the "download-config-button" element.
+ * When the button is clicked, this function generates a Blob containing
+ * the JSON representation of the 'story' object and triggers a file download
+ * for the configuration.
+ */
+export function addDownloadConfigHandler() {
+  document
+    .getElementById("download-config-button")
+    .addEventListener("click", () => {
+      const anchor = document.createElement("a");
+
+      // Create a Blob containing the JSON representation of the 'story' object
+      const blob = new Blob([JSON.stringify(story)], {
+        type: "text/json;charset=utf-8",
+      });
+      // Create a URL for the Blob
+      const blobUrl = URL.createObjectURL(blob);
+
+      // Set up the anchor element for download
+      anchor.href = blobUrl;
+      anchor.target = "_blank";
+      anchor.download = "config.json";
+
+      // Auto click on the anchor element, triggering the file download
+      anchor.click();
+
+      // Revoke the Blob URL to free up resources
+      URL.revokeObjectURL(blobUrl);
+    });
+}
