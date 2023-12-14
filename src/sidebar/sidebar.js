@@ -202,17 +202,17 @@ export function createLocationItem(chapter) {
 export async function initAutoComplete() {
   const locationInput = document.querySelector(".locations-container input");
 
-  // Todo: get correct fields
   const options = { fields: ["geometry"] };
   const autocomplete = new google.maps.places.Autocomplete(
     locationInput,
     options
   );
 
-  let location = null;
+  let coords = null;
+  let cameraOptions = null;
 
   // Listen to location changes
-  autocomplete.addListener("place_changed", () => {
+  autocomplete.addListener("place_changed", async () => {
     removeMarker("place-marker");
     const selectedPlace = autocomplete.getPlace();
 
@@ -221,9 +221,12 @@ export async function initAutoComplete() {
       locationSubmitButton.disabled = true;
       return;
     }
-    location = selectedPlace.geometry.location;
-    performFlyTo({ coords: location.toJSON() });
-    createMarkers([{ id: "place-marker", coords: location.toJSON() }]);
+    coords = selectedPlace.geometry.location.toJSON();
+    cameraOptions = await calculateCameraPositionAndOrientation(coords);
+    const { position, heading, pitch, roll } = cameraOptions;
+
+    performFlyTo({ position, orientation: { heading, pitch, roll } });
+    createMarkers([{ id: "place-marker", coords }]);
 
     locationSubmitButton.disabled = false;
   });
@@ -234,17 +237,14 @@ export async function initAutoComplete() {
   locationInput.addEventListener("input", () => {
     if (locationInput.value === "") {
       removeMarker("place-marker");
-      location = null;
+      coords = null;
+      cameraOptions = null;
       locationSubmitButton.disabled = true;
     }
   });
 
   // Handle submit location button click
-  locationSubmitButton.addEventListener("click", async () => {
-    const coords = location.toJSON();
-
-    const cameraOptions = await calculateCameraPositionAndOrientation(coords);
-
+  locationSubmitButton.addEventListener("click", () => {
     // Adds new chapter to story
     addStory({
       title: locationInput.value,
