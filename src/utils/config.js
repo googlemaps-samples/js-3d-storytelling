@@ -11,6 +11,8 @@ import {
   removeCustomRadiusShader,
 } from "../utils/cesium.js";
 
+import { hideMarker, showMarker } from "./create-markers.js";
+
 // Properties of a chapter that can be edited
 const chapterProperties = [
   "title",
@@ -18,9 +20,9 @@ const chapterProperties = [
   "imageUrl",
   "dateTime",
   "imageCredit",
-  "highlightMode",
+  "showFocus",
   "radius",
-  "locationMarkerVisibility",
+  "showLocationMarker",
   "cameraOptions",
 ];
 
@@ -236,22 +238,37 @@ export const storyProxyHandler = {
         const radius = updatedValue;
         const coords = target.coords;
         createCustomRadiusShader(coords, radius);
-        target.focusOptions.highlightRadius = radius;
+        target.focusOptions.focusRadius = radius;
         return true;
       }
 
-      if (property === "highlightMode") {
-        const highlightMode = updatedValue;
+      if (property === "showFocus") {
+        const showFocus = updatedValue;
 
-        if (highlightMode === "active") {
-          const radius = target.highlightRadius;
+        if (showFocus === true) {
+          const radius = target.focusRadius;
           const coords = this.parent.coords; // Get the parent object (chapter) and access its coords property
 
           createCustomRadiusShader(coords, radius);
         } else {
           removeCustomRadiusShader();
         }
-        target.highlightMode = highlightMode;
+        target.showFocus = showFocus;
+        return true;
+      }
+
+      if (property === "showLocationMarker") {
+        const showLocationMarker = updatedValue;
+        const markerId = this.parent.id; // Get the parent object (chapter) and access its id property
+
+        if (showLocationMarker) {
+          showMarker(markerId);
+        } else {
+          hideMarker(markerId);
+        }
+
+        target.showLocationMarker = showLocationMarker;
+
         return true;
       }
       // Update the value

@@ -11,10 +11,10 @@ const BASE_HEADING_RADIANS = 3.14159;
 const BASE_ROLL_RADIANS = 0;
 
 /**
- * The radius size of the  highlighted area
+ * The default radius size of the  highlighted area
  * @readonly
  */
-const HIGHLIGHT_RADIUS = 250;
+const DEFAULT_FOCUS_RADIUS = 250;
 
 /**
  * An export of the CesiumJS viewer instance to be accessed by other modules.
@@ -254,7 +254,7 @@ export function removeCustomRadiusShader() {
  */
 export function createCustomRadiusShader(
   coordinates,
-  radius = HIGHLIGHT_RADIUS
+  radius = DEFAULT_FOCUS_RADIUS
 ) {
   const { lat, lng } = coordinates;
   const center = Cesium.Cartesian3.fromDegrees(lng, lat);

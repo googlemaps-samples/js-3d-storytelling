@@ -83,8 +83,8 @@ export function initChapterNavigation() {
 
   // Get the current chapter based on URL parameters
   const params = getParams();
-  const chapterId = params.get("chapterId")
-  
+  const chapterId = params.get("chapterId");
+
   // Initialize chapter content based on URL parameters
   if (chapterId !== null) {
     updateChapter(chapterId);
@@ -193,11 +193,10 @@ export function updateChapter(chapterIndex) {
   activateNavigationElement("details"); // Activate the details navigation
 
   // Check if the current chapter has a vignette and create or remove the custom radius shader accordingly
-  const hasVignette =
-    story.chapters[chapterIndex].focusOptions.highlightMode === "active";
+  const hasVignette = story.chapters[chapterIndex].focusOptions.showFocus;
 
   if (hasVignette) {
-    const radius = story.chapters[chapterIndex].focusOptions.highlightRadius;
+    const radius = story.chapters[chapterIndex].focusOptions.focusRadius;
 
     createCustomRadiusShader(coords, radius); // Create the custom radius shader
   } else {

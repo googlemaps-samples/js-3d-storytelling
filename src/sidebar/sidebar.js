@@ -634,15 +634,15 @@ function handleEditAction(chapter) {
   // Fill the "more settings" form inputs with the chapter data
   // Get the radius input element
 
-  const isVignetteEnabled = chapter.focusOptions.highlightMode === "active";
+  const isFocusEnabled = chapter.focusOptions.showFocus;
 
-  editForm.querySelector('input[name="vignette-checkbox"]').checked =
-    isVignetteEnabled;
+  editForm.querySelector('input[name="focus-checkbox"]').checked =
+    isFocusEnabled;
 
   const radiusInput = editForm.querySelector("#radius");
 
   // Initialize the slider with the current radius from the chapter
-  radiusInput.value = chapter.focusOptions.highlightRadius ?? 0;
+  radiusInput.value = chapter.focusOptions.focusRadius ?? 0;
   radiusInput.style.setProperty("--value", radiusInput.value);
 
   // Update the slider progress when the value changed
@@ -653,6 +653,11 @@ function handleEditAction(chapter) {
     },
     { signal: editFormEventController.signal }
   );
+
+  const isMarkerVisible = chapter.focusOptions.showLocationMarker;
+
+  editForm.querySelector('input[name="marker-checkbox"]').checked =
+    isMarkerVisible;
 
   const selectedChapterKey = editForm.getAttribute("key");
 
@@ -679,31 +684,28 @@ function handleEditAction(chapter) {
   editForm.addEventListener(
     "input",
     (event) => {
-      // Get the update input name and value
-      const { name: inputName, value: inputValue } = event.target;
+      const { name, value, type, checked } = event.target;
 
-      // if event.target is an input of type checkbox, check if the checkbox is checked
-      // if it is checked, set the value to "active"
-      // if it is not checked, set the value to "inactive"
-      if (event.target.type === "checkbox") {
-        if (event.target.checked) {
-          story.chapters[selectedChapterIndex].focusOptions.highlightMode =
-            "active";
-        } else {
-          story.chapters[selectedChapterIndex].focusOptions.highlightMode =
-            "inactive";
+      // Define the chapter for easier reference
+      const chapter = story.chapters[selectedChapterIndex];
+
+      if (type === "checkbox") {
+        if (name === "focus-checkbox") {
+          chapter.focusOptions.showFocus = checked;
+        }
+
+        if (name === "marker-checkbox") {
+          chapter.focusOptions.showLocationMarker = checked;
         }
         return;
       }
 
-      // update the preview image
-      if (inputName === "imageUrl") {
+      if (name === "imageUrl") {
         editForm.querySelector(".image-credit-container img").src =
-          inputValue ?? null;
+          value ?? null;
       }
 
-      // Update the chapter
-      story.chapters[selectedChapterIndex][inputName] = inputValue;
+      chapter[name] = value;
     },
     { signal: editFormEventController.signal }
   );

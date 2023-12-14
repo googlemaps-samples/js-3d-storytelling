@@ -8,9 +8,9 @@ type CesiumCameraOptions = {
 
 // Define the type for the shader options
 type focusOptions = {
-  highlightRadius: number;
-  highlightMode: "active" | "inactive";
-  locationMarkerVisibility: "show" | "hide";
+  focusRadius: number;
+  showFocus: boolean;
+  showLocationMarker: boolean;
 };
 
 // Define the type for the Segment
