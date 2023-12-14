@@ -124,6 +124,11 @@ export function addChaptersBar(story) {
   });
 }
 
+/**
+ * Returns the index of the chapter with the given ID.
+ * @param {number} chapterId
+ * @returns {number}
+ */
 export function getChapterIndex(chapterId) {
   return story.chapters.findIndex(({ id }) => id === chapterId);
 }
