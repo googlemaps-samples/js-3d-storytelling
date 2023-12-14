@@ -125,6 +125,7 @@ export async function performFlyTo(options) {
 export function getCameraOptions() {
   const { position, heading, pitch, roll } = cesiumViewer.camera;
   return {
+    // spread object to remove reference to cesium camera position
     position: { ...position },
     heading,
     pitch,
