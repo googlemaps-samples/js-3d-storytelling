@@ -66,7 +66,7 @@ const forwardButton = detailNavigation.querySelector("#chapter-forward");
  * The id used to identify the timeout instance for the story progression
  * @type {number | null}
  */
-let intervalId = null;
+let timeoutId = null;
 
 /**
  * Initializes and manages chapter navigation for a story.
@@ -109,8 +109,8 @@ export function initChapterNavigation() {
  */
 function stopAutoplay() {
   autoplayButton.innerHTML = PLAY_ICON;
-  clearInterval(intervalId);
-  intervalId = null;
+  clearTimeout(timeoutId);
+  timeoutId = null;
 }
 
 let autoplayStep = 0;
@@ -147,7 +147,7 @@ function setNextAutoplayStep() {
  */
 function autoplayClickHandler() {
   // If the autoplay is already active, stop it
-  if (intervalId) {
+  if (timeoutId) {
     stopAutoplay();
   } else {
     // If the autoplay is not active, start it
