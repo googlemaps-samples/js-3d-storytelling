@@ -169,7 +169,7 @@ const setNextChapter = () => {
  */
 export function resetToIntro() {
   const { cameraOptions } = story.properties;
-  const { position, orientation, pitch, heading, roll } = cameraOptions;
+  const { position, pitch, heading, roll } = cameraOptions;
 
   setParams("chapterId", null); // Clear the chapter parameter
   setSelectedMarker(null); // "Deselect" current marker
@@ -179,7 +179,7 @@ export function resetToIntro() {
   // Fly back to the starting position
   performFlyTo({
     position,
-    orientation: orientation || {
+    orientation: {
       roll,
       pitch,
       heading,
@@ -194,7 +194,7 @@ export function resetToIntro() {
  */
 export function updateChapter(chapterIndex) {
   const { cameraOptions, coords } = story.chapters[chapterIndex];
-  const { position, orientation, pitch, heading, roll } = cameraOptions;
+  const { position, pitch, heading, roll } = cameraOptions;
 
   setSelectedMarker(chapterIndex); // Set the selected marker
   setParams("chapterId", story.chapters[chapterIndex].id); // Set the chapter parameter
@@ -204,7 +204,7 @@ export function updateChapter(chapterIndex) {
   // Fly to the new chapter location
   performFlyTo({
     position,
-    orientation: orientation || {
+    orientation: {
       roll,
       pitch,
       heading,

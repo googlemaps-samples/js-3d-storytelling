@@ -3,10 +3,12 @@ import { story } from "../main.js";
 
 // The radius from the target point to position the camera.
 const RADIUS = 800;
-// Pitch 30 degrees in radians
-const BASE_PITCH_RADIANS = 0.523599;
-// No base heading
-const BASE_HEADING_RADIANS = 0;
+// Pitch -30 degrees in radians
+const BASE_PITCH_RADIANS = -0.523599;
+// Heading 180 degrees in radians
+const BASE_HEADING_RADIANS = 3.14159;
+// No base roll
+const BASE_ROLL_RADIANS = 0;
 
 /**
  * An export of the CesiumJS viewer instance to be accessed by other modules.
@@ -25,36 +27,35 @@ let tileset = null;
  * @param {Object} coords - The coordinates of the target point as an object with properties `lat` (latitude) and `lng` (longitude).
  *
  * @returns {Promise<{
- *   cameraPosition: Cesium.Cartesian3,
- *   cameraOrientation: {
- *     direction: Cesium.Cartesian3,
- *     up: Cesium.Cartesian3
- *   }
+ *   position: Cesium.Cartesian3,
+ *   heading: number,
+ *   pitch: number,
+ *   roll: number
  * }>} A promise that resolves to an object representing the camera position and orientation with properties:
- *   - cameraPosition: A {@link Cesium.Cartesian3} representing the camera position in Earth-fixed coordinates.
- *   - cameraOrientation: An object with properties:
- *      - direction: A {@link Cesium.Cartesian3} representing the camera orientation direction vector.
- *      - up: A {@link Cesium.Cartesian3} representing the up vector of the camera.
+ *   - position: A {@link Cesium.Cartesian3} representing the camera position in Earth-fixed coordinates.
+ *   - heading: The heading angle of the camera (in radians).
+ *   - pitch: The pitch angle of the camera (in radians).
+ *   - roll: The roll angle of the camera (in radians).
  */
 export async function calculateCameraPositionAndOrientation(coords) {
   // Convert latitude and longitude to Cartesian3 (Earth-fixed coordinates)
   const center = await adjustCoordinateHeight(coords);
 
-  // Convert heading and pitch from degrees to radians
   const headingRadians = BASE_HEADING_RADIANS;
   const pitchRadians = BASE_PITCH_RADIANS;
+  const rollRadians = BASE_ROLL_RADIANS;
 
   // Create a local east-north-up coordinate system at the given center point
   const localEastNorthUp = Cesium.Transforms.eastNorthUpToFixedFrame(center);
 
   // Calculate the camera's offset in the local east-north-up coordinates
-  // - 'radius * Math.cos(pitchRadians)' gives the distance in the north direction
-  // - 'radius * Math.sin(pitchRadians)' gives the height above the center point
   // - 'radius * Math.sin(headingRadians)' gives the distance in the east direction
+  // - 'radius * Math.cos(pitchRadians * -1)' gives the distance in the north direction
+  // - 'radius * Math.sin(pitchRadians * -1)' gives the height above the center point
   const cameraOffset = new Cesium.Cartesian3(
     RADIUS * Math.sin(headingRadians),
-    RADIUS * Math.cos(pitchRadians),
-    RADIUS * Math.sin(pitchRadians)
+    RADIUS * Math.cos(pitchRadians * -1),
+    RADIUS * Math.sin(pitchRadians * -1)
   );
 
   // Calculate the camera's final position in Earth-fixed coordinates
@@ -66,18 +67,11 @@ export async function calculateCameraPositionAndOrientation(coords) {
     cameraPosition
   );
 
-  const cameraDirection = Cesium.Cartesian3.subtract(
-    center,
-    cameraPosition,
-    new Cesium.Cartesian3()
-  );
-
-  Cesium.Cartesian3.normalize(cameraDirection, cameraDirection);
-  const cameraUp = Cesium.Cartesian3.clone(Cesium.Cartesian3.UNIT_Z);
-
   return {
-    cameraPosition,
-    cameraOrientation: { direction: cameraDirection, up: cameraUp },
+    position: cameraPosition,
+    heading: headingRadians,
+    pitch: pitchRadians,
+    roll: rollRadians,
   };
 }
 

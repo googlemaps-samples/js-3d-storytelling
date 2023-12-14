@@ -243,17 +243,13 @@ export async function initAutoComplete() {
   locationSubmitButton.addEventListener("click", async () => {
     const coords = location.toJSON();
 
-    const { cameraPosition, cameraOrientation } =
-      await calculateCameraPositionAndOrientation(coords);
+    const cameraOptions = await calculateCameraPositionAndOrientation(coords);
 
     // Adds new chapter to story
     addStory({
       title: locationInput.value,
       coords,
-      cameraOptions: {
-        position: cameraPosition,
-        orientation: cameraOrientation,
-      },
+      cameraOptions,
     });
 
     // Reset input field
