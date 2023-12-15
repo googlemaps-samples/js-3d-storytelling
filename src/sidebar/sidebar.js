@@ -5,6 +5,7 @@ import {
   getCameraOptions,
   calculateCameraPositionAndOrientation,
   performFlyTo,
+  DEFAULT_FOCUS_RADIUS,
 } from "../utils/cesium.js";
 import { getStoryDetails, addChapterToStory } from "../utils/config.js";
 import { getParams } from "../utils/params.js";
@@ -653,7 +654,7 @@ function handleEditAction(chapter) {
   const radiusInput = editForm.querySelector("#radius");
 
   // Initialize the slider with the current radius from the chapter
-  radiusInput.value = chapter.focusOptions.focusRadius ?? 0;
+  radiusInput.value = chapter.focusOptions.focusRadius ?? DEFAULT_FOCUS_RADIUS;
   radiusInput.style.setProperty("--value", radiusInput.value);
 
   // Update the slider progress when the value changed
