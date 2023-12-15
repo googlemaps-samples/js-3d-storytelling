@@ -39,6 +39,11 @@
         "heading": 0,
         "pitch": 0,
         "roll": 0
+      },
+      "focusOptions": {
+        "focusRadius": 3000,
+        "showFocus": false,
+        "showLocationMarker": true
       }
     },
     {
@@ -62,6 +67,11 @@
         "heading": 0,
         "pitch": 0,
         "roll": 0
+      },
+      "focusOptions": {
+        "focusRadius": 250,
+        "showFocus": true,
+        "showLocationMarker": true
       }
     },
     {
@@ -85,6 +95,11 @@
         "heading": 0,
         "pitch": 0,
         "roll": 0
+      },
+      "focusOptions": {
+        "focusRadius": 4500,
+        "showFocus": true,
+        "showLocationMarker": false
       }
     }
   ]

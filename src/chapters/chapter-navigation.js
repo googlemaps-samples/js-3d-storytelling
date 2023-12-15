@@ -220,7 +220,18 @@ export function updateChapter(chapterIndex) {
   setParams("chapterId", story.chapters[chapterIndex].id); // Set the chapter parameter
   updateChapterContent(story.chapters[chapterIndex], false); // Update the chapter details content
   activateNavigationElement("details"); // Activate the details navigation
-  createCustomRadiusShader(coords, HIGHLIGHT_RADIUS); // Create the custom radius shader
+
+  // Check if the current chapter has a focus and create or remove the custom radius shader accordingly
+  const hasFocus = story.chapters[chapterIndex].focusOptions.showFocus;
+
+  if (hasFocus) {
+    const radius = story.chapters[chapterIndex].focusOptions.focusRadius;
+
+    createCustomRadiusShader(coords, radius); // Create the custom radius shader
+  } else {
+    removeCustomRadiusShader(); // Remove the custom radius shader
+  }
+
   // Fly to the new chapter location
   performFlyTo({
     position,
@@ -296,8 +307,9 @@ export function updateChapterContent(chapterData, isIntro = true) {
     ".description",
     isIntro ? story.properties.description : chapterData.content
   );
-  setTextContent(".date", isIntro ? "" : chapterData.date);
-  setTextContent(".place", chapterData.place);
+
+  setTextContent(".date", isIntro ? "" : chapterData.dateTime);
+  setTextContent(".place", chapterData.address);
 
   // Update image
   chapterDetail.querySelector(".hero").src = chapterData.imageUrl;
