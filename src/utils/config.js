@@ -74,10 +74,10 @@ export async function loadConfig(configUrl) {
 
 /**
  * Adds a new story chapter and saves it to local storage.
- * @param {Chapter} chapter - The chapter object to be added.
+ * @param {Object} chapter - The chapter object to be added.
  * @returns {void}
  */
-export function addChapterToStory(chapter) {
+export function addStory(chapter) {
   const chapterIds = story.chapters.map(({ id }) => id).filter(Boolean);
 
   // Increment hightest existing chapter id by one. If no chapters exist, set id to 0
