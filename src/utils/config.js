@@ -5,7 +5,10 @@ import {
   createEditMenus,
 } from "../sidebar/sidebar.js";
 import { createChapterCard } from "../chapters/chapters.js";
-import { updateChapterContent } from "../chapters/chapter-navigation.js";
+import {
+  updateChapterContent,
+  updateDetailsNavigation,
+} from "../chapters/chapter-navigation.js";
 import {
   createCustomRadiusShader,
   removeCustomRadiusShader,
@@ -89,6 +92,9 @@ export function addChapterToStory(newChapter) {
 
   // Create chapter marker and add it to the map
   createMarkers([newChapter]);
+
+  // Update details navigation
+  updateDetailsNavigation();
 
   // Save updated object back to local storage
   localStorage.setItem("story", JSON.stringify(story));
