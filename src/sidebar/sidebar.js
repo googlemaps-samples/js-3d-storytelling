@@ -619,18 +619,6 @@ function handleEditAction(chapter) {
 
   const container = document.querySelector(".locations-container");
 
-  // Get the radius input element
-  const radiusInput = document.querySelector("#radius");
-
-  // Update the slider progress when the value changed
-  radiusInput.addEventListener(
-    "input",
-    () => {
-      radiusInput.style.setProperty("--value", radiusInput.value);
-    },
-    { signal: editFormEventController.signal }
-  );
-
   // Add custom data-attribute to the container
   container.setAttribute("data-mode", locationMenuOptions.edit);
 
@@ -639,7 +627,7 @@ function handleEditAction(chapter) {
   // Set which chapter the form belongs to
   editForm.setAttribute("key", chapter.id);
 
-  // Fill the form inputs with the chapter data
+  // Fill the form text inputs with the chapter data
   editForm.querySelector('input[name="title"]').value = chapter.title ?? null;
   editForm.querySelector('input[name="content"]').value =
     chapter.content ?? null;
@@ -653,6 +641,34 @@ function handleEditAction(chapter) {
     chapter.imageUrl ?? null;
   editForm.querySelector('input[name="imageCredit"]').value =
     chapter.imageCredit ?? null;
+
+  // Fill the "more settings" form inputs with the chapter data
+  // Get the radius input element
+
+  const isFocusEnabled = chapter.focusOptions.showFocus;
+
+  editForm.querySelector('input[name="focus-checkbox"]').checked =
+    isFocusEnabled;
+
+  const radiusInput = editForm.querySelector("#radius");
+
+  // Initialize the slider with the current radius from the chapter
+  radiusInput.value = chapter.focusOptions.focusRadius ?? 0;
+  radiusInput.style.setProperty("--value", radiusInput.value);
+
+  // Update the slider progress when the value changed
+  radiusInput.addEventListener(
+    "input",
+    () => {
+      radiusInput.style.setProperty("--value", radiusInput.value);
+    },
+    { signal: editFormEventController.signal }
+  );
+
+  const isMarkerVisible = chapter.focusOptions.showLocationMarker;
+
+  editForm.querySelector('input[name="marker-checkbox"]').checked =
+    isMarkerVisible;
 
   const selectedChapterKey = editForm.getAttribute("key");
 
@@ -679,17 +695,28 @@ function handleEditAction(chapter) {
   editForm.addEventListener(
     "input",
     (event) => {
-      // Get the update input name and value
-      const { name: inputName, value: inputValue } = event.target;
+      const { name, value, type, checked } = event.target;
 
-      // update the preview image
-      if (inputName === "imageUrl") {
-        editForm.querySelector(".image-credit-container img").src =
-          inputValue ?? null;
+      // Define the chapter for easier reference
+      const chapter = story.chapters[selectedChapterIndex];
+
+      if (type === "checkbox") {
+        if (name === "focus-checkbox") {
+          chapter.focusOptions.showFocus = checked;
+        }
+
+        if (name === "marker-checkbox") {
+          chapter.focusOptions.showLocationMarker = checked;
+        }
+        return;
       }
 
-      // Update the chapter
-      story.chapters[selectedChapterIndex][inputName] = inputValue;
+      if (name === "imageUrl") {
+        editForm.querySelector(".image-credit-container img").src =
+          value ?? null;
+      }
+
+      chapter[name] = value;
     },
     { signal: editFormEventController.signal }
   );
