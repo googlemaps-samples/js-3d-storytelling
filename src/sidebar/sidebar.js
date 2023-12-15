@@ -85,10 +85,10 @@ function updateStoryDetails(properties) {
     properties.createdBy ?? null;
   storyDetailsForm.querySelector('input[name="date"]').value =
     properties.date ?? null;
-  storyDetailsForm.querySelector('input[name="imageUrl"]').value =
-    properties.imageUrl ?? null;
+  storyDetailsForm.querySelector('input[name="mediaUrl"]').value =
+    properties.mediaUrl ?? null;
   storyDetailsForm.querySelector(".image-credit-container img").src =
-    properties.imageUrl ?? null;
+    properties.previewUrl ?? null;
   storyDetailsForm.querySelector('input[name="imageCredit"]').value =
     properties.imageCredit ?? null;
 
@@ -132,7 +132,7 @@ function updateStoryDetails(properties) {
 
     // update the preview image
     storyDetailsForm.querySelector(".image-credit-container img").src =
-      updatedStoryProperties.imageUrl ?? null;
+      updatedStoryProperties.previewUrl ?? null;
 
     // Save updated object back to local storage
     localStorage.setItem("story", JSON.stringify(story));
@@ -636,10 +636,10 @@ function handleEditAction(chapter) {
     chapter.address ?? null;
   editForm.querySelector('input[name="dateTime"]').value =
     chapter.dateTime ?? null;
-  editForm.querySelector('input[name="imageUrl"]').value =
-    chapter.imageUrl ?? null;
+  editForm.querySelector('input[name="mediaUrl"]').value =
+    chapter.mediaUrl ?? null;
   editForm.querySelector(".image-credit-container img").src =
-    chapter.imageUrl ?? null;
+    chapter.mediaUrl ?? null;
   editForm.querySelector('input[name="imageCredit"]').value =
     chapter.imageCredit ?? null;
 
@@ -712,7 +712,7 @@ function handleEditAction(chapter) {
         return;
       }
 
-      if (name === "imageUrl") {
+      if (name === "mediaUrl") {
         editForm.querySelector(".image-credit-container img").src =
           value ?? null;
       }

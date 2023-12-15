@@ -27,7 +27,7 @@ const chapterProperties = [
   "title",
   "content",
   "address",
-  "imageUrl",
+  "mediaUrl",
   "dateTime",
   "imageCredit",
   "showFocus",
@@ -301,18 +301,12 @@ export const storyProxyHandler = {
 
     if (property === "properties") {
       // Update chapter details
+
+      getMediaUrl(target.properties);
+
       updateChapterContent(target.properties, true);
 
-      // Get cards container
-      const cardsContainer = document.querySelector("#chapters-bar .cards");
-
-      // Update the intro card
-      const card = cardsContainer.querySelector(`.story-intro`);
-
-      // Update headline in intro-card
-      const headline = card.querySelector("h1");
-
-      headline.textContent = updatedValue.title;
+      updateStoryCard(target.properties);
     }
 
     return true;
@@ -418,7 +412,7 @@ function updateChapterCard(target, property, updatedValue) {
   // Check if element is an image
   // If so, update the src attribute
   // Otherwise, update the text content
-  if (property === "imageUrl") {
+  if (property === "mediaUrl") {
     element.src = updatedValue;
   } else {
     element.textContent = updatedValue;
@@ -445,4 +439,67 @@ function updateLocationListItem(targetId, updatedValue) {
 
   // Update element
   element.textContent = updatedValue;
+}
+
+function updateStoryCard(updatedValues) {
+  console.log(
+    "🚀 ~ file: config.js:447 ~ updateStoryCard ~ updatedValues:",
+    updatedValues
+  );
+  // Get cards container
+  const cardsContainer = document.querySelector("#chapters-bar .cards");
+
+  // Update the intro card
+  const card = cardsContainer.querySelector(`.story-intro`);
+
+  // Update headline in intro-card
+  const headline = card.querySelector("h1");
+
+  // Update img in intro-card
+  const img = card.querySelector("img");
+  img.src = updatedValues.previewUrl;
+
+  headline.textContent = updatedValues.title;
+
+  // The preview image is determined by media type and set in
+}
+
+function getMediaUrl(properties) {
+  const mediaUrl = properties.mediaUrl;
+  if (isValidYouTubeUrl(mediaUrl)) {
+    const videoId = getYouTubeVideoId(mediaUrl);
+    if (videoId) {
+      const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+      const videoUrl = `https://www.youtube.com/embed/${videoId}?v=2`;
+
+      properties.mediaUrl = videoUrl;
+      properties.previewUrl = thumbnailUrl;
+      properties.mediaType = "video";
+    } else {
+      properties.mediaUrl = "";
+      properties.previewUrl = "";
+      properties.mediaType = "";
+
+      mediaContainer.innerHTML =
+        "<p>Please enter a valid YouTube video URL.</p>";
+    }
+  } else {
+    properties.mediaUrl = mediaUrl;
+    properties.previewUrl = mediaUrl;
+    properties.mediaType = "image";
+  }
+}
+
+function isValidYouTubeUrl(url) {
+  // Regex to check if the URL is a valid YouTube video URL
+  const youtubeRegex =
+    /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  return youtubeRegex.test(url);
+}
+
+function getYouTubeVideoId(url) {
+  const match = url.match(
+    /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  );
+  return match ? match[1] : null;
 }

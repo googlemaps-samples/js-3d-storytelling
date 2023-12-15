@@ -18,7 +18,8 @@
         <div class="chapter-detail">
           <div class="story-title"></div>
           <div class="hero-image-container">
-            <img class="hero" src="#" alt="chapter-image" />
+            <div id="media-container"></div>
+            <!-- <img class="hero" src="#" alt="chapter-image" /> -->
           </div>
           <header>
             <div class="story-intro-attribution"></div>
@@ -145,13 +146,22 @@
               <div class="field-wrapper url-input">
                 <input
                   type="text"
-                  name="imageUrl"
+                  name="mediaUrl"
                   placeholder="Image or Youtube URL"
                 />
                 <div class="field-placeholder">
                   <span class="label">URL</span>
                 </div>
               </div>
+              <div class="checkbox-container">
+                <input
+                  type="checkbox"
+                  id="autoplay-checkbox"
+                  name="autoplay-checkbox"
+                />
+                <label for="autoplay-checkbox">Enable video autoplay</label>
+              </div>
+
               <div class="image-credit-container">
                 <img src="#" alt="" />
                 <div class="field-wrapper">
@@ -235,7 +245,7 @@
               <div class="field-wrapper url-input">
                 <input
                   type="text"
-                  name="imageUrl"
+                  name="mediaUrl"
                   placeholder="Image or Youtube URL"
                 />
                 <div class="field-placeholder">

@@ -270,7 +270,6 @@ export function updateDetailsNavigation() {
  */
 export function updateChapterContent(chapterData, isIntro = true) {
   updateDetailsNavigation();
-  const chapterDetail = document.querySelector(".chapter-detail");
 
   setTextContent(".story-title", isIntro ? "" : story.properties.title);
   setTextContent("h2", isIntro ? story.properties.title : chapterData.title);
@@ -283,7 +282,8 @@ export function updateChapterContent(chapterData, isIntro = true) {
   setTextContent(".place", chapterData.address);
 
   // Update image
-  chapterDetail.querySelector(".hero").src = chapterData.imageUrl;
+  // chapterDetail.querySelector(".hero").src = chapterData.mediaUrl;
+  displayMedia(chapterData);
 
   // Update image credit
   const imageCredit = chapterData.imageCredit
@@ -317,4 +317,29 @@ function updateChapterIndexAndNavigation() {
 
   // Update forward button state
   forwardButton.disabled = chapterIndex + 1 === story.chapters.length;
+}
+
+function displayMedia(chapterData) {
+  const mediaContainer = document.getElementById("media-container");
+
+  const mediaUrl = chapterData.mediaUrl;
+
+  // Clear previous content
+  mediaContainer.innerHTML = "";
+
+  if (chapterData.mediaType === "image") {
+    const imgElement = document.createElement("img");
+    imgElement.src = mediaUrl;
+    mediaContainer.appendChild(imgElement);
+  } else if (chapterData.mediaType === "video") {
+    const iframeElement = document.createElement("iframe");
+    iframeElement.src = mediaUrl;
+    iframeElement.allow =
+      "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+    iframeElement.allowFullscreen = true;
+
+    mediaContainer.appendChild(iframeElement);
+  } else {
+    mediaContainer.innerHTML = "No media available or invalid media type";
+  }
 }
