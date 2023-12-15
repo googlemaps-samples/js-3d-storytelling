@@ -6,6 +6,7 @@ import {
 } from "../sidebar/sidebar.js";
 import { createChapterCard } from "../chapters/chapters.js";
 import {
+  resetToIntro,
   updateChapterContent,
   updateDetailsNavigation,
 } from "../chapters/chapter-navigation.js";
@@ -14,7 +15,12 @@ import {
   removeCustomRadiusShader,
 } from "../utils/cesium.js";
 
-import { createMarkers, hideMarker, showMarker } from "./create-markers.js";
+import {
+  createMarkers,
+  hideMarker,
+  showMarker,
+  removeMarker,
+} from "./create-markers.js";
 
 // Properties of a chapter that can be edited
 const chapterProperties = [
@@ -68,13 +74,14 @@ export async function loadConfig(configUrl) {
 
 /**
  * Adds a new story chapter and saves it to local storage.
- * @param {Object} chapter - The chapter object to be added.
+ * @param {Chapter} chapter - The chapter object to be added.
  * @returns {void}
  */
-export function addChapterToStory(newChapter) {
+export function addChapterToStory(chapter) {
   const chapterIds = story.chapters.map(({ id }) => id).filter(Boolean);
-  // Increment hightest existing chapter id by one
-  const newChapterId = Math.max(...chapterIds) + 1;
+
+  // Increment hightest existing chapter id by one. If no chapters exist, set id to 0
+  const newChapterId = chapterIds.length ? Math.max(...chapterIds) + 1 : 0;
 
   // If not specified, the new chapter will have a marker and no focus by default
   const newChapter = {
@@ -335,6 +342,14 @@ export const storyProxyHandler = {
 
     // Remove chapter from chapters bar
     deleteChapterCard(deletedChapterId);
+
+    // Remove chapter marker from map
+    removeMarker(deletedChapterId);
+
+    // Update details navigation
+    updateDetailsNavigation();
+
+    resetToIntro();
 
     return true;
   },
