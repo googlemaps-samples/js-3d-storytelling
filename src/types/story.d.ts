@@ -13,27 +13,32 @@ type focusOptions = {
   showLocationMarker: boolean;
 };
 
+type media = {
+  url: string;
+  previewUrl: string;
+  mediaType: "image" | "video";
+  mediaCredit: string;
+};
+
 // Define the type for the Segment
 interface Chapter {
   title: string; // Title of the segment
-  mediaUrl: string; // URL for the segment's image or youtube video
-  imageCredit: string; // Credit for the segment's image
   content: string; // Text content of the segment
   dateTime: string;
   coords: google.maps.LatLngLiteral; // Latitude and longitude coordinates using Google Maps type
   address: string; // Clear text address
   cameraOptions: CesiumCameraOptions; // Basic Cesium camera options
-  focus: focusOptions;
+  focusOptions: focusOptions;
+  media: media;
 }
 
 interface StoryProperties {
-  mediaUrl: string; // The image url for the intro card
-  imageCredit: string; // The image credit for the intro card
   title: string; // The title of the story
   date: string; // A date associated with the story
   description: string; // The description text
   createdBy: string; // The author
   cameraOptions: CesiumCameraOptions; // Basic Cesium camera options
+  media: media;
 }
 // Define the NeighbourhoodStory as an array of Segments
 interface Story {

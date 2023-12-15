@@ -282,16 +282,16 @@ export function updateChapterContent(chapterData, isIntro = true) {
   setTextContent(".place", chapterData.address);
 
   // Update image
-  // chapterDetail.querySelector(".hero").src = chapterData.mediaUrl;
+  // chapterDetail.querySelector(".hero").src = chapterData.media.url;
   displayMedia(chapterData);
 
   // Update image credit
-  const imageCredit = chapterData.imageCredit
-    ? `Image credit: ${chapterData.imageCredit}`
+  const mediaCredit = chapterData.mediaCredit
+    ? `Image credit: ${chapterData.mediaCredit}`
     : "";
 
-  setTextContent(".story-intro-attribution", isIntro ? imageCredit : "");
-  setTextContent(".attribution", isIntro ? "" : imageCredit);
+  setTextContent(".story-intro-attribution", isIntro ? mediaCredit : "");
+  setTextContent(".attribution", isIntro ? "" : mediaCredit);
 
   // Update author and date in intro
   setTextContent(
@@ -322,16 +322,16 @@ function updateChapterIndexAndNavigation() {
 function displayMedia(chapterData) {
   const mediaContainer = document.getElementById("media-container");
 
-  const mediaUrl = chapterData.mediaUrl;
+  const mediaUrl = chapterData.media.url;
 
   // Clear previous content
   mediaContainer.innerHTML = "";
 
-  if (chapterData.mediaType === "image") {
+  if (chapterData.media.type === "image") {
     const imgElement = document.createElement("img");
     imgElement.src = mediaUrl;
     mediaContainer.appendChild(imgElement);
-  } else if (chapterData.mediaType === "video") {
+  } else if (chapterData.media.type === "video") {
     const iframeElement = document.createElement("iframe");
     iframeElement.src = mediaUrl;
     iframeElement.allow =

@@ -29,7 +29,7 @@ const chapterProperties = [
   "address",
   "mediaUrl",
   "dateTime",
-  "imageCredit",
+  "mediaCredit",
   "showFocus",
   "radius",
   "showLocationMarker",
@@ -205,6 +205,9 @@ export const storyProxyHandler = {
   set(target, property, updatedValue) {
     // Check if the property being is the length property
     // If so, return true to ignore changes to the length property (for example when adding a new chapter)
+
+    console.log(target, property, updatedValue);
+
     if (property === "length") {
       return true;
     }
@@ -457,7 +460,7 @@ function updateStoryCard(updatedValues) {
 
   // Update img in intro-card
   const img = card.querySelector("img");
-  img.src = updatedValues.previewUrl;
+  img.src = updatedValues.media.previewUrl;
 
   headline.textContent = updatedValues.title;
 
@@ -465,28 +468,28 @@ function updateStoryCard(updatedValues) {
 }
 
 function getMediaUrl(properties) {
-  const mediaUrl = properties.mediaUrl;
+  const mediaUrl = properties.media.url;
   if (isValidYouTubeUrl(mediaUrl)) {
     const videoId = getYouTubeVideoId(mediaUrl);
     if (videoId) {
       const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
       const videoUrl = `https://www.youtube.com/embed/${videoId}?v=2`;
 
-      properties.mediaUrl = videoUrl;
-      properties.previewUrl = thumbnailUrl;
-      properties.mediaType = "video";
+      properties.media.url = videoUrl;
+      properties.media.previewUrl = thumbnailUrl;
+      properties.media.type = "video";
     } else {
-      properties.mediaUrl = "";
-      properties.previewUrl = "";
-      properties.mediaType = "";
+      properties.media.url = "";
+      properties.media.previewUrl = "";
+      properties.media.type = "";
 
       mediaContainer.innerHTML =
         "<p>Please enter a valid YouTube video URL.</p>";
     }
   } else {
-    properties.mediaUrl = mediaUrl;
-    properties.previewUrl = mediaUrl;
-    properties.mediaType = "image";
+    properties.media.url = mediaUrl;
+    properties.media.previewUrl = mediaUrl;
+    properties.media.type = "image";
   }
 }
 

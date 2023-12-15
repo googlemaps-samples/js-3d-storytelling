@@ -86,11 +86,11 @@ function updateStoryDetails(properties) {
   storyDetailsForm.querySelector('input[name="date"]').value =
     properties.date ?? null;
   storyDetailsForm.querySelector('input[name="mediaUrl"]').value =
-    properties.mediaUrl ?? null;
+    properties.media.url ?? null;
   storyDetailsForm.querySelector(".image-credit-container img").src =
-    properties.previewUrl ?? null;
-  storyDetailsForm.querySelector('input[name="imageCredit"]').value =
-    properties.imageCredit ?? null;
+    properties.media.previewUrl ?? null;
+  storyDetailsForm.querySelector('input[name="mediaCredit"]').value =
+    properties.mediaCredit ?? null;
 
   // Add event listener to save the camera position to story
   document
@@ -132,7 +132,7 @@ function updateStoryDetails(properties) {
 
     // update the preview image
     storyDetailsForm.querySelector(".image-credit-container img").src =
-      updatedStoryProperties.previewUrl ?? null;
+      updatedStoryProperties.media.previewUrl ?? null;
 
     // Save updated object back to local storage
     localStorage.setItem("story", JSON.stringify(story));
@@ -637,11 +637,11 @@ function handleEditAction(chapter) {
   editForm.querySelector('input[name="dateTime"]').value =
     chapter.dateTime ?? null;
   editForm.querySelector('input[name="mediaUrl"]').value =
-    chapter.mediaUrl ?? null;
+    chapter.media.url ?? null;
   editForm.querySelector(".image-credit-container img").src =
-    chapter.mediaUrl ?? null;
-  editForm.querySelector('input[name="imageCredit"]').value =
-    chapter.imageCredit ?? null;
+    chapter.media.url ?? null;
+  editForm.querySelector('input[name="mediaCredit"]').value =
+    chapter.mediaCredit ?? null;
 
   // Fill the "more settings" form inputs with the chapter data
   // Get the radius input element
