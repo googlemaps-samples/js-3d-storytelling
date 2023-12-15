@@ -68,7 +68,7 @@ export async function loadConfig(configUrl) {
  * @param {Object} newChapter - The chapter object to be added.
  * @returns {void}
  */
-export function addStory(newChapter) {
+export function addChapterToStory(newChapter) {
   const chapterIds = story.chapters.map(({ id }) => id).filter(Boolean);
   // Increment hightest existing chapter id by one
   const newChapterId = Math.max(...chapterIds) + 1;

@@ -6,7 +6,7 @@ import {
   calculateCameraPositionAndOrientation,
   performFlyTo,
 } from "../utils/cesium.js";
-import { getStoryDetails, addStory } from "../utils/config.js";
+import { getStoryDetails, addChapterToStory } from "../utils/config.js";
 import { getParams } from "../utils/params.js";
 
 /**
@@ -258,7 +258,7 @@ export async function initAutoComplete() {
   // Handle submit location button click
   locationSubmitButton.addEventListener("click", () => {
     // Adds new chapter to story
-    addStory({
+    addChapterToStory({
       title: locationInput.value,
       coords,
       cameraOptions,

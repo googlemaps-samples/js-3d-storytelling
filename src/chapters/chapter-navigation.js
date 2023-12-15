@@ -192,10 +192,10 @@ export function updateChapter(chapterIndex) {
   updateChapterContent(story.chapters[chapterIndex], false); // Update the chapter details content
   activateNavigationElement("details"); // Activate the details navigation
 
-  // Check if the current chapter has a vignette and create or remove the custom radius shader accordingly
-  const hasVignette = story.chapters[chapterIndex].focusOptions.showFocus;
+  // Check if the current chapter has a focus and create or remove the custom radius shader accordingly
+  const hasFocus = story.chapters[chapterIndex].focusOptions.showFocus;
 
-  if (hasVignette) {
+  if (hasFocus) {
     const radius = story.chapters[chapterIndex].focusOptions.focusRadius;
 
     createCustomRadiusShader(coords, radius); // Create the custom radius shader
