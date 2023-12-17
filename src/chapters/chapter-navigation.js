@@ -88,7 +88,10 @@ export function initChapterNavigation() {
 
   // Initialize chapter content based on URL parameters
   if (chapterId !== null) {
-    updateChapter(chapterId);
+    const chapterIndex = story.chapters.findIndex(
+      (chapter) => Number(chapter.id) === Number(chapterId)
+    );
+    updateChapter(chapterIndex);
   } else {
     resetToIntro();
   }
@@ -271,6 +274,10 @@ export function updateDetailsNavigation() {
  */
 export function updateChapterContent(chapter, isIntro = true) {
   const { media, ...chapterData } = chapter;
+  console.log(
+    "🚀 ~ file: chapter-navigation.js:274 ~ updateChapterContent ~ media:",
+    media
+  );
 
   updateDetailsNavigation();
 
@@ -285,11 +292,11 @@ export function updateChapterContent(chapter, isIntro = true) {
   setTextContent(".place", chapterData.address);
 
   // Update media content
-  setMediaContent(media);
+  media && setMediaContent(media);
 
   // Update image credit
-  const mediaCredit = media.mediaCredit
-    ? `Image credit: ${media.mediaCredit}`
+  const mediaCredit = media?.mediaCredit
+    ? `Image credit: ${media?.mediaCredit}`
     : "";
 
   setTextContent(".story-intro-attribution", isIntro ? mediaCredit : "");
@@ -339,8 +346,7 @@ function onYouTubeIframeAPIReady() {
 
 function onPlayerStateChange(event) {
   if (event.data == YT.PlayerState.ENDED) {
-    // Video has ended, fire your callback here
-    console.log("Video ended");
+    // Todo: go to next chapter
   }
 }
 
@@ -366,6 +372,10 @@ function setMediaContent(mediaData) {
       width: "300",
       videoId: getYouTubeVideoId(mediaUrl),
       events: {
+        onReady: function (event) {
+          // Todo: pause interactive mode
+          // event.target.playVideo();
+        },
         onStateChange: onPlayerStateChange,
       },
     });

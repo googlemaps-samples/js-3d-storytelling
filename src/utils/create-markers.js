@@ -216,7 +216,9 @@ async function handleClickOnMarker(click) {
     return;
   }
 
-  updateChapter(markerId);
+  const chapterIndex = story.chapters.findIndex(({ id }) => id === markerId);
+
+  updateChapter(chapterIndex);
 }
 
 /**

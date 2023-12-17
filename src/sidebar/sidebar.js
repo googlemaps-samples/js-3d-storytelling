@@ -641,13 +641,13 @@ function handleEditAction(chapter) {
   editForm.querySelector('input[name="dateTime"]').value =
     chapter.dateTime ?? null;
   editForm.querySelector('input[name="mediaUrl"]').value =
-    chapter.media.url ?? null;
+    chapter.media?.url ?? null;
   editForm.querySelector('input[name="mediaCredit"]').value =
-    chapter.media.mediaCredit ?? null;
+    chapter.media?.mediaCredit ?? null;
 
   // Update the preview image
   editForm.querySelector(".image-credit-container img").src =
-    chapter.media.previewUrl ?? null;
+    chapter.media?.previewUrl ?? null;
 
   // Fill the "more settings" form inputs with the chapter data
   // Get the radius input element
