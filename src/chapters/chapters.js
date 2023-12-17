@@ -37,7 +37,7 @@ export function createChapterCard(chapter) {
   card.id = chapter.id;
 
   const chapterImage = document.createElement("img");
-  chapterImage.setAttribute("data-input-name", "mediaUrl");
+  chapterImage.setAttribute("data-input-name", "media");
   chapterImage.src = chapter.media.previewUrl;
   card.appendChild(chapterImage);
 

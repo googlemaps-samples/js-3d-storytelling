@@ -642,10 +642,12 @@ function handleEditAction(chapter) {
     chapter.dateTime ?? null;
   editForm.querySelector('input[name="mediaUrl"]').value =
     chapter.media.url ?? null;
-  editForm.querySelector(".image-credit-container img").src =
-    chapter.media.url ?? null;
   editForm.querySelector('input[name="mediaCredit"]').value =
     chapter.media.mediaCredit ?? null;
+
+  // Update the preview image
+  editForm.querySelector(".image-credit-container img").src =
+    chapter.media.previewUrl ?? null;
 
   // Fill the "more settings" form inputs with the chapter data
   // Get the radius input element
@@ -713,12 +715,23 @@ function handleEditAction(chapter) {
         if (name === "marker-checkbox") {
           chapter.focusOptions.showLocationMarker = checked;
         }
-        return;
       }
 
       if (name === "mediaUrl") {
+        const media = getMediaData(value);
         editForm.querySelector(".image-credit-container img").src =
-          value ?? null;
+          media.previewUrl ?? null;
+
+        chapter.media = media;
+        return;
+      }
+
+      if (name === "mediaCredit") {
+        chapter.media = {
+          ...chapter.media,
+          mediaCredit: value,
+        };
+        return;
       }
 
       chapter[name] = value;

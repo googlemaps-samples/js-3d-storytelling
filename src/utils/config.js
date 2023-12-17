@@ -27,7 +27,7 @@ const chapterProperties = [
   "title",
   "content",
   "address",
-  // "mediaUrl",
+  "media",
   "dateTime",
   "mediaCredit",
   "showFocus",
@@ -303,13 +303,6 @@ export const storyProxyHandler = {
     if (property === "properties") {
       // Update chapter details
 
-      console.log(
-        "🚀 ~ file: config.js:270 ~ set ~ updatedValue",
-        updatedValue
-      );
-      console.log("🚀 ~ file: config.js:270 ~ set ~ target", target);
-      console.log("🚀 ~ file: config.js:270 ~ set ~ property", property);
-
       // getMediaUrl(target.properties);
 
       updateChapterContent(target.properties, true);
@@ -405,6 +398,7 @@ function updateChapterCard(target, property, updatedValue) {
   const card = cardsContainer.querySelector(`.card[id="${target.id}"]`);
 
   if (!card) {
+    console.warn(`Chapter card with id ${target.id} not found`);
     return;
   }
 
@@ -412,19 +406,20 @@ function updateChapterCard(target, property, updatedValue) {
   const element = card.querySelector(`[data-input-name="${property}"]`) || null;
 
   if (!element) {
+    console.warn(`Element with data-input-name "${property}" not found`);
     return;
   }
 
   // Update element
 
-  // Check if element is an image
-  // If so, update the src attribute
-  // Otherwise, update the text content
-  // if (property === "mediaUrl") {
-  //   element.src = updatedValue;
-  // } else {
-  //   element.textContent = updatedValue;
-  // }
+  // Check which property of chapter card is being updated
+  if (property === "media") {
+    element.src = updatedValue.previewUrl;
+  }
+
+  if (property === "title") {
+    element.textContent = updatedValue;
+  }
 }
 
 /**

@@ -266,10 +266,12 @@ export function updateDetailsNavigation() {
 
 /**
  * Updates the content of the chapter detail section.
- * @param {Chapter} chapterData - The data object containing chapter details
+ * @param {Chapter} chapter - The data object containing chapter details
  * @param {boolean} [isIntro=true] - Flag indicating if the current view is the introduction.
  */
-export function updateChapterContent(chapterData, isIntro = true) {
+export function updateChapterContent(chapter, isIntro = true) {
+  const { media, ...chapterData } = chapter;
+
   updateDetailsNavigation();
 
   setTextContent(".story-title", isIntro ? "" : story.properties.title);
@@ -282,13 +284,12 @@ export function updateChapterContent(chapterData, isIntro = true) {
   setTextContent(".date", isIntro ? "" : chapterData.dateTime);
   setTextContent(".place", chapterData.address);
 
-  // Update image
-  // chapterDetail.querySelector(".hero").src = chapterData.media.url;
-  displayMedia(chapterData);
+  // Update media content
+  setMediaContent(media);
 
   // Update image credit
-  const mediaCredit = chapterData.media.mediaCredit
-    ? `Image credit: ${chapterData.media.mediaCredit}`
+  const mediaCredit = media.mediaCredit
+    ? `Image credit: ${media.mediaCredit}`
     : "";
 
   setTextContent(".story-intro-attribution", isIntro ? mediaCredit : "");
@@ -340,25 +341,22 @@ function onPlayerStateChange(event) {
   if (event.data == YT.PlayerState.ENDED) {
     // Video has ended, fire your callback here
     console.log("Video ended");
-    // yourCallbackFunction();
   }
 }
 
-function displayMedia(chapterData) {
-  console.log(chapterData);
-
+function setMediaContent(mediaData) {
   const mediaContainer = document.getElementById("media-container");
 
-  const mediaUrl = chapterData.media.url;
+  const mediaUrl = mediaData.url;
 
   // Clear previous content
   mediaContainer.innerHTML = "";
 
-  if (chapterData.media.type === "image") {
+  if (mediaData.type === "image") {
     const imgElement = document.createElement("img");
     imgElement.src = mediaUrl;
     mediaContainer.appendChild(imgElement);
-  } else if (chapterData.media.type === "video") {
+  } else if (mediaData.type === "video") {
     const iframeElement = document.createElement("div");
     iframeElement.id = "player";
     mediaContainer.appendChild(iframeElement);
