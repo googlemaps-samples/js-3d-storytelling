@@ -8,6 +8,7 @@ import { setSelectedMarker } from "../utils/create-markers.js";
 import { getParams, setParams } from "../utils/params.js";
 import { loadSvg } from "../utils/svg.js";
 import { setTextContent } from "../utils/ui.js";
+import { getYouTubeVideoId } from "../sidebar/sidebar.js";
 
 /**
  * The time in milliseconds between each chapter progression
@@ -286,8 +287,8 @@ export function updateChapterContent(chapterData, isIntro = true) {
   displayMedia(chapterData);
 
   // Update image credit
-  const mediaCredit = chapterData.mediaCredit
-    ? `Image credit: ${chapterData.mediaCredit}`
+  const mediaCredit = chapterData.media.mediaCredit
+    ? `Image credit: ${chapterData.media.mediaCredit}`
     : "";
 
   setTextContent(".story-intro-attribution", isIntro ? mediaCredit : "");
@@ -319,7 +320,33 @@ function updateChapterIndexAndNavigation() {
   forwardButton.disabled = chapterIndex + 1 === story.chapters.length;
 }
 
+// Load the IFrame Player API code asynchronously.
+let tag = document.createElement("script");
+tag.src = "https://www.youtube.com/iframe_api";
+let firstScriptTag = document.getElementsByTagName("script")[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+let player;
+
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player("player", {
+    events: {
+      onStateChange: onPlayerStateChange,
+    },
+  });
+}
+
+function onPlayerStateChange(event) {
+  if (event.data == YT.PlayerState.ENDED) {
+    // Video has ended, fire your callback here
+    console.log("Video ended");
+    // yourCallbackFunction();
+  }
+}
+
 function displayMedia(chapterData) {
+  console.log(chapterData);
+
   const mediaContainer = document.getElementById("media-container");
 
   const mediaUrl = chapterData.media.url;
@@ -332,13 +359,18 @@ function displayMedia(chapterData) {
     imgElement.src = mediaUrl;
     mediaContainer.appendChild(imgElement);
   } else if (chapterData.media.type === "video") {
-    const iframeElement = document.createElement("iframe");
-    iframeElement.src = mediaUrl;
-    iframeElement.allow =
-      "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-    iframeElement.allowFullscreen = true;
-
+    const iframeElement = document.createElement("div");
+    iframeElement.id = "player";
     mediaContainer.appendChild(iframeElement);
+
+    player = new YT.Player("player", {
+      height: "150",
+      width: "300",
+      videoId: getYouTubeVideoId(mediaUrl),
+      events: {
+        onStateChange: onPlayerStateChange,
+      },
+    });
   } else {
     mediaContainer.innerHTML = "No media available or invalid media type";
   }

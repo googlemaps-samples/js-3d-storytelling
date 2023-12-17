@@ -90,7 +90,7 @@ function updateStoryDetails(properties) {
   storyDetailsForm.querySelector(".image-credit-container img").src =
     properties.media.previewUrl ?? null;
   storyDetailsForm.querySelector('input[name="mediaCredit"]').value =
-    properties.mediaCredit ?? null;
+    properties.media.mediaCredit ?? null;
 
   // Add event listener to save the camera position to story
   document
@@ -119,12 +119,16 @@ function updateStoryDetails(properties) {
     event.preventDefault();
 
     // Get updated story details
-    const updatedStoryDetails = getStoryDetails();
+    const { mediaUrl, mediaCredit, ...updatedStoryDetails } = getStoryDetails();
+
+    // Get media data
+    const media = getMediaData(mediaUrl, mediaCredit);
 
     // Update story properties
     const updatedStoryProperties = {
       ...story.properties,
       ...updatedStoryDetails,
+      media,
     };
 
     // Update story
@@ -641,7 +645,7 @@ function handleEditAction(chapter) {
   editForm.querySelector(".image-credit-container img").src =
     chapter.media.url ?? null;
   editForm.querySelector('input[name="mediaCredit"]').value =
-    chapter.mediaCredit ?? null;
+    chapter.media.mediaCredit ?? null;
 
   // Fill the "more settings" form inputs with the chapter data
   // Get the radius input element
@@ -784,4 +788,42 @@ export function addDownloadConfigHandler() {
       // Revoke the Blob URL to free up resources
       URL.revokeObjectURL(blobUrl);
     });
+}
+
+function getMediaData(mediaUrl, mediaCredit) {
+  let media = {
+    url: "",
+    previewUrl: "",
+    type: "",
+    mediaCredit: mediaCredit ?? "",
+  };
+
+  if (isValidYouTubeUrl(mediaUrl)) {
+    const videoId = getYouTubeVideoId(mediaUrl);
+    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+
+    media.url = mediaUrl;
+    media.previewUrl = thumbnailUrl;
+    media.type = "video";
+  } else {
+    media.url = mediaUrl;
+    media.previewUrl = mediaUrl;
+    media.type = "image";
+  }
+
+  return media;
+}
+
+function isValidYouTubeUrl(url) {
+  // Regex to check if the URL is a valid YouTube video URL
+  const youtubeRegex =
+    /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  return youtubeRegex.test(url);
+}
+
+export function getYouTubeVideoId(url) {
+  const match = url.match(
+    /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  );
+  return match ? match[1] : null;
 }
