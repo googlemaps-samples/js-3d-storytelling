@@ -15,10 +15,15 @@ import {
 } from "../utils/youtube-loader.js";
 
 /**
- * The time in milliseconds between each chapter progression
+ * The time in seconds between each chapter progression
  * @readonly
  */
-const TIME_PER_CHAPTER = 3000;
+const CHAPTER_DURATION = 3;
+
+/**
+ * The time in seconds a fly to animation takes
+ */
+const FLY_TO_DURATION = 2;
 
 // SVG icons
 /**
@@ -59,8 +64,16 @@ const forwardButton = detailNavigation.querySelector("#chapter-forward");
 /**
  * The id used to identify the timeout instance for the story progression
  * @type {number | null}
+ * @default null
  */
-let intervalId = null;
+let timeoutId = null;
+
+/**
+ * The id used to identify the current step of the autoplay
+ * @type {number}
+ * @default 0
+ */
+let autoplayStep = 0;
 
 /**
  * Initializes and manages chapter navigation for a story.
@@ -87,14 +100,10 @@ export function initChapterNavigation() {
   autoplayButton.addEventListener("click", autoplayClickHandler);
 
   // Get the current chapter based on URL parameters
-  const params = getParams();
-  const chapterId = params.get("chapterId");
+  const chapterIndex = getCurrentChapterIndex();
 
   // Initialize chapter content based on URL parameters
-  if (chapterId !== null) {
-    const chapterIndex = story.chapters.findIndex(
-      (chapter) => Number(chapter.id) === Number(chapterId)
-    );
+  if (typeof chapterIndex === "number") {
     updateChapter(chapterIndex);
   } else {
     resetToIntro();
@@ -106,16 +115,32 @@ export function initChapterNavigation() {
  */
 function stopAutoplay() {
   autoplayButton.innerHTML = PLAY_ICON;
-  clearTimeout(intervalId);
-  intervalId = null;
+  clearTimeout(timeoutId);
+  timeoutId = null;
 }
 
 /**
  * Progresses to the next chapter and stops progression if the current chapter is the last one.
- * @param {type} paramName - description of parameter
  */
 function setNextAutoplayStep() {
-  setNextChapter();
+  // Convert from seconds to milliseconds
+  const flyToDurationMillis = FLY_TO_DURATION * 1000;
+  const chapterDurationMillis = CHAPTER_DURATION * 1000;
+
+  // The interval duration is the sum of the fly to duration and the chapter duration
+  // autoplayStep = 0 means the first step, so the wait time is only the chapter duration
+  const timeoutDuration =
+    autoplayStep === 0
+      ? chapterDurationMillis
+      : chapterDurationMillis + flyToDurationMillis;
+
+  timeoutId = setTimeout(() => {
+    autoplayStep++; // Increment the autoplay step
+    setNextChapter(); // Update the chapter content
+    setNextAutoplayStep(); // Start the next autoplay step
+  }, timeoutDuration);
+
+  // If the current chapter is the last one, stop the autoplay
   if (getCurrentChapterIndex() === story.chapters.length - 1) {
     stopAutoplay();
   }
@@ -125,12 +150,12 @@ function setNextAutoplayStep() {
  * Starts the autoplay chapter progression.
  */
 function autoplayClickHandler() {
-  // If the interval is already active, stop it
-  if (intervalId) {
+  // If the autoplay is already active, stop it
+  if (timeoutId) {
     stopAutoplay();
   } else {
-    // If the interval is not active, start it
-    intervalId = setInterval(setNextAutoplayStep, TIME_PER_CHAPTER);
+    // If the autoplay is not active, start it
+    setNextAutoplayStep();
     autoplayButton.innerHTML = PAUSE_ICON;
   }
 }
@@ -183,7 +208,7 @@ export function resetToIntro() {
       pitch,
       heading,
     },
-    duration: 1,
+    duration: FLY_TO_DURATION,
   });
 }
 
@@ -192,16 +217,17 @@ export function resetToIntro() {
  * @param {number} chapterIndex - The index of the chapter to be updated.
  */
 export function updateChapter(chapterIndex) {
-  const { cameraOptions, coords } = story.chapters[chapterIndex];
+  const chapter = story.chapters.at(chapterIndex);
+  const { cameraOptions, coords, id: chapterId } = chapter;
   const { position, pitch, heading, roll } = cameraOptions;
 
-  setSelectedMarker(chapterIndex); // Set the selected marker
-  setParams("chapterId", story.chapters[chapterIndex].id); // Set the chapter parameter
-  updateChapterContent(story.chapters[chapterIndex], false); // Update the chapter details content
+  setSelectedMarker(chapterId); // Set the selected marker
+  setParams("chapterId", chapterId); // Set the chapter parameter
+  updateChapterContent(chapter, false); // Update the chapter details content
   activateNavigationElement("details"); // Activate the details navigation
 
   // Check if the current chapter has a focus and create or remove the custom radius shader accordingly
-  const hasFocus = story.chapters[chapterIndex].focusOptions.showFocus;
+  const hasFocus = story.chapters[chapterIndex].focusOptions?.showFocus;
 
   if (hasFocus) {
     const radius = story.chapters[chapterIndex].focusOptions.focusRadius;
@@ -219,7 +245,7 @@ export function updateChapter(chapterIndex) {
       pitch,
       heading,
     },
-    duration: 2,
+    duration: FLY_TO_DURATION,
   });
 }
 
@@ -236,17 +262,23 @@ export function activateNavigationElement(navName) {
  * Returns the index of the current chapter.
  * @returns {number} - The index of the current chapter.
  */
-export const getCurrentChapterIndex = () => {
+export function getCurrentChapterIndex() {
   const params = getParams();
   const chapterId = params.get("chapterId");
-
   // Get the index of the current chapter
-  const chapterIndex = story.chapters.findIndex(
-    (chapter) => Number(chapter.id) === Number(chapterId)
-  );
+  return getChapterIndexFromId(chapterId);
+}
 
-  return chapterIndex;
-};
+/**
+ * Returns the index of the chapter with the given id.
+ * @param {string} chapterId - The id of the chapter to be found.
+ * @returns {number | null} - The index of the chapter with the given id.
+ */
+export function getChapterIndexFromId(chapterId) {
+  return chapterId === null
+    ? null
+    : story.chapters.findIndex((chapter) => chapter.id == chapterId);
+}
 
 /**
  * Updates the details navigation. This includes the chapter index and

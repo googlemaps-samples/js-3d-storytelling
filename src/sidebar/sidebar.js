@@ -1,22 +1,29 @@
-import { updateChapter, resetToIntro } from "../chapters/chapter-navigation.js";
-import { story } from "../main.js";
+import {
+  updateChapter,
+  resetToIntro,
+  getChapterIndexFromId,
+} from "../chapters/chapter-navigation.js";
 import { createMarkers, removeMarker } from "../utils/create-markers.js";
+import { getParams } from "../utils/params.js";
 import {
   getCameraOptions,
   calculateCameraPositionAndOrientation,
   performFlyTo,
-  DEFAULT_FOCUS_RADIUS,
+  DEFAULT_HIGHLIGHT_RADIUS,
 } from "../utils/cesium.js";
+import { story } from "../main.js";
 import { getStoryDetails, addChapterToStory } from "../utils/config.js";
 import { getParams } from "../utils/params.js";
 import { getPreviewUrl } from "../utils/ui.js";
 /**
  * Options for radio buttons in the sidebar.
  * @typedef {Object} LocationMenuOptions
- * @property {string} moveUp - Option for moving up.
- * @property {string} moveDown - Option for moving down.
- * @property {string} edit - Option for editing.
- * @property {string} delete - Option for deleting.
+ * @property {'edit'} edit - Option for editing.
+ * @property {'delete'} delete - Option for deleting.
+ */
+
+/**
+ * @type {LocationMenuOptions} - Options for radio buttons in the sidebar.
  */
 const locationMenuOptions = {
   edit: "edit",
@@ -48,6 +55,11 @@ export function updateSidebar() {
   updateLocationList(chapters);
 }
 
+/**
+ * Updates the location list with the provided chapters data.
+ *
+ * @param {Chapter[]} chapters - The chapters data used to populate the location list.
+ */
 export function updateLocationList(chapters) {
   // Fill the location list with the chapters data
   const locationListContainer = document.querySelector(".location-list");
@@ -68,7 +80,7 @@ export function updateLocationList(chapters) {
 
 /**
  * Updates the story details form with the provided properties data.
- * @param {Object} properties - The properties data to fill the form with.
+ * @param {StoryProperties} properties - The properties data to fill the form with.
  */
 function updateStoryDetails(properties) {
   // Fill the story details form with the properties data
@@ -148,7 +160,7 @@ function updateStoryDetails(properties) {
 /**
  * Creates a location item element for a given chapter.
  *
- * @param {Object} chapter - The chapter object containing the title.
+ * @param {Chapter} chapter - The chapter object containing the title.
  * @returns {HTMLElement} - The created location item element.
  */
 export function createLocationItem(chapter) {
@@ -213,9 +225,8 @@ export function createLocationItem(chapter) {
 
 /**
  * Initializes the autocomplete functionality for the location input field.
- * @returns {Promise<void>} A promise that resolves when the autocomplete is initialized.
  */
-export async function initAutoComplete() {
+export function initAutoComplete() {
   const locationInput = document.querySelector(".locations-container input");
 
   const options = { fields: ["geometry"] };
@@ -276,9 +287,15 @@ export async function initAutoComplete() {
     locationInput.value = "";
   });
 }
-// A reference to the currently open dialog
+
+/**
+ * The currently opened menu dialog.
+ * @type {HTMLDialogElement}
+ */
 let currentOpenedMenu = null;
-/** A reference to the abort controller used to cancel the events on dialog close
+
+/**
+ * A reference to the abort controller used to cancel the events on dialog close
  * @type {AbortController}
  */
 let locationMenuEventController;
@@ -363,7 +380,10 @@ function createLocationMenuCloseListeners(dialog) {
   );
 }
 
-// Helper function to close the dialog and aborts any ongoing event listeners
+/**
+ * Helper function to close the dialog and aborts any ongoing event listeners
+ * @param {HTMLDialogElement} dialog - The dialog element to be closed.
+ */
 function closeMenu(dialog) {
   dialog.close();
   locationMenuEventController.abort();
@@ -430,6 +450,12 @@ export function initDragAndDrop() {
   });
 }
 
+/**
+ * Updates the chapter bar cards by reordering the chapters based on the dragged and next location items.
+ *
+ * @param {string} draggedLocationItemId - The ID of the dragged location item.
+ * @param {string} nextLocationItemId - The ID of the next location item.
+ */
 function updateChapterBarCards(draggedLocationItemId, nextLocationItemId) {
   // Get chapter card container
   const cardsContainer = document.querySelector("#chapters-bar .cards");
@@ -469,10 +495,10 @@ function updateChapterBarCards(draggedLocationItemId, nextLocationItemId) {
 /**
  * Moves a chapter within an array of chapters.
  *
- * @param {Array} chapters - The array of chapters.
+ * @param {Chapter[]} chapters - The array of chapters.
  * @param {number} draggedLocationItemId - The ID of the dragged chapter.
  * @param {number} nextLocationItemId - The ID of the next sibling of the dragged chapter.
- * @returns {Array} - The updated array of chapters with the dragged chapter moved to the desired position.
+ * @returns {Chapter[]} - The updated array of chapters with the dragged chapter moved to the desired position.
  */
 const moveChapter = (chapters, draggedLocationItemId, nextLocationItemId) => {
   // Create shallow copy of original array
@@ -480,9 +506,7 @@ const moveChapter = (chapters, draggedLocationItemId, nextLocationItemId) => {
   const copiedChapters = chapters.slice();
 
   // Find the index of the dragged chapter
-  const movedChapterIndex = copiedChapters.findIndex(
-    (chapter) => Number(chapter.id) === Number(draggedLocationItemId)
-  );
+  const movedChapterIndex = getChapterIndexFromId(draggedLocationItemId);
 
   // Get the dragged chapter and remove it from the array
   const movedChapter = copiedChapters.splice(movedChapterIndex, 1)[0];
@@ -538,7 +562,7 @@ function getNextElementByVerticalPosition(container, draggedElementPositionY) {
 /**
  * Adds a change event listener to each form element with the method attribute set to "dialog".
  * When a radio input is changed, the form is submitted and the dialog is closed.
- * @param {Array} chapters - An array of chapter objects.
+ * @param {Chapter[]} chapters - An array of chapter objects.
  */
 function addEditMenuEventListeners(chapters) {
   const editMenus = document.querySelectorAll('form[name="location-menu"]');
@@ -585,7 +609,7 @@ function addEditMenuEventListeners(chapters) {
  * Handles the submit action of the edit menu.
  *
  * @param {string} action - The action to perform.
- * @param {string} selectedChapter - The selected chapter.
+ * @param {Chapter} selectedChapter - The selected chapter.
  */
 function handleEditMenuSubmit(action, selectedChapter) {
   switch (action) {
@@ -619,7 +643,7 @@ let editFormEventController;
  * 2. Fills the form with the chapter data
  * 3. Submits the form and updates the chapter data
  *
- * @param {Object} chapter - The chapter object to be edited.
+ * @param {Chapter} chapter - The chapter object to be edited.
  */
 function handleEditAction(chapter) {
   editFormEventController = new AbortController();
@@ -661,7 +685,8 @@ function handleEditAction(chapter) {
   const radiusInput = editForm.querySelector("#radius");
 
   // Initialize the slider with the current radius from the chapter
-  radiusInput.value = chapter.focusOptions.focusRadius ?? DEFAULT_FOCUS_RADIUS;
+  radiusInput.value =
+    chapter.focusOptions.focusRadius ?? DEFAULT_HIGHLIGHT_RADIUS;
   radiusInput.style.setProperty("--value", radiusInput.value);
 
   // Update the slider progress when the value changed
@@ -680,22 +705,19 @@ function handleEditAction(chapter) {
 
   const selectedChapterKey = editForm.getAttribute("key");
 
-  // Find index of chapter to be updated
-  const selectedChapterIndex = story.chapters.findIndex(
+  const selectedChapter = story.chapters.find(
     (chapter) => Number(selectedChapterKey) === Number(chapter.id)
   );
 
   // Update chapter when opening edit form
-  updateChapter(selectedChapterIndex);
+  updateChapter(getChapterIndexFromId(selectedChapterKey));
 
   // Add event listener to save the camera position to chapter
   document
     .getElementById("save-chapter-camera-position-button")
     .addEventListener(
       "click",
-      () => {
-        story.chapters[selectedChapterIndex].cameraOptions = getCameraOptions();
-      },
+      () => (selectedChapter.cameraOptions = getCameraOptions()),
       { signal: editFormEventController.signal }
     );
 
@@ -705,16 +727,13 @@ function handleEditAction(chapter) {
     (event) => {
       const { name, value, type, checked } = event.target;
 
-      // Define the chapter for easier reference
-      const chapter = story.chapters[selectedChapterIndex];
-
       if (type === "checkbox") {
         if (name === "focus-checkbox") {
-          chapter.focusOptions.showFocus = checked;
+          selectedChapter.focusOptions.showFocus = checked;
         }
 
         if (name === "marker-checkbox") {
-          chapter.focusOptions.showLocationMarker = checked;
+          selectedChapter.focusOptions.showLocationMarker = checked;
         }
         return;
       }
@@ -724,7 +743,7 @@ function handleEditAction(chapter) {
         editForm.querySelector(".image-credit-container img").src = mediaSource;
       }
 
-      chapter[name] = value;
+      selectedChapter[name] = value;
     },
     { signal: editFormEventController.signal }
   );

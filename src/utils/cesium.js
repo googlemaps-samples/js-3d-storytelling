@@ -1,20 +1,39 @@
 import { GOOGLE_MAPS_API_KEY } from "../env.js";
 import { story } from "../main.js";
 
-// The radius from the target point to position the camera.
+/**
+ * The radius from the target point to position the camera.
+ * @readonly
+ * @type {number}
+ */
 const RADIUS = 800;
-// Pitch -30 degrees in radians
+
+/**
+ * The base pitch of the camera. Defaults to -30 degrees in radians.
+ * @readonly
+ * @type {number}
+ */
 const BASE_PITCH_RADIANS = -0.523599;
-// Heading 180 degrees in radians
+
+/**
+ * The base heading of the camera. Defaults to 180 degrees in radians.
+ * @readonly
+ * @type {number}
+ */
 const BASE_HEADING_RADIANS = 3.14159;
-// No base roll
+
+/**
+ * The base roll of the camera. Defaults to 0 degrees in radians.
+ * @readonly
+ * @type {number}
+ */
 const BASE_ROLL_RADIANS = 0;
 
 /**
- * The default radius size of the  highlighted area
+ * The default radius size of the highlighted area
  * @readonly
  */
-export const DEFAULT_FOCUS_RADIUS = 250;
+export const DEFAULT_HIGHLIGHT_RADIUS = 250;
 
 /**
  * An export of the CesiumJS viewer instance to be accessed by other modules.
@@ -214,6 +233,9 @@ async function createTileset() {
   }
 }
 
+/**
+ * Creates an attribution element for the Cesium viewer.
+ */
 function createAttribution() {
   if (!cesiumViewer) {
     console.error("Error creating attribution: `cesiumViewer` is undefined");
@@ -255,7 +277,7 @@ export function removeCustomRadiusShader() {
  */
 export function createCustomRadiusShader(
   coordinates,
-  radius = DEFAULT_FOCUS_RADIUS
+  radius = DEFAULT_HIGHLIGHT_RADIUS
 ) {
   const { lat, lng } = coordinates;
   const center = Cesium.Cartesian3.fromDegrees(lng, lat);

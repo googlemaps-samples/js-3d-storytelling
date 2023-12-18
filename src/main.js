@@ -12,13 +12,6 @@ import { addChaptersBar } from "./chapters/chapters.js";
 import { initGoogleMaps } from "./utils/places.js";
 import { initChapterNavigation } from "./chapters/chapter-navigation.js";
 
-// Here we load the configuration.
-// The current implementation loads our local `config.json`.
-//
-// This can be changed easily, to fetch from any other API, CMS
-// or request some file from another host, by changing the config url parameter.
-//
-// You could also implement your (dynamic) configuration loading function here.
 /**
  * The story configuration object
  * @type {Story}
@@ -27,10 +20,22 @@ let storyConfig;
 
 const isStoryInLocalStorage = Boolean(localStorage.getItem("story"));
 
+/**
+ * Here we load the configuration.
+ *
+ * The current implementation loads our local `config.json`.
+ *
+ * This can be changed easily, to fetch from any other API, CMS
+ * or request some file from another host, by changing the config url parameter.
+ *
+ * You could also implement your (dynamic) configuration loading function here.
+ */
+
 // Check if story is in local storage
 if (isStoryInLocalStorage) {
   storyConfig = JSON.parse(localStorage.getItem("story"));
 } else {
+  // If not load story config from local file
   storyConfig = await loadConfig("./config.json");
   localStorage.setItem("story", JSON.stringify(storyConfig));
 }
@@ -45,12 +50,16 @@ export let story = new Proxy(storyConfig, storyProxyHandler);
 
 const { chapters } = story;
 
+/**
+ * The main function. This function is called when the page is loaded.
+ * It then initializes all necessary parts of the application.
+ */
 async function main() {
   try {
     await initCesiumViewer();
     await initGoogleMaps();
-    await initAutoComplete();
-    updateSidebar(story);
+    initAutoComplete();
+    updateSidebar();
 
     // Create markers from chapter coordinates
     await createMarkers(chapters);

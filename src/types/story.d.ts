@@ -15,6 +15,7 @@ type focusOptions = {
 
 // Define the type for the Segment
 interface Chapter {
+  id: number;
   title: string; // Title of the segment
   imageUrl: string; // URL for the segment's image (google or custom)
   imageCredit: string; // Credit for the segment's image
