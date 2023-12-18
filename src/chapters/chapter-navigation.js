@@ -244,7 +244,7 @@ export const getCurrentChapterIndex = () => {
  * Updates the details navigation. This includes the chapter index and
  * the forward button (if the current chapter is the last).
  */
-function updateDetailsNavigation() {
+export function updateDetailsNavigation() {
   // Update chapter index
   const chapterIndex = getCurrentChapterIndex() + 1;
   // Displays the current chapter index

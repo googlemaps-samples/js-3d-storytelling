@@ -5,13 +5,16 @@ import {
   createEditMenus,
 } from "../sidebar/sidebar.js";
 import { createChapterCard } from "../chapters/chapters.js";
-import { updateChapterContent } from "../chapters/chapter-navigation.js";
+import {
+  updateChapterContent,
+  updateDetailsNavigation,
+} from "../chapters/chapter-navigation.js";
 import {
   createCustomRadiusShader,
   removeCustomRadiusShader,
 } from "../utils/cesium.js";
 
-import { hideMarker, showMarker } from "./create-markers.js";
+import { createMarkers, hideMarker, showMarker } from "./create-markers.js";
 
 // Properties of a chapter that can be edited
 const chapterProperties = [
@@ -65,7 +68,7 @@ export async function loadConfig(configUrl) {
 
 /**
  * Adds a new story chapter and saves it to local storage.
- * @param {Object} newChapter - The chapter object to be added.
+ * @param {Object} chapter - The chapter object to be added.
  * @returns {void}
  */
 export function addChapterToStory(newChapter) {
@@ -73,8 +76,25 @@ export function addChapterToStory(newChapter) {
   // Increment hightest existing chapter id by one
   const newChapterId = Math.max(...chapterIds) + 1;
 
+  // If not specified, the new chapter will have a marker and no focus by default
+  const newChapter = {
+    focusOptions: {
+      focusRadius: null,
+      showFocus: false,
+      showLocationMarker: true,
+    },
+    ...chapter,
+    id: newChapterId,
+  };
+
   // Add new chapter to story
-  story.chapters.push({ ...newChapter, id: newChapterId });
+  story.chapters.push(newChapter);
+
+  // Create chapter marker and add it to the map
+  createMarkers([newChapter]);
+
+  // Update details navigation
+  updateDetailsNavigation();
 
   // Save updated object back to local storage
   localStorage.setItem("story", JSON.stringify(story));
@@ -226,7 +246,7 @@ export const storyProxyHandler = {
           const radius = target.focusRadius;
           const coords = this.parent.coords; // Get the parent object (chapter) and access its coords property
 
-          createCustomRadiusShader(coords, radius);
+          createCustomRadiusShader(coords, radius || undefined);
         } else {
           removeCustomRadiusShader();
         }

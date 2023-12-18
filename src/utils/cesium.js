@@ -14,7 +14,7 @@ const BASE_ROLL_RADIANS = 0;
  * The default radius size of the  highlighted area
  * @readonly
  */
-const DEFAULT_FOCUS_RADIUS = 250;
+export const DEFAULT_FOCUS_RADIUS = 250;
 
 /**
  * An export of the CesiumJS viewer instance to be accessed by other modules.
