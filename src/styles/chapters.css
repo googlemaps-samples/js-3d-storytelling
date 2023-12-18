@@ -316,7 +316,6 @@
 #chapters-bar .navigation-button::after {
   content: url("data:image/svg+xml,%3Csvg viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6.01875 16.5L4.6875 15.1688L10.8563 9L4.6875 2.83125L6.01875 1.5L13.5188 9L6.01875 16.5Z' fill='%23202124'/%3E%3C/svg%3E");
   position: relative;
-  z-index: 1;
   display: block;
   width: 1.125rem;
   height: 1.125rem;
