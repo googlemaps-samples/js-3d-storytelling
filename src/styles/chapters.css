@@ -289,6 +289,10 @@
   border-radius: 50%;
 }
 
+#chapters-bar .navigation-button.hidden {
+  display: none;
+}
+
 #chapters-bar .navigation-button.previous {
   grid-area: navigation-previous;
 }

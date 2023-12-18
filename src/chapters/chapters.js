@@ -102,6 +102,14 @@ export function addChaptersBar(story) {
   );
   const cardSectionWidth = cardElementWidth + cardsGap;
 
+  if (
+    cardSectionWidth * cardsContainer.children.length >
+    cardsContainer.clientWidth
+  ) {
+    barNavigationNextButton.classList.remove("hidden");
+    barNavigationPreviousButton.classList.remove("hidden");
+  }
+
   barNavigationPreviousButton.addEventListener("click", () => {
     // Scroll one card back
     const newScrollLeft = cardsContainer.scrollLeft - cardSectionWidth;
