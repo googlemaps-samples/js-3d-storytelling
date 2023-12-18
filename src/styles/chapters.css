@@ -7,6 +7,7 @@
   position: absolute;
   display: flex;
   width: 350px;
+  height: calc(100vh - 190px);
   flex-direction: column;
   align-items: flex-start;
   border-radius: var(--spacing-medium);
@@ -19,6 +20,9 @@
 }
 
 .chapter .chapter-detail {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 70px);
   width: 100%;
   padding: var(--spacing-medium) var(--spacing-medium-large) 0px
     var(--spacing-medium-large);
@@ -86,6 +90,8 @@
 }
 
 .chapter .description {
+  flex-grow: 1;
+  overflow: auto;
   color: var(--chapter-color);
   font-family: var(--font-family-base);
   font-size: var(--font-size-medium);
