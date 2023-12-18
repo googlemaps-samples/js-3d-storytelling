@@ -6,7 +6,7 @@ import {
 } from "../sidebar/sidebar.js";
 import { createChapterCard } from "../chapters/chapters.js";
 import {
-  getIndexFromId,
+  getChapterIndexFromId,
   updateChapterContent,
 } from "../chapters/chapter-navigation.js";
 
@@ -253,7 +253,7 @@ export const storyProxyHandler = {
    */
   deleteProperty(chapters, deletedChapterId) {
     // Find index of chapter to be deleted
-    const deletedChapterIndex = getIndexFromId(deletedChapterId);
+    const deletedChapterIndex = getChapterIndexFromId(deletedChapterId);
     // Remove chapter from story
     chapters.splice(deletedChapterIndex, 1);
 

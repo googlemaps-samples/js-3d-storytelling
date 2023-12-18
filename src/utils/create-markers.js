@@ -1,5 +1,5 @@
 import {
-  getIndexFromId,
+  getChapterIndexFromId,
   updateChapter,
 } from "../chapters/chapter-navigation.js";
 import { story } from "../main.js";
@@ -219,7 +219,7 @@ async function handleClickOnMarker(click) {
     return;
   }
 
-  updateChapter(getIndexFromId(markerId));
+  updateChapter(getChapterIndexFromId(markerId));
 }
 
 /**

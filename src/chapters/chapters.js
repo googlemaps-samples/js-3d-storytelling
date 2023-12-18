@@ -1,6 +1,6 @@
 import { story } from "../main.js";
 import {
-  getIndexFromId,
+  getChapterIndexFromId,
   resetToIntro,
   updateChapter,
 } from "./chapter-navigation.js";
@@ -61,7 +61,7 @@ export function createChapterCard(chapter) {
 
   // set current chapter
   card.addEventListener("click", () =>
-    updateChapter(getIndexFromId(chapter.id))
+    updateChapter(getChapterIndexFromId(chapter.id))
   );
 
   return card;

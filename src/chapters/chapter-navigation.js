@@ -250,7 +250,7 @@ export function getCurrentChapterIndex() {
   const params = getParams();
   const chapterId = params.get("chapterId");
   // Get the index of the current chapter
-  return getIndexFromId(chapterId);
+  return getChapterIndexFromId(chapterId);
 }
 
 /**
@@ -258,7 +258,7 @@ export function getCurrentChapterIndex() {
  * @param {string} chapterId - The id of the chapter to be found.
  * @returns {number | null} - The index of the chapter with the given id.
  */
-export function getIndexFromId(chapterId) {
+export function getChapterIndexFromId(chapterId) {
   return chapterId === null
     ? null
     : story.chapters.findIndex((chapter) => chapter.id == chapterId);
