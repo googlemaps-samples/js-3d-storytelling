@@ -9,6 +9,10 @@ import { getParams, setParams } from "../utils/params.js";
 import { loadSvg } from "../utils/svg.js";
 import { setTextContent } from "../utils/ui.js";
 import { getYouTubeVideoId } from "../sidebar/sidebar.js";
+import {
+  loadYouTubeAPI,
+  onPlayerStateChange,
+} from "../utils/youtube-loader.js";
 
 /**
  * The time in milliseconds between each chapter progression
@@ -274,10 +278,6 @@ export function updateDetailsNavigation() {
  */
 export function updateChapterContent(chapter, isIntro = true) {
   const { media, ...chapterData } = chapter;
-  console.log(
-    "🚀 ~ file: chapter-navigation.js:274 ~ updateChapterContent ~ media:",
-    media
-  );
 
   updateDetailsNavigation();
 
@@ -328,29 +328,9 @@ function updateChapterIndexAndNavigation() {
   forwardButton.disabled = chapterIndex + 1 === story.chapters.length;
 }
 
-// Load the IFrame Player API code asynchronously.
-let tag = document.createElement("script");
-tag.src = "https://www.youtube.com/iframe_api";
-let firstScriptTag = document.getElementsByTagName("script")[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+await loadYouTubeAPI();
 
-let player;
-
-function onYouTubeIframeAPIReady() {
-  player = new YT.Player("player", {
-    events: {
-      onStateChange: onPlayerStateChange,
-    },
-  });
-}
-
-function onPlayerStateChange(event) {
-  if (event.data == YT.PlayerState.ENDED) {
-    // Todo: go to next chapter
-  }
-}
-
-function setMediaContent(mediaData) {
+async function setMediaContent(mediaData) {
   const mediaContainer = document.getElementById("media-container");
 
   const mediaUrl = mediaData.url;
@@ -367,7 +347,7 @@ function setMediaContent(mediaData) {
     iframeElement.id = "player";
     mediaContainer.appendChild(iframeElement);
 
-    player = new YT.Player("player", {
+    new YT.Player("player", {
       height: "150",
       width: "300",
       videoId: getYouTubeVideoId(mediaUrl),
