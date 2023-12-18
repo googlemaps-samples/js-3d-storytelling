@@ -93,12 +93,12 @@ export function initChapterNavigation() {
   autoplayButton.addEventListener("click", autoplayClickHandler);
 
   // Get the current chapter based on URL parameters
-  const params = getParams();
-  const chapterId = params.get("chapterId");
+  const chapterIndex = getCurrentChapterIndex();
 
   // Initialize chapter content based on URL parameters
-  if (chapterId !== null) {
-    updateChapter(chapterId);
+  console.log(chapterIndex);
+  if (typeof chapterIndex === "number") {
+    updateChapter(chapterIndex);
   } else {
     resetToIntro();
   }
@@ -213,7 +213,7 @@ export function resetToIntro() {
  * @param {number} chapterIndex - The index of the chapter to be updated.
  */
 export function updateChapter(chapterIndex) {
-  const chapter = story.chapters[chapterIndex];
+  const chapter = story.chapters.at(chapterIndex);
   const { cameraOptions, coords, id: chapterId } = chapter;
   const { position, pitch, heading, roll } = cameraOptions;
 
@@ -251,8 +251,18 @@ export function getCurrentChapterIndex() {
   const params = getParams();
   const chapterId = params.get("chapterId");
   // Get the index of the current chapter
+  return getIndexFromId(chapterId);
+}
 
-  return story.chapters.findIndex((chapter) => chapter.id == chapterId);
+/**
+ * Returns the index of the chapter with the given id.
+ * @param {string} chapterId - The id of the chapter to be found.
+ * @returns {number | null} - The index of the chapter with the given id.
+ */
+export function getIndexFromId(chapterId) {
+  return chapterId === null
+    ? null
+    : story.chapters.findIndex((chapter) => chapter.id == chapterId);
 }
 
 /**

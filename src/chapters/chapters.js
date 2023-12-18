@@ -1,5 +1,9 @@
 import { story } from "../main.js";
-import { resetToIntro, updateChapter } from "./chapter-navigation.js";
+import {
+  getIndexFromId,
+  resetToIntro,
+  updateChapter,
+} from "./chapter-navigation.js";
 
 /**
  * Returns a story intro card as HTML element.
@@ -57,7 +61,7 @@ export function createChapterCard(chapter) {
 
   // set current chapter
   card.addEventListener("click", () =>
-    updateChapter(story.chapters.findIndex(({ id }) => id === chapter.id))
+    updateChapter(getIndexFromId(chapter.id))
   );
 
   return card;

@@ -1,4 +1,8 @@
-import { updateChapter, resetToIntro } from "../chapters/chapter-navigation.js";
+import {
+  updateChapter,
+  resetToIntro,
+  getIndexFromId,
+} from "../chapters/chapter-navigation.js";
 import { createMarkers, removeMarker } from "../utils/create-markers.js";
 import { getStoryDetails, addStory } from "../utils/config.js";
 import { getParams } from "../utils/params.js";
@@ -473,9 +477,7 @@ const moveChapter = (chapters, draggedLocationItemId, nextLocationItemId) => {
   const copiedChapters = chapters.slice();
 
   // Find the index of the dragged chapter
-  const movedChapterIndex = copiedChapters.findIndex(
-    (chapter) => Number(chapter.id) === Number(draggedLocationItemId)
-  );
+  const movedChapterIndex = getIndexFromId(draggedLocationItemId);
 
   // Get the dragged chapter and remove it from the array
   const movedChapter = copiedChapters.splice(movedChapterIndex, 1)[0];
@@ -654,12 +656,9 @@ function handleEditAction(chapter) {
   const selectedChapter = story.chapters.find(
     (chapter) => Number(selectedChapterId) === Number(chapter.id)
   );
-  const selectedChapterIndex = story.chapters.findIndex(
-    (chapter) => Number(selectedChapterId) === Number(chapter.id)
-  );
 
   // Update chapter when opening edit form
-  updateChapter(selectedChapterIndex);
+  updateChapter(getIndexFromId(selectedChapterId));
 
   // Add event listener to save the camera position to chapter
   document
