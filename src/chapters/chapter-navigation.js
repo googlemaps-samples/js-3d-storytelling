@@ -391,6 +391,12 @@ function setMediaContent(url) {
   }
 }
 
+/**
+ * Sets the selected chapter- or story intro card based on the provided chapterId and isIntro flag.
+ * @param {string} chapterId - The ID of the chapter card to be selected.
+ * @param {boolean} [isIntro=false] - Indicates whether the chapter card is an intro card.
+ * @returns {void}
+ */
 function setSelectedChapterCard(chapterId, isIntro = false) {
   const cardsContainer = document.querySelector("#chapters-bar .cards");
 
