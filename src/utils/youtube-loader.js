@@ -12,6 +12,9 @@ export async function loadYouTubeAPI() {
 
 let youtubePlayer;
 
+/**
+ * Initializes the YouTube iframe API and creates a new YouTube player.
+ */
 function onYouTubeIframeAPIReady() {
   youtubePlayer = new YT.Player("player", {
     events: {
@@ -20,6 +23,10 @@ function onYouTubeIframeAPIReady() {
   });
 }
 
+/**
+ * Handles the player state change event of embedded youtube video.
+ * @param {Object} event - The event object.
+ */
 export function onPlayerStateChange(event) {
   if (event.data == YT.PlayerState.ENDED) {
     // Todo: go to next chapter

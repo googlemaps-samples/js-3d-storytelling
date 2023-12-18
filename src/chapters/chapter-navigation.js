@@ -328,8 +328,15 @@ function updateChapterIndexAndNavigation() {
   forwardButton.disabled = chapterIndex + 1 === story.chapters.length;
 }
 
+// Wait for the YouTube API to be loaded
 await loadYouTubeAPI();
 
+/**
+ * Sets the media content based on the provided media data.
+ * @param {Object} mediaData - The media data object.
+ * @param {string} mediaData.url - The URL of the media.
+ * @param {string} mediaData.type - The type of the media (image or video).
+ */
 async function setMediaContent(mediaData) {
   const mediaContainer = document.getElementById("media-container");
 
