@@ -10,7 +10,7 @@ import { loadSvg } from "../utils/svg.js";
 import { setTextContent } from "../utils/ui.js";
 
 /**
- * The time in milliseconds between each chapter progression
+ * The time in seconds between each chapter progression
  * @readonly
  */
 const CHAPTER_DURATION = 3;
