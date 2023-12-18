@@ -226,6 +226,7 @@ summary::after {
   gap: var(--spacing-medium);
 }
 
+.chapter-form .checkbox-container,
 .more-settings-container ul li {
   position: relative;
   align-items: center;
@@ -233,21 +234,21 @@ summary::after {
   gap: var(--spacing-small);
 }
 
-.more-settings-container input[type="checkbox"] {
+form input[type="checkbox"] {
   padding-inline: var(--spacing-small);
   appearance: none;
 }
 
-.more-settings-container input[type="checkbox"]:after {
+form input[type="checkbox"]:after {
   position: absolute;
   top: 2px;
   left: calc(-1 * var(--spacing-extra-small) + 2px);
 }
-.more-settings-container input[type="checkbox"]:checked::after {
+form input[type="checkbox"]:checked::after {
   content: url("../assets/icons/checked-box-icon.svg");
 }
 
-.more-settings-container input[type="checkbox"]:after {
+form input[type="checkbox"]:after {
   content: url("../assets/icons/unchecked-box-icon.svg");
   position: absolute;
 }
@@ -663,11 +664,17 @@ button.leave-edit-mode {
 .image-credit-container > img {
   width: var(--image-size);
   height: var(--image-size);
-  border-radius: var(--custom-border-radius);
+  border: 1px solid var(--custom-border-radius);
   object-fit: cover;
 }
 
 .image-credit-container .field-wrapper {
   margin-bottom: 0;
   flex: 1;
+}
+
+#media-container > iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
 }

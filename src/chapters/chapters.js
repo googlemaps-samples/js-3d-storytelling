@@ -1,4 +1,4 @@
-import { story } from "../main.js";
+import { getPreviewUrl } from "../utils/ui.js";
 import {
   getChapterIndexFromId,
   resetToIntro,
@@ -16,7 +16,8 @@ export function createStoryIntroCard(storyProperties) {
   card.classList.add("card", "story-intro");
 
   const storyIntroImage = document.createElement("img");
-  storyIntroImage.src = storyProperties.imageUrl;
+
+  storyIntroImage.src = getPreviewUrl(storyProperties.imageUrl);
   card.appendChild(storyIntroImage);
 
   const storyIntroTitle = document.createElement("h1");
@@ -42,7 +43,8 @@ export function createChapterCard(chapter) {
 
   const chapterImage = document.createElement("img");
   chapterImage.setAttribute("data-input-name", "imageUrl");
-  chapterImage.src = chapter.imageUrl;
+
+  chapterImage.src = getPreviewUrl(chapter.imageUrl);
   card.appendChild(chapterImage);
 
   const chapterDate = document.createElement("p");

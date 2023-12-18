@@ -13,7 +13,7 @@ import {
 } from "../utils/cesium.js";
 import { story } from "../main.js";
 import { getStoryDetails, addChapterToStory } from "../utils/config.js";
-
+import { getPreviewUrl } from "../utils/ui.js";
 /**
  * Options for radio buttons in the sidebar.
  * @typedef {Object} LocationMenuOptions
@@ -98,10 +98,14 @@ function updateStoryDetails(properties) {
     properties.date ?? null;
   storyDetailsForm.querySelector('input[name="imageUrl"]').value =
     properties.imageUrl ?? null;
-  storyDetailsForm.querySelector(".image-credit-container img").src =
-    properties.imageUrl ?? null;
   storyDetailsForm.querySelector('input[name="imageCredit"]').value =
     properties.imageCredit ?? null;
+
+  // Update the preview image or video
+  const mediaSource = getPreviewUrl(properties.imageUrl) ?? null;
+
+  storyDetailsForm.querySelector(".image-credit-container img").src =
+    mediaSource;
 
   // Add event listener to save the camera position to story
   document
@@ -141,9 +145,11 @@ function updateStoryDetails(properties) {
     // Update story
     story.properties = updatedStoryProperties;
 
-    // update the preview image
+    // update the preview image or video
+    const mediaSource = getPreviewUrl(story.properties.imageUrl) ?? null;
+
     storyDetailsForm.querySelector(".image-credit-container img").src =
-      updatedStoryProperties.imageUrl ?? null;
+      mediaSource;
 
     // Save updated object back to local storage
     localStorage.setItem("story", JSON.stringify(story));
@@ -661,14 +667,15 @@ function handleEditAction(chapter) {
     chapter.dateTime ?? null;
   editForm.querySelector('input[name="imageUrl"]').value =
     chapter.imageUrl ?? null;
-  editForm.querySelector(".image-credit-container img").src =
-    chapter.imageUrl ?? null;
   editForm.querySelector('input[name="imageCredit"]').value =
     chapter.imageCredit ?? null;
 
+  // Update the preview image or video
+  const mediaSource = getPreviewUrl(chapter.imageUrl) ?? null;
+  editForm.querySelector(".image-credit-container img").src = mediaSource;
+
   // Fill the "more settings" form inputs with the chapter data
   // Get the radius input element
-
   const isFocusEnabled = chapter.focusOptions.showFocus;
 
   editForm.querySelector('input[name="focus-checkbox"]').checked =
@@ -677,7 +684,8 @@ function handleEditAction(chapter) {
   const radiusInput = editForm.querySelector("#radius");
 
   // Initialize the slider with the current radius from the chapter
-  radiusInput.value = chapter.focusOptions.focusRadius ?? DEFAULT_HIGHLIGHT_RADIUS;
+  radiusInput.value =
+    chapter.focusOptions.focusRadius ?? DEFAULT_HIGHLIGHT_RADIUS;
   radiusInput.style.setProperty("--value", radiusInput.value);
 
   // Update the slider progress when the value changed
@@ -730,8 +738,8 @@ function handleEditAction(chapter) {
       }
 
       if (name === "imageUrl") {
-        editForm.querySelector(".image-credit-container img").src =
-          value ?? null;
+        const mediaSource = getPreviewUrl(value) ?? null;
+        editForm.querySelector(".image-credit-container img").src = mediaSource;
       }
 
       selectedChapter[name] = value;

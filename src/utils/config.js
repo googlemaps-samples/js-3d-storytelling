@@ -23,6 +23,8 @@ import {
   removeMarker,
 } from "./create-markers.js";
 
+import { getPreviewUrl } from "../utils/ui.js";
+
 // Properties of a chapter that can be edited
 const chapterProperties = [
   "title",
@@ -305,16 +307,8 @@ export const storyProxyHandler = {
       // Update chapter details
       updateChapterContent(target.properties, true);
 
-      // Get cards container
-      const cardsContainer = document.querySelector("#chapters-bar .cards");
-
-      // Update the intro card
-      const card = cardsContainer.querySelector(`.story-intro`);
-
-      // Update headline in intro-card
-      const headline = card.querySelector("h1");
-
-      headline.textContent = updatedValue.title;
+      // Update story card
+      updateStoryCard(target.properties);
     }
 
     return true;
@@ -418,7 +412,9 @@ function updateChapterCard(target, property, updatedValue) {
   // If so, update the src attribute
   // Otherwise, update the text content
   if (property === "imageUrl") {
-    element.src = updatedValue;
+    const mediaSource = getPreviewUrl(updatedValue) ?? null;
+
+    element.src = mediaSource;
   } else {
     element.textContent = updatedValue;
   }
@@ -444,4 +440,28 @@ function updateLocationListItem(targetId, updatedValue) {
 
   // Update element
   element.textContent = updatedValue;
+}
+
+/**
+ * Updates the story details card with the provided values.
+ *
+ * @param {Object} updatedValues - The updated values for the story card.
+ * @param {string} updatedValues.imageUrl - The URL of the image to be displayed in the card.
+ * @param {string} updatedValues.title - The title of the card.
+ */
+function updateStoryCard(updatedValues) {
+  // Get cards container
+  const cardsContainer = document.querySelector("#chapters-bar .cards");
+
+  // Update the intro card
+  const card = cardsContainer.querySelector(`.story-intro`);
+
+  // Update headline in intro-card
+  const headline = card.querySelector("h1");
+
+  // Update img in intro-card
+  const img = card.querySelector("img");
+  img.src = getPreviewUrl(updatedValues.imageUrl);
+
+  headline.textContent = updatedValues.title;
 }

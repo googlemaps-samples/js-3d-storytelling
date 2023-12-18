@@ -8,6 +8,11 @@ import { setSelectedMarker } from "../utils/create-markers.js";
 import { getParams, setParams } from "../utils/params.js";
 import { loadSvg } from "../utils/svg.js";
 import { setTextContent } from "../utils/ui.js";
+import {
+  getYouTubeVideoId,
+  isValidYouTubeUrl,
+  loadYouTubeAPI,
+} from "../utils/youtube-loader.js";
 
 /**
  * The time in seconds between each chapter progression
@@ -300,13 +305,13 @@ export function updateDetailsNavigation() {
 
 /**
  * Updates the content of the chapter detail section.
- * @param {Chapter} chapterData - The data object containing chapter details
+ * @param {Chapter} chapter - The data object containing chapter details
  * @param {boolean} [isIntro=true] - Flag indicating if the current view is the introduction.
  */
-export function updateChapterContent(chapterData, isIntro = true) {
-  updateDetailsNavigation();
+export function updateChapterContent(chapter, isIntro = true) {
+  const { imageUrl, ...chapterData } = chapter;
 
-  const chapterDetail = document.querySelector(".chapter-detail");
+  updateDetailsNavigation();
 
   setTextContent(".story-title", isIntro ? "" : story.properties.title);
   setTextContent("h2", isIntro ? story.properties.title : chapterData.title);
@@ -318,10 +323,10 @@ export function updateChapterContent(chapterData, isIntro = true) {
   setTextContent(".date", isIntro ? "" : chapterData.dateTime);
   setTextContent(".place", chapterData.address);
 
-  // Update image
-  chapterDetail.querySelector(".hero").src = chapterData.imageUrl;
+  // Update image or video
+  setMediaContent(imageUrl);
 
-  // Update image credit
+  // Update image or video credit
   const imageCredit = chapterData.imageCredit
     ? `Image credit: ${chapterData.imageCredit}`
     : "";
@@ -353,4 +358,33 @@ function updateChapterIndexAndNavigation() {
 
   // Update forward button state
   forwardButton.disabled = chapterIndex + 1 === story.chapters.length;
+}
+
+/**
+ * Sets the media content in the media container based on the provided URL.
+ * If the URL is a valid YouTube URL, it creates an embedded YouTube player.
+ * If the URL is not a valid YouTube URL, it displays an image.
+ * @param {string} url - The URL of the media content.
+ */
+function setMediaContent(url) {
+  const mediaContainer = document.getElementById("media-container");
+
+  // Clear previous content
+  mediaContainer.innerHTML = "";
+
+  if (isValidYouTubeUrl(url)) {
+    const iframeElement = document.createElement("div");
+    iframeElement.id = "player";
+    mediaContainer.appendChild(iframeElement);
+
+    new YT.Player("player", {
+      height: "150",
+      width: "300",
+      videoId: getYouTubeVideoId(url),
+    });
+  } else {
+    const imgElement = document.createElement("img");
+    imgElement.src = url;
+    mediaContainer.appendChild(imgElement);
+  }
 }
