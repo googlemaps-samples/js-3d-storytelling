@@ -13,7 +13,6 @@ import {
 } from "../utils/cesium.js";
 import { story } from "../main.js";
 import { getStoryDetails, addChapterToStory } from "../utils/config.js";
-import { getParams } from "../utils/params.js";
 import { getPreviewUrl } from "../utils/ui.js";
 /**
  * Options for radio buttons in the sidebar.
