@@ -6,6 +6,13 @@ type CesiumCameraOptions = {
   roll: number; // Roll in radians
 };
 
+// Define the type for the shader options
+type focusOptions = {
+  focusRadius: number;
+  showFocus: boolean;
+  showLocationMarker: boolean;
+};
+
 // Define the type for the Segment
 interface Chapter {
   id: number;
@@ -17,6 +24,7 @@ interface Chapter {
   coords: google.maps.LatLngLiteral; // Latitude and longitude coordinates using Google Maps type
   address: string; // Clear text address
   cameraOptions: CesiumCameraOptions; // Basic Cesium camera options
+  focus: focusOptions;
 }
 
 interface StoryProperties {

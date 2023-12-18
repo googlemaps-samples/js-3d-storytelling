@@ -4,14 +4,15 @@ import {
   getChapterIndexFromId,
 } from "../chapters/chapter-navigation.js";
 import { createMarkers, removeMarker } from "../utils/create-markers.js";
-import { getStoryDetails, addStory } from "../utils/config.js";
 import { getParams } from "../utils/params.js";
 import {
   getCameraOptions,
   calculateCameraPositionAndOrientation,
   performFlyTo,
+  DEFAULT_FOCUS_RADIUS,
 } from "../utils/cesium.js";
 import { story } from "../main.js";
+import { getStoryDetails, addChapterToStory } from "../utils/config.js";
 
 /**
  * Options for radio buttons in the sidebar.
@@ -262,7 +263,7 @@ export async function initAutoComplete() {
   // Handle submit location button click
   locationSubmitButton.addEventListener("click", () => {
     // Adds new chapter to story
-    addStory({
+    addChapterToStory({
       title: locationInput.value,
       coords,
       cameraOptions,
@@ -621,16 +622,6 @@ function handleEditAction(chapter) {
 
   const container = document.querySelector(".locations-container");
 
-  // Get the radius input element
-  const radiusInput = document.querySelector("#radius");
-
-  // Update the slider progress when the value changed
-  radiusInput.addEventListener(
-    "input",
-    () => radiusInput.style.setProperty("--value", radiusInput.value),
-    { signal: editFormEventController.signal }
-  );
-
   // Add custom data-attribute to the container
   container.setAttribute("data-mode", locationMenuOptions.edit);
 
@@ -639,10 +630,12 @@ function handleEditAction(chapter) {
   // Set which chapter the form belongs to
   editForm.setAttribute("key", chapter.id);
 
-  // Fill the form inputs with the chapter data
+  // Fill the form text inputs with the chapter data
   editForm.querySelector('input[name="title"]').value = chapter.title ?? null;
   editForm.querySelector('input[name="content"]').value =
     chapter.content ?? null;
+  editForm.querySelector('input[name="address"]').value =
+    chapter.address ?? null;
   editForm.querySelector('input[name="dateTime"]').value =
     chapter.dateTime ?? null;
   editForm.querySelector('input[name="imageUrl"]').value =
@@ -652,13 +645,42 @@ function handleEditAction(chapter) {
   editForm.querySelector('input[name="imageCredit"]').value =
     chapter.imageCredit ?? null;
 
-  const selectedChapterId = editForm.getAttribute("key");
+  // Fill the "more settings" form inputs with the chapter data
+  // Get the radius input element
+
+  const isFocusEnabled = chapter.focusOptions.showFocus;
+
+  editForm.querySelector('input[name="focus-checkbox"]').checked =
+    isFocusEnabled;
+
+  const radiusInput = editForm.querySelector("#radius");
+
+  // Initialize the slider with the current radius from the chapter
+  radiusInput.value = chapter.focusOptions.focusRadius ?? DEFAULT_FOCUS_RADIUS;
+  radiusInput.style.setProperty("--value", radiusInput.value);
+
+  // Update the slider progress when the value changed
+  radiusInput.addEventListener(
+    "input",
+    () => {
+      radiusInput.style.setProperty("--value", radiusInput.value);
+    },
+    { signal: editFormEventController.signal }
+  );
+
+  const isMarkerVisible = chapter.focusOptions.showLocationMarker;
+
+  editForm.querySelector('input[name="marker-checkbox"]').checked =
+    isMarkerVisible;
+
+  const selectedChapterKey = editForm.getAttribute("key");
+
   const selectedChapter = story.chapters.find(
-    (chapter) => Number(selectedChapterId) === Number(chapter.id)
+    (chapter) => Number(selectedChapterKey) === Number(chapter.id)
   );
 
   // Update chapter when opening edit form
-  updateChapter(getChapterIndexFromId(selectedChapterId));
+  updateChapter(getChapterIndexFromId(selectedChapterKey));
 
   // Add event listener to save the camera position to chapter
   document
@@ -673,16 +695,25 @@ function handleEditAction(chapter) {
   editForm.addEventListener(
     "input",
     (event) => {
-      // Get the update input name and value
-      const { name: inputName, value: inputValue } = event.target;
+      const { name, value, type, checked } = event.target;
 
-      // Update the chapter
-      selectedChapter[inputName] = inputValue;
+      if (type === "checkbox") {
+        if (name === "focus-checkbox") {
+          selectedChapter.focusOptions.showFocus = checked;
+        }
 
-      if (inputName !== "imageUrl") return;
-      // update the preview image
-      editForm.querySelector(".image-credit-container img").src =
-        inputValue ?? null;
+        if (name === "marker-checkbox") {
+          selectedChapter.focusOptions.showLocationMarker = checked;
+        }
+        return;
+      }
+
+      if (name === "imageUrl") {
+        editForm.querySelector(".image-credit-container img").src =
+          value ?? null;
+      }
+
+      selectedChapter[name] = value;
     },
     { signal: editFormEventController.signal }
   );
@@ -717,4 +748,36 @@ function handleDeleteAction(id) {
   delete story.chapters[id];
   // Save updated object back to local storage
   localStorage.setItem("story", JSON.stringify(story));
+}
+
+/**
+ * Adds a click event handler to the "download-config-button" element.
+ * When the button is clicked, this function generates a Blob containing
+ * the JSON representation of the 'story' object and triggers a file download
+ * for the configuration.
+ */
+export function addDownloadConfigHandler() {
+  document
+    .getElementById("download-config-button")
+    .addEventListener("click", () => {
+      const anchor = document.createElement("a");
+
+      // Create a Blob containing the JSON representation of the 'story' object
+      const blob = new Blob([JSON.stringify(story)], {
+        type: "text/json;charset=utf-8",
+      });
+      // Create a URL for the Blob
+      const blobUrl = URL.createObjectURL(blob);
+
+      // Set up the anchor element for download
+      anchor.href = blobUrl;
+      anchor.target = "_blank";
+      anchor.download = "config.json";
+
+      // Auto click on the anchor element, triggering the file download
+      anchor.click();
+
+      // Revoke the Blob URL to free up resources
+      URL.revokeObjectURL(blobUrl);
+    });
 }

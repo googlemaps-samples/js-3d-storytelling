@@ -10,7 +10,7 @@ import { loadSvg } from "../utils/svg.js";
 import { setTextContent } from "../utils/ui.js";
 
 /**
- * The time in milliseconds between each chapter progression
+ * The time in seconds between each chapter progression
  * @readonly
  */
 const CHAPTER_DURATION = 3;
@@ -66,7 +66,7 @@ const forwardButton = detailNavigation.querySelector("#chapter-forward");
  * The id used to identify the timeout instance for the story progression
  * @type {number | null}
  */
-let intervalId = null;
+let timeoutId = null;
 
 /**
  * Initializes and manages chapter navigation for a story.
@@ -108,8 +108,8 @@ export function initChapterNavigation() {
  */
 function stopAutoplay() {
   autoplayButton.innerHTML = PLAY_ICON;
-  clearInterval(intervalId);
-  intervalId = null;
+  clearTimeout(timeoutId);
+  timeoutId = null;
 }
 
 let autoplayStep = 0;
@@ -146,7 +146,7 @@ function setNextAutoplayStep() {
  */
 function autoplayClickHandler() {
   // If the autoplay is already active, stop it
-  if (intervalId) {
+  if (timeoutId) {
     stopAutoplay();
   } else {
     // If the autoplay is not active, start it
@@ -220,7 +220,18 @@ export function updateChapter(chapterIndex) {
   setParams("chapterId", chapterId); // Set the chapter parameter
   updateChapterContent(chapter, false); // Update the chapter details content
   activateNavigationElement("details"); // Activate the details navigation
-  createCustomRadiusShader(coords, HIGHLIGHT_RADIUS); // Create the custom radius shader
+
+  // Check if the current chapter has a focus and create or remove the custom radius shader accordingly
+  const hasFocus = story.chapters[chapterIndex].focusOptions.showFocus;
+
+  if (hasFocus) {
+    const radius = story.chapters[chapterIndex].focusOptions.focusRadius;
+
+    createCustomRadiusShader(coords, radius); // Create the custom radius shader
+  } else {
+    removeCustomRadiusShader(); // Remove the custom radius shader
+  }
+
   // Fly to the new chapter location
   performFlyTo({
     position,
@@ -268,7 +279,7 @@ export function getChapterIndexFromId(chapterId) {
  * Updates the details navigation. This includes the chapter index and
  * the forward button (if the current chapter is the last).
  */
-function updateDetailsNavigation() {
+export function updateDetailsNavigation() {
   // Update chapter index
   const chapterIndex = getCurrentChapterIndex() + 1;
   // Displays the current chapter index
@@ -303,8 +314,9 @@ export function updateChapterContent(chapterData, isIntro = true) {
     ".description",
     isIntro ? story.properties.description : chapterData.content
   );
-  setTextContent(".date", isIntro ? "" : chapterData.date);
-  setTextContent(".place", chapterData.place);
+
+  setTextContent(".date", isIntro ? "" : chapterData.dateTime);
+  setTextContent(".place", chapterData.address);
 
   // Update image
   chapterDetail.querySelector(".hero").src = chapterData.imageUrl;

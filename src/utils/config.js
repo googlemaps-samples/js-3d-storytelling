@@ -7,19 +7,33 @@ import {
 import { createChapterCard } from "../chapters/chapters.js";
 import {
   getChapterIndexFromId,
+  resetToIntro,
   updateChapterContent,
+  updateDetailsNavigation,
 } from "../chapters/chapter-navigation.js";
+import {
+  createCustomRadiusShader,
+  removeCustomRadiusShader,
+} from "../utils/cesium.js";
+
+import {
+  createMarkers,
+  hideMarker,
+  showMarker,
+  removeMarker,
+} from "./create-markers.js";
 
 // Properties of a chapter that can be edited
 const chapterProperties = [
   "title",
   "content",
+  "address",
   "imageUrl",
   "dateTime",
   "imageCredit",
-  "marker-checkbox",
-  "vignette-checkbox",
+  "showFocus",
   "radius",
+  "showLocationMarker",
   "cameraOptions",
 ];
 
@@ -61,16 +75,34 @@ export async function loadConfig(configUrl) {
 
 /**
  * Adds a new story chapter and saves it to local storage.
- * @param {Object} newChapter - The chapter object to be added.
+ * @param {Chapter} chapter - The chapter object to be added.
  * @returns {void}
  */
-export function addStory(newChapter) {
+export function addChapterToStory(chapter) {
   const chapterIds = story.chapters.map(({ id }) => id).filter(Boolean);
-  // Increment hightest existing chapter id by one
-  const newChapterId = Math.max(...chapterIds) + 1;
+
+  // Increment hightest existing chapter id by one. If no chapters exist, set id to 0
+  const newChapterId = chapterIds.length ? Math.max(...chapterIds) + 1 : 0;
+
+  // If not specified, the new chapter will have a marker and no focus by default
+  const newChapter = {
+    focusOptions: {
+      focusRadius: null,
+      showFocus: false,
+      showLocationMarker: true,
+    },
+    ...chapter,
+    id: newChapterId,
+  };
 
   // Add new chapter to story
-  story.chapters.push({ ...newChapter, id: newChapterId });
+  story.chapters.push(newChapter);
+
+  // Create chapter marker and add it to the map
+  createMarkers([newChapter]);
+
+  // Update details navigation
+  updateDetailsNavigation();
 
   // Save updated object back to local storage
   localStorage.setItem("story", JSON.stringify(story));
@@ -157,7 +189,10 @@ export const storyProxyHandler = {
   get(target, key) {
     const value = target[key];
     if (typeof value === "object" && value !== null) {
-      return new Proxy(value, storyProxyHandler);
+      return new Proxy(value, {
+        ...storyProxyHandler,
+        parent: target, // Pass the parent object to the proxy handler as a property (used to access the parent object in the set handler)
+      });
     }
     return value;
   },
@@ -202,6 +237,60 @@ export const storyProxyHandler = {
       }
     }
 
+    // Check if changed property is a chapter property
+    if (chapterProperties.includes(property)) {
+      if (property === "radius") {
+        const radius = updatedValue;
+        const coords = target.coords;
+        createCustomRadiusShader(coords, radius);
+        target.focusOptions.focusRadius = radius;
+        return true;
+      }
+
+      if (property === "showFocus") {
+        const showFocus = updatedValue;
+
+        if (showFocus === true) {
+          const radius = target.focusRadius;
+          const coords = this.parent.coords; // Get the parent object (chapter) and access its coords property
+
+          createCustomRadiusShader(coords, radius || undefined);
+        } else {
+          removeCustomRadiusShader();
+        }
+        target.showFocus = showFocus;
+        return true;
+      }
+
+      if (property === "showLocationMarker") {
+        const showLocationMarker = updatedValue;
+        const markerId = this.parent.id; // Get the parent object (chapter) and access its id property
+
+        if (showLocationMarker) {
+          showMarker(markerId);
+        } else {
+          hideMarker(markerId);
+        }
+
+        target.showLocationMarker = showLocationMarker;
+
+        return true;
+      }
+      // Update the value
+      target[property] = updatedValue;
+
+      // Update chapter card
+      updateChapterCard(target, property, updatedValue);
+
+      // Update chapter details
+      updateChapterContent(target, false);
+
+      // Update location list item
+      if (property === "title") {
+        updateLocationListItem(target.id, updatedValue);
+      }
+    }
+
     // Update the value
     target[property] = updatedValue;
 
@@ -225,20 +314,6 @@ export const storyProxyHandler = {
       const headline = card.querySelector("h1");
 
       headline.textContent = updatedValue.title;
-    }
-
-    // Check if changed property is a chapter property
-    if (chapterProperties.includes(property)) {
-      // Update chapter card
-      updateChapterCard(target, property, updatedValue);
-
-      // Update chapter details
-      updateChapterContent(target, false);
-
-      // Update location list item
-      if (property === "title") {
-        updateLocationListItem(target.id, updatedValue);
-      }
     }
 
     return true;
@@ -265,6 +340,14 @@ export const storyProxyHandler = {
 
     // Remove chapter from chapters bar
     deleteChapterCard(deletedChapterId);
+
+    // Remove chapter marker from map
+    removeMarker(deletedChapterId);
+
+    // Update details navigation
+    updateDetailsNavigation();
+
+    resetToIntro();
 
     return true;
   },
