@@ -20,12 +20,6 @@ const CHAPTER_DURATION = 3;
  */
 const FLY_TO_DURATION = 2;
 
-/**
- * The radius size of the  highlighted area
- * @readonly
- */
-const HIGHLIGHT_RADIUS = 250;
-
 // SVG icons
 /**
  * Icon shown to pause the autoplay
@@ -65,8 +59,16 @@ const forwardButton = detailNavigation.querySelector("#chapter-forward");
 /**
  * The id used to identify the timeout instance for the story progression
  * @type {number | null}
+ * @default null
  */
 let timeoutId = null;
+
+/**
+ * The id used to identify the current step of the autoplay
+ * @type {number}
+ * @default 0
+ */
+let autoplayStep = 0;
 
 /**
  * Initializes and manages chapter navigation for a story.
@@ -112,8 +114,6 @@ function stopAutoplay() {
   clearTimeout(timeoutId);
   timeoutId = null;
 }
-
-let autoplayStep = 0;
 
 /**
  * Progresses to the next chapter and stops progression if the current chapter is the last one.

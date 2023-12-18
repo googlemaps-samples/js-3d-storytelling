@@ -19,6 +19,7 @@ import { initChapterNavigation } from "./chapters/chapter-navigation.js";
 // or request some file from another host, by changing the config url parameter.
 //
 // You could also implement your (dynamic) configuration loading function here.
+
 /**
  * The story configuration object
  * @type {Story}
@@ -45,12 +46,16 @@ export let story = new Proxy(storyConfig, storyProxyHandler);
 
 const { chapters } = story;
 
+/**
+ * The main function. This function is called when the page is loaded.
+ * It then initializes all necessary parts of the application.
+ */
 async function main() {
   try {
     await initCesiumViewer();
     await initGoogleMaps();
-    await initAutoComplete();
-    updateSidebar(story);
+    initAutoComplete();
+    updateSidebar();
 
     // Create markers from chapter coordinates
     await createMarkers(chapters);
