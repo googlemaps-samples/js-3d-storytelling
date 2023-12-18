@@ -1,14 +1,18 @@
-import { updateChapter, resetToIntro } from "../chapters/chapter-navigation.js";
-import { story } from "../main.js";
+import {
+  updateChapter,
+  resetToIntro,
+  getChapterIndexFromId,
+} from "../chapters/chapter-navigation.js";
 import { createMarkers, removeMarker } from "../utils/create-markers.js";
+import { getParams } from "../utils/params.js";
 import {
   getCameraOptions,
   calculateCameraPositionAndOrientation,
   performFlyTo,
   DEFAULT_HIGHLIGHT_RADIUS,
 } from "../utils/cesium.js";
+import { story } from "../main.js";
 import { getStoryDetails, addChapterToStory } from "../utils/config.js";
-import { getParams } from "../utils/params.js";
 
 /**
  * Options for radio buttons in the sidebar.
@@ -495,9 +499,7 @@ const moveChapter = (chapters, draggedLocationItemId, nextLocationItemId) => {
   const copiedChapters = chapters.slice();
 
   // Find the index of the dragged chapter
-  const movedChapterIndex = copiedChapters.findIndex(
-    (chapter) => Number(chapter.id) === Number(draggedLocationItemId)
-  );
+  const movedChapterIndex = getChapterIndexFromId(draggedLocationItemId);
 
   // Get the dragged chapter and remove it from the array
   const movedChapter = copiedChapters.splice(movedChapterIndex, 1)[0];
@@ -694,22 +696,19 @@ function handleEditAction(chapter) {
 
   const selectedChapterKey = editForm.getAttribute("key");
 
-  // Find index of chapter to be updated
-  const selectedChapterIndex = story.chapters.findIndex(
+  const selectedChapter = story.chapters.find(
     (chapter) => Number(selectedChapterKey) === Number(chapter.id)
   );
 
   // Update chapter when opening edit form
-  updateChapter(selectedChapterIndex);
+  updateChapter(getChapterIndexFromId(selectedChapterKey));
 
   // Add event listener to save the camera position to chapter
   document
     .getElementById("save-chapter-camera-position-button")
     .addEventListener(
       "click",
-      () => {
-        story.chapters[selectedChapterIndex].cameraOptions = getCameraOptions();
-      },
+      () => (selectedChapter.cameraOptions = getCameraOptions()),
       { signal: editFormEventController.signal }
     );
 
@@ -719,16 +718,13 @@ function handleEditAction(chapter) {
     (event) => {
       const { name, value, type, checked } = event.target;
 
-      // Define the chapter for easier reference
-      const chapter = story.chapters[selectedChapterIndex];
-
       if (type === "checkbox") {
         if (name === "focus-checkbox") {
-          chapter.focusOptions.showFocus = checked;
+          selectedChapter.focusOptions.showFocus = checked;
         }
 
         if (name === "marker-checkbox") {
-          chapter.focusOptions.showLocationMarker = checked;
+          selectedChapter.focusOptions.showLocationMarker = checked;
         }
         return;
       }
@@ -738,7 +734,7 @@ function handleEditAction(chapter) {
           value ?? null;
       }
 
-      chapter[name] = value;
+      selectedChapter[name] = value;
     },
     { signal: editFormEventController.signal }
   );

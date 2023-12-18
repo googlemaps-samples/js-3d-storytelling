@@ -1,4 +1,7 @@
-import { updateChapter } from "../chapters/chapter-navigation.js";
+import {
+  getChapterIndexFromId,
+  updateChapter,
+} from "../chapters/chapter-navigation.js";
 import { story } from "../main.js";
 import { cesiumViewer } from "./cesium.js";
 
@@ -216,7 +219,7 @@ async function handleClickOnMarker(click) {
     return;
   }
 
-  updateChapter(markerId);
+  updateChapter(getChapterIndexFromId(markerId));
 }
 
 /**

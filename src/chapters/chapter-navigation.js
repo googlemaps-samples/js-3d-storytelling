@@ -95,12 +95,11 @@ export function initChapterNavigation() {
   autoplayButton.addEventListener("click", autoplayClickHandler);
 
   // Get the current chapter based on URL parameters
-  const params = getParams();
-  const chapterId = params.get("chapterId");
+  const chapterIndex = getCurrentChapterIndex();
 
   // Initialize chapter content based on URL parameters
-  if (chapterId !== null) {
-    updateChapter(chapterId);
+  if (typeof chapterIndex === "number") {
+    updateChapter(chapterIndex);
   } else {
     resetToIntro();
   }
@@ -213,12 +212,13 @@ export function resetToIntro() {
  * @param {number} chapterIndex - The index of the chapter to be updated.
  */
 export function updateChapter(chapterIndex) {
-  const { cameraOptions, coords } = story.chapters[chapterIndex];
+  const chapter = story.chapters.at(chapterIndex);
+  const { cameraOptions, coords, id: chapterId } = chapter;
   const { position, pitch, heading, roll } = cameraOptions;
 
-  setSelectedMarker(chapterIndex); // Set the selected marker
-  setParams("chapterId", story.chapters[chapterIndex].id); // Set the chapter parameter
-  updateChapterContent(story.chapters[chapterIndex], false); // Update the chapter details content
+  setSelectedMarker(chapterId); // Set the selected marker
+  setParams("chapterId", chapterId); // Set the chapter parameter
+  updateChapterContent(chapter, false); // Update the chapter details content
   activateNavigationElement("details"); // Activate the details navigation
 
   // Check if the current chapter has a focus and create or remove the custom radius shader accordingly
@@ -257,17 +257,23 @@ export function activateNavigationElement(navName) {
  * Returns the index of the current chapter.
  * @returns {number} - The index of the current chapter.
  */
-export const getCurrentChapterIndex = () => {
+export function getCurrentChapterIndex() {
   const params = getParams();
   const chapterId = params.get("chapterId");
-
   // Get the index of the current chapter
-  const chapterIndex = story.chapters.findIndex(
-    (chapter) => Number(chapter.id) === Number(chapterId)
-  );
+  return getChapterIndexFromId(chapterId);
+}
 
-  return chapterIndex;
-};
+/**
+ * Returns the index of the chapter with the given id.
+ * @param {string} chapterId - The id of the chapter to be found.
+ * @returns {number | null} - The index of the chapter with the given id.
+ */
+export function getChapterIndexFromId(chapterId) {
+  return chapterId === null
+    ? null
+    : story.chapters.findIndex((chapter) => chapter.id == chapterId);
+}
 
 /**
  * Updates the details navigation. This includes the chapter index and
@@ -299,6 +305,7 @@ export function updateDetailsNavigation() {
  */
 export function updateChapterContent(chapterData, isIntro = true) {
   updateDetailsNavigation();
+
   const chapterDetail = document.querySelector(".chapter-detail");
 
   setTextContent(".story-title", isIntro ? "" : story.properties.title);
