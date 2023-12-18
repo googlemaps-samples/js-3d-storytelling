@@ -10,10 +10,21 @@ import { loadSvg } from "../utils/svg.js";
 import { setTextContent } from "../utils/ui.js";
 
 /**
- * The time in milliseconds between each chapter progression
+ * The time in seconds between each chapter progression
  * @readonly
  */
-const TIME_PER_CHAPTER = 3000;
+const CHAPTER_DURATION = 3;
+
+/**
+ * The time in seconds a fly to animation takes
+ */
+const FLY_TO_DURATION = 2;
+
+/**
+ * The radius size of the  highlighted area
+ * @readonly
+ */
+const HIGHLIGHT_RADIUS = 250;
 
 // SVG icons
 /**
@@ -55,7 +66,7 @@ const forwardButton = detailNavigation.querySelector("#chapter-forward");
  * The id used to identify the timeout instance for the story progression
  * @type {number | null}
  */
-let intervalId = null;
+let timeoutId = null;
 
 /**
  * Initializes and manages chapter navigation for a story.
@@ -98,16 +109,34 @@ export function initChapterNavigation() {
  */
 function stopAutoplay() {
   autoplayButton.innerHTML = PLAY_ICON;
-  clearTimeout(intervalId);
-  intervalId = null;
+  clearTimeout(timeoutId);
+  timeoutId = null;
 }
+
+let autoplayStep = 0;
 
 /**
  * Progresses to the next chapter and stops progression if the current chapter is the last one.
- * @param {type} paramName - description of parameter
  */
 function setNextAutoplayStep() {
-  setNextChapter();
+  // Convert from seconds to milliseconds
+  const flyToDurationMillis = FLY_TO_DURATION * 1000;
+  const chapterDurationMillis = CHAPTER_DURATION * 1000;
+
+  // The interval duration is the sum of the fly to duration and the chapter duration
+  // autoplayStep = 0 means the first step, so the wait time is only the chapter duration
+  const timeoutDuration =
+    autoplayStep === 0
+      ? chapterDurationMillis
+      : chapterDurationMillis + flyToDurationMillis;
+
+  timeoutId = setTimeout(() => {
+    autoplayStep++; // Increment the autoplay step
+    setNextChapter(); // Update the chapter content
+    setNextAutoplayStep(); // Start the next autoplay step
+  }, timeoutDuration);
+
+  // If the current chapter is the last one, stop the autoplay
   if (getCurrentChapterIndex() === story.chapters.length - 1) {
     stopAutoplay();
   }
@@ -117,12 +146,12 @@ function setNextAutoplayStep() {
  * Starts the autoplay chapter progression.
  */
 function autoplayClickHandler() {
-  // If the interval is already active, stop it
-  if (intervalId) {
+  // If the autoplay is already active, stop it
+  if (timeoutId) {
     stopAutoplay();
   } else {
-    // If the interval is not active, start it
-    intervalId = setInterval(setNextAutoplayStep, TIME_PER_CHAPTER);
+    // If the autoplay is not active, start it
+    setNextAutoplayStep();
     autoplayButton.innerHTML = PAUSE_ICON;
   }
 }
@@ -175,7 +204,7 @@ export function resetToIntro() {
       pitch,
       heading,
     },
-    duration: 1,
+    duration: FLY_TO_DURATION,
   });
 }
 
@@ -211,7 +240,7 @@ export function updateChapter(chapterIndex) {
       pitch,
       heading,
     },
-    duration: 2,
+    duration: FLY_TO_DURATION,
   });
 }
 
