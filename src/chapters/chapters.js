@@ -103,7 +103,7 @@ export function addChaptersBar(story) {
   const cardSectionWidth = cardElementWidth + cardsGap;
 
   // Check if the length and the width of the cards exceeds the container width.
-  // If yes sho naviagtion buttons
+  // If yes show navigation buttons
   if (
     cardSectionWidth * cardsContainer.children.length >
     cardsContainer.clientWidth
