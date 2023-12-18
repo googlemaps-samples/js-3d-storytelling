@@ -90,7 +90,7 @@ function updateStoryDetails(properties) {
   storyDetailsForm.querySelector('input[name="imageCredit"]').value =
     properties.imageCredit ?? null;
 
-  // Update the preview image
+  // Update the preview image or video
   const mediaSource = getPreviewUrl(properties.imageUrl) ?? null;
 
   storyDetailsForm.querySelector(".image-credit-container img").src =
@@ -134,7 +134,7 @@ function updateStoryDetails(properties) {
     // Update story
     story.properties = updatedStoryProperties;
 
-    // update the preview image
+    // update the preview image or video
     const mediaSource = getPreviewUrl(story.properties.imageUrl) ?? null;
 
     storyDetailsForm.querySelector(".image-credit-container img").src =
@@ -647,7 +647,7 @@ function handleEditAction(chapter) {
   editForm.querySelector('input[name="imageCredit"]').value =
     chapter.imageCredit ?? null;
 
-  // Update the preview image
+  // Update the preview image or video
   const mediaSource = getPreviewUrl(chapter.imageUrl) ?? null;
   editForm.querySelector(".image-credit-container img").src = mediaSource;
 
