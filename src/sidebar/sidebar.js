@@ -812,8 +812,9 @@ function getMediaData(mediaUrl, mediaCredit) {
   };
 
   if (isValidYouTubeUrl(mediaUrl)) {
-    const videoId = getYouTubeVideoId(mediaUrl);
-    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    const thumbnailUrl = `https://img.youtube.com/vi/${getYouTubeVideoId(
+      mediaUrl
+    )}/hqdefault.jpg`;
 
     media.url = mediaUrl;
     media.previewUrl = thumbnailUrl;

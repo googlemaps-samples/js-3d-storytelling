@@ -291,16 +291,17 @@ export function updateChapterContent(chapter, isIntro = true) {
   setTextContent(".date", isIntro ? "" : chapterData.dateTime);
   setTextContent(".place", chapterData.address);
 
-  // Update media content
-  media && setMediaContent(media);
+  // Update image
+  // chapterDetail.querySelector(".hero").src = chapterData.mediaUrl;
+  displayMedia(chapterData);
 
   // Update image credit
-  const mediaCredit = media?.mediaCredit
-    ? `Image credit: ${media?.mediaCredit}`
+  const imageCredit = chapterData.imageCredit
+    ? `Image credit: ${chapterData.imageCredit}`
     : "";
 
-  setTextContent(".story-intro-attribution", isIntro ? mediaCredit : "");
-  setTextContent(".attribution", isIntro ? "" : mediaCredit);
+  setTextContent(".story-intro-attribution", isIntro ? imageCredit : "");
+  setTextContent(".attribution", isIntro ? "" : imageCredit);
 
   // Update author and date in intro
   setTextContent(
@@ -359,7 +360,7 @@ async function setMediaContent(mediaData) {
       width: "300",
       videoId: getYouTubeVideoId(mediaUrl),
       events: {
-        onReady: function (event) {
+        onReady: (event) => {
           // Todo: pause interactive mode
           // event.target.playVideo();
         },

@@ -12,7 +12,7 @@ export function createStoryIntroCard(storyProperties) {
   card.classList.add("card", "story-intro");
 
   const storyIntroImage = document.createElement("img");
-  storyIntroImage.src = storyProperties.media.previewUrl;
+  storyIntroImage.src = storyProperties.previewUrl;
   card.appendChild(storyIntroImage);
 
   const storyIntroTitle = document.createElement("h1");
@@ -37,8 +37,8 @@ export function createChapterCard(chapter) {
   card.id = chapter.id;
 
   const chapterImage = document.createElement("img");
-  chapterImage.setAttribute("data-input-name", "media");
-  chapterImage.src = chapter.media?.previewUrl;
+  chapterImage.setAttribute("data-input-name", "mediaUrl");
+  chapterImage.src = chapter.previewUrl;
   card.appendChild(chapterImage);
 
   const chapterDate = document.createElement("p");

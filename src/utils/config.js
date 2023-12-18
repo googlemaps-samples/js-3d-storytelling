@@ -29,7 +29,7 @@ const chapterProperties = [
   "address",
   "media",
   "dateTime",
-  "mediaCredit",
+  "imageCredit",
   "showFocus",
   "radius",
   "showLocationMarker",
@@ -205,7 +205,6 @@ export const storyProxyHandler = {
   set(target, property, updatedValue) {
     // Check if the property being is the length property
     // If so, return true to ignore changes to the length property (for example when adding a new chapter)
-
     if (property === "length") {
       return true;
     }
@@ -456,9 +455,49 @@ function updateStoryCard(updatedValues) {
 
   // Update img in intro-card
   const img = card.querySelector("img");
-  img.src = updatedValues.media.previewUrl;
+  img.src = updatedValues.previewUrl;
 
   headline.textContent = updatedValues.title;
 
   // The preview image is determined by media type and set in
+}
+
+function getMediaUrl(properties) {
+  const mediaUrl = properties.mediaUrl;
+  if (isValidYouTubeUrl(mediaUrl)) {
+    const videoId = getYouTubeVideoId(mediaUrl);
+    if (videoId) {
+      const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+      const videoUrl = `https://www.youtube.com/embed/${videoId}?v=2`;
+
+      properties.mediaUrl = videoUrl;
+      properties.previewUrl = thumbnailUrl;
+      properties.mediaType = "video";
+    } else {
+      properties.mediaUrl = "";
+      properties.previewUrl = "";
+      properties.mediaType = "";
+
+      mediaContainer.innerHTML =
+        "<p>Please enter a valid YouTube video URL.</p>";
+    }
+  } else {
+    properties.mediaUrl = mediaUrl;
+    properties.previewUrl = mediaUrl;
+    properties.mediaType = "image";
+  }
+}
+
+function isValidYouTubeUrl(url) {
+  // Regex to check if the URL is a valid YouTube video URL
+  const youtubeRegex =
+    /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  return youtubeRegex.test(url);
+}
+
+function getYouTubeVideoId(url) {
+  const match = url.match(
+    /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  );
+  return match ? match[1] : null;
 }
