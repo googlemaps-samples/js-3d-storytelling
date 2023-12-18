@@ -211,8 +211,6 @@ export const storyProxyHandler = {
       return true;
     }
 
-    console.log(target, property, updatedValue);
-
     if (Array.isArray(target)) {
       const isNewChapter = !target.includes(updatedValue.id);
 

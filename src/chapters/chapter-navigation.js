@@ -328,9 +328,6 @@ function updateChapterIndexAndNavigation() {
   forwardButton.disabled = chapterIndex + 1 === story.chapters.length;
 }
 
-// Wait for the YouTube API to be loaded
-await loadYouTubeAPI();
-
 function setMediaContent(url) {
   const mediaContainer = document.getElementById("media-container");
 

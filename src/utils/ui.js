@@ -15,6 +15,14 @@ export function setTextContent(selector, text) {
   }
 }
 
+/**
+ * Returns the preview URL for a given media.
+ * If the URL is a valid YouTube URL, it returns the thumbnail URL of the video.
+ * Otherwise, it returns the original URL.
+ *
+ * @param {string} url - The YouTube URL or any other URL.
+ * @returns {string} - The preview URL.
+ */
 export function getPreviewUrl(url) {
   return isValidYouTubeUrl(url)
     ? `https://img.youtube.com/vi/${getYouTubeVideoId(url)}/hqdefault.jpg`
