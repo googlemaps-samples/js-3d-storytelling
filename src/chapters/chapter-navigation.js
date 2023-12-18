@@ -360,6 +360,12 @@ function updateChapterIndexAndNavigation() {
   forwardButton.disabled = chapterIndex + 1 === story.chapters.length;
 }
 
+/**
+ * Sets the media content in the media container based on the provided URL.
+ * If the URL is a valid YouTube URL, it creates an embedded YouTube player.
+ * If the URL is not a valid YouTube URL, it displays an image.
+ * @param {string} url - The URL of the media content.
+ */
 function setMediaContent(url) {
   const mediaContainer = document.getElementById("media-container");
 

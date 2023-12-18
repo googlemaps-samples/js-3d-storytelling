@@ -442,6 +442,13 @@ function updateLocationListItem(targetId, updatedValue) {
   element.textContent = updatedValue;
 }
 
+/**
+ * Updates the story details card with the provided values.
+ *
+ * @param {Object} updatedValues - The updated values for the story card.
+ * @param {string} updatedValues.imageUrl - The URL of the image to be displayed in the card.
+ * @param {string} updatedValues.title - The title of the card.
+ */
 function updateStoryCard(updatedValues) {
   // Get cards container
   const cardsContainer = document.querySelector("#chapters-bar .cards");
