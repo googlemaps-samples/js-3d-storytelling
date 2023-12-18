@@ -74,7 +74,7 @@ export async function loadConfig(configUrl) {
 
 /**
  * Adds a new story chapter and saves it to local storage.
- * @param {Object} chapter - The chapter object to be added.
+ * @param {Chapter} chapter - The chapter object to be added.
  * @returns {void}
  */
 export function addChapterToStory(chapter) {
