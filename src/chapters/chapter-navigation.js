@@ -96,7 +96,6 @@ export function initChapterNavigation() {
   const chapterIndex = getCurrentChapterIndex();
 
   // Initialize chapter content based on URL parameters
-  console.log(chapterIndex);
   if (typeof chapterIndex === "number") {
     updateChapter(chapterIndex);
   } else {
