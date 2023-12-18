@@ -8,7 +8,6 @@ import { setSelectedMarker } from "../utils/create-markers.js";
 import { getParams, setParams } from "../utils/params.js";
 import { loadSvg } from "../utils/svg.js";
 import { setTextContent } from "../utils/ui.js";
-import { getChapterIndex } from "./chapters.js";
 
 /**
  * The time in milliseconds between each chapter progression
@@ -252,7 +251,8 @@ export function getCurrentChapterIndex() {
   const params = getParams();
   const chapterId = params.get("chapterId");
   // Get the index of the current chapter
-  return getChapterIndex(chapterId);
+
+  return story.chapters.findIndex((chapter) => chapter.id == chapterId);
 }
 
 /**
@@ -285,6 +285,7 @@ function updateDetailsNavigation() {
  */
 export function updateChapterContent(chapterData, isIntro = true) {
   updateDetailsNavigation();
+
   const chapterDetail = document.querySelector(".chapter-detail");
 
   setTextContent(".story-title", isIntro ? "" : story.properties.title);

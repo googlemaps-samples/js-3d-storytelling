@@ -1,5 +1,4 @@
 import { updateChapter, resetToIntro } from "../chapters/chapter-navigation.js";
-import { getChapterIndex } from "../chapters/chapters.js";
 import { createMarkers, removeMarker } from "../utils/create-markers.js";
 import { getStoryDetails, addStory } from "../utils/config.js";
 import { getParams } from "../utils/params.js";
@@ -651,9 +650,13 @@ function handleEditAction(chapter) {
   editForm.querySelector('input[name="imageCredit"]').value =
     chapter.imageCredit ?? null;
 
-  const selectedChapterKey = editForm.getAttribute("key");
-  const selectedChapterIndex = getChapterIndex(Number(selectedChapterKey));
-  const selectedChapter = story.chapters[selectedChapterIndex];
+  const selectedChapterId = editForm.getAttribute("key");
+  const selectedChapter = story.chapters.find(
+    (chapter) => Number(selectedChapterId) === Number(chapter.id)
+  );
+  const selectedChapterIndex = story.chapters.findIndex(
+    (chapter) => Number(selectedChapterId) === Number(chapter.id)
+  );
 
   // Update chapter when opening edit form
   updateChapter(selectedChapterIndex);

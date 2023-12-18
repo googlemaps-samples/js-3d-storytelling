@@ -127,7 +127,9 @@ function getMarkerEntityConfiguration({ position, id, markerSvg }) {
  * Sets the selected marker and scales it to 1 while scaling the previous marker back to the default scale.
  * @param {number | null} markerId - The id given to the entity object representing the selected marker.
  */
-export function setSelectedMarker(markerId) {
+export function setSelectedMarker(markerIndex) {
+  const markerId = story.chapters[markerIndex]?.id;
+
   // If no markerID is provided, the getter returns undefined
   const newMarker = cesiumViewer.entities.getById(markerId);
 
@@ -216,7 +218,11 @@ async function handleClickOnMarker(click) {
     return;
   }
 
-  updateChapter(markerId);
+  const markerIndex = story.chapters.findIndex(
+    (chapter) => chapter.id === markerId
+  );
+
+  updateChapter(markerIndex);
 }
 
 /**

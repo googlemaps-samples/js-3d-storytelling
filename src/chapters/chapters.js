@@ -56,10 +56,9 @@ export function createChapterCard(chapter) {
   chapterTitleContainer.appendChild(chapterTitle);
 
   // set current chapter
-  card.addEventListener("click", () => {
-    const chapterIndex = getChapterIndex(chapter.id);
-    updateChapter(chapterIndex);
-  });
+  card.addEventListener("click", () =>
+    updateChapter(story.chapters.findIndex(({ id }) => id === chapter.id))
+  );
 
   return card;
 }
@@ -122,13 +121,4 @@ export function addChaptersBar(story) {
       behavior: "smooth",
     });
   });
-}
-
-/**
- * Returns the index of the chapter with the given ID.
- * @param {number} chapterId
- * @returns {number}
- */
-export function getChapterIndex(chapterId) {
-  return story.chapters.findIndex(({ id }) => id === chapterId);
 }
