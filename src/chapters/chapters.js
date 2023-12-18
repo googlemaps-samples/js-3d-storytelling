@@ -40,6 +40,7 @@ export function createChapterCard(chapter) {
 
   const chapterImage = document.createElement("img");
   chapterImage.setAttribute("data-input-name", "imageUrl");
+
   chapterImage.src = getPreviewUrl(chapter.imageUrl);
   card.appendChild(chapterImage);
 
@@ -81,10 +82,6 @@ export function addChaptersBar(story) {
 
   const storyIntroCard = createStoryIntroCard(story.properties);
   cardsContainer.appendChild(storyIntroCard);
-  console.log(
-    "🚀 ~ file: chapters.js:81 ~ addChaptersBar ~ storyIntroCard:",
-    storyIntroCard
-  );
 
   for (const chapter of story.chapters) {
     const chapterCard = createChapterCard(chapter);

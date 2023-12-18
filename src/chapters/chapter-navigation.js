@@ -331,7 +331,7 @@ function updateChapterIndexAndNavigation() {
 // Wait for the YouTube API to be loaded
 await loadYouTubeAPI();
 
-async function setMediaContent(url) {
+function setMediaContent(url) {
   const mediaContainer = document.getElementById("media-container");
 
   // Clear previous content

@@ -668,13 +668,6 @@ button.leave-edit-mode {
   object-fit: cover;
 }
 
-/* .image-credit-container > #media-container {
-  width: var(--image-size);
-  height: var(--image-size);
-  border-radius: var(--custom-border-radius);
-  object-fit: cover;
-} */
-
 .image-credit-container .field-wrapper {
   margin-bottom: 0;
   flex: 1;
