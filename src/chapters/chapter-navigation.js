@@ -197,6 +197,7 @@ export function resetToIntro() {
 
   setParams("chapterId", null); // Clear the chapter parameter
   setSelectedMarker(null); // "Deselect" current marker
+  setSelectedChapterCard(null, true); // Set the selected chapter card
   updateChapterContent(story.properties); // Update the chapter details content
   activateNavigationElement("intro"); // Activate the introduction navigation
   removeCustomRadiusShader(); // Remove the custom radius shader
@@ -222,6 +223,7 @@ export function updateChapter(chapterIndex) {
   const { position, pitch, heading, roll } = cameraOptions;
 
   setSelectedMarker(chapterId); // Set the selected marker
+  setSelectedChapterCard(chapterId); // Set the selected chapter card
   setParams("chapterId", chapterId); // Set the chapter parameter
   updateChapterContent(chapter, false); // Update the chapter details content
   activateNavigationElement("details"); // Activate the details navigation
@@ -387,4 +389,35 @@ function setMediaContent(url) {
     imgElement.src = url;
     mediaContainer.appendChild(imgElement);
   }
+}
+
+/**
+ * Sets the selected chapter- or story intro card based on the provided chapterId and isIntro flag.
+ * @param {string} chapterId - The ID of the chapter card to be selected.
+ * @param {boolean} [isIntro=false] - Indicates whether the chapter card is an intro card.
+ * @returns {void}
+ */
+function setSelectedChapterCard(chapterId, isIntro = false) {
+  const cardsContainer = document.querySelector("#chapters-bar .cards");
+
+  // Remove selected style from previous card if there is one
+  const currentlySelectedCard = cardsContainer.querySelector(".selected");
+  if (currentlySelectedCard) {
+    currentlySelectedCard.classList.remove("selected");
+  }
+
+  let card;
+  // Get card to be deleted
+  if (isIntro) {
+    card = cardsContainer.querySelector(".card.story-intro");
+  } else {
+    card = cardsContainer.querySelector(`.card[id="${chapterId}"]`);
+  }
+
+  if (!card) {
+    return;
+  }
+
+  // add selected style
+  card.classList.add("selected");
 }

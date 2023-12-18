@@ -68,8 +68,8 @@ async function main() {
 
     addSidebarToggleHandler();
     initDragAndDrop();
-    initChapterNavigation();
     addChaptersBar(storyConfig);
+    initChapterNavigation();
     addDownloadConfigHandler();
   } catch (error) {
     console.error(error);
