@@ -175,6 +175,7 @@
 .cards {
   grid-area: cards;
   display: flex;
+  align-items: flex-end;
   gap: 0.75rem;
   overflow: auto;
 }
@@ -182,6 +183,7 @@
 .card {
   --card-background-color: var(--background-color);
   --card-text-color: var(--text-color-primary);
+  transition: width 0.3s, height 0.3s;
   position: relative;
   flex-shrink: 0;
   width: 9rem;
@@ -193,7 +195,14 @@
   line-height: 1.25rem;
 }
 
+.card:hover {
+  --card-background-color: rgba(0, 0, 0, 0.8);
+  --card-text-color: var(--text-color-white);
+}
+
 .card.selected {
+  width: 9.5rem;
+  height: 7.5rem;
   --card-background-color: #000;
   --card-text-color: #fff;
 }
