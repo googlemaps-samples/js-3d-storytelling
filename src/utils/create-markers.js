@@ -136,7 +136,8 @@ export function setSelectedMarker(markerId) {
 
   // Get the currently still selected marker
   const currentMarker =
-    selectedMarkerId && cesiumViewer.entities.getById(selectedMarkerId);
+    typeof selectedMarkerId === "number" &&
+    cesiumViewer.entities.getById(selectedMarkerId);
 
   // Scale the previous selected marker back to the default scale
   if (currentMarker) {
