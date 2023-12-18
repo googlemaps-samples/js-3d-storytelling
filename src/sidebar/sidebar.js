@@ -111,6 +111,20 @@ function updateStoryDetails(properties) {
       storyDetailsForm.requestSubmit();
     });
 
+  // Add event listener to show info tooltip for saving camera position
+  const saveStoryCameraPositionInfoIcon = document.getElementById(
+    "save-story-camera-position-info-icon"
+  );
+  const saveStoryCameraPositionInfoText = document.getElementById(
+    "save-story-camera-position-info-tooltip"
+  );
+  saveStoryCameraPositionInfoIcon.addEventListener("mouseover", () => {
+    saveStoryCameraPositionInfoText.style.display = "initial";
+  });
+  saveStoryCameraPositionInfoIcon.addEventListener("mouseleave", () => {
+    saveStoryCameraPositionInfoText.style.display = "none";
+  });
+
   // In the story details form, the user can change the story properties.
   // As there is no submit button, we submit the form when the user changes an input.
   storyDetailsForm.addEventListener("input", () => {
@@ -711,6 +725,20 @@ function handleEditAction(chapter) {
       () => (selectedChapter.cameraOptions = getCameraOptions()),
       { signal: editFormEventController.signal }
     );
+
+  // Add event listener to show info tooltip for saving camera position
+  const saveChapterCameraPositionInfoIcon = document.getElementById(
+    "save-chapter-camera-position-info-icon"
+  );
+  const saveChapterCameraPositionInfoText = document.getElementById(
+    "save-chapter-camera-position-info-tooltip"
+  );
+  saveChapterCameraPositionInfoIcon.addEventListener("mouseover", () => {
+    saveChapterCameraPositionInfoText.style.display = "initial";
+  });
+  saveChapterCameraPositionInfoIcon.addEventListener("mouseleave", () => {
+    saveChapterCameraPositionInfoText.style.display = "none";
+  });
 
   // Add event listener that listens to changes to the chapter properties
   editForm.addEventListener(
