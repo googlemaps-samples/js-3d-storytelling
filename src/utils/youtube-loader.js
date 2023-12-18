@@ -13,6 +13,12 @@ export async function loadYouTubeAPI() {
 // Wait for the YouTube API to be loaded
 await loadYouTubeAPI();
 
+/**
+ * Checks if a given URL is a valid YouTube video URL.
+ *
+ * @param {string} url - The URL to be checked.
+ * @returns {boolean} - Returns true if the URL is a valid YouTube video URL, otherwise returns false.
+ */
 export function isValidYouTubeUrl(url) {
   // Regex to check if the URL is a valid YouTube video URL
   const youtubeRegex =
@@ -20,6 +26,12 @@ export function isValidYouTubeUrl(url) {
   return youtubeRegex.test(url);
 }
 
+/**
+ * Extracts the YouTube video ID from a given URL.
+ *
+ * @param {string} url - The YouTube video URL.
+ * @returns {string|null} - The YouTube video ID if found, otherwise null.
+ */
 export function getYouTubeVideoId(url) {
   const match = url.match(
     /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
