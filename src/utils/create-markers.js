@@ -127,9 +127,7 @@ function getMarkerEntityConfiguration({ position, id, markerSvg }) {
  * Sets the selected marker and scales it to 1 while scaling the previous marker back to the default scale.
  * @param {number | null} markerId - The id given to the entity object representing the selected marker.
  */
-export function setSelectedMarker(markerIndex) {
-  const markerId = story.chapters[markerIndex]?.id;
-
+export function setSelectedMarker(markerId) {
   // If no markerID is provided, the getter returns undefined
   const newMarker = cesiumViewer.entities.getById(markerId);
 

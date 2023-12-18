@@ -217,7 +217,7 @@ export function updateChapter(chapterIndex) {
   const { cameraOptions, coords, id: chapterId } = chapter;
   const { position, pitch, heading, roll } = cameraOptions;
 
-  setSelectedMarker(chapterIndex); // Set the selected marker
+  setSelectedMarker(chapterId); // Set the selected marker
   setParams("chapterId", chapterId); // Set the chapter parameter
   updateChapterContent(chapter, false); // Update the chapter details content
   activateNavigationElement("details"); // Activate the details navigation
