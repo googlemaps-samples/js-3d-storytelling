@@ -10,10 +10,12 @@ export async function loadYouTubeAPI() {
   });
 }
 
-let youtubePlayer;
+export let youtubePlayer;
 
 /**
  * Initializes the YouTube iframe API and creates a new YouTube player.
+ * This function will execute as soon as the player API code downloads
+ * see https://developers.google.com/youtube/iframe_api_reference
  */
 function onYouTubeIframeAPIReady() {
   youtubePlayer = new YT.Player("player", {
@@ -23,12 +25,16 @@ function onYouTubeIframeAPIReady() {
   });
 }
 
-/**
- * Handles the player state change event of embedded youtube video.
- * @param {Object} event - The event object.
- */
-export function onPlayerStateChange(event) {
-  if (event.data == YT.PlayerState.ENDED) {
-    // Todo: go to next chapter
-  }
+export function isValidYouTubeUrl(url) {
+  // Regex to check if the URL is a valid YouTube video URL
+  const youtubeRegex =
+    /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  return youtubeRegex.test(url);
+}
+
+export function getYouTubeVideoId(url) {
+  const match = url.match(
+    /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  );
+  return match ? match[1] : null;
 }

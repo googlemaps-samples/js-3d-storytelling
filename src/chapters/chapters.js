@@ -1,5 +1,6 @@
 import { story } from "../main.js";
 import { resetToIntro, updateChapter } from "./chapter-navigation.js";
+import { getPreviewUrl } from "../utils/ui.js";
 
 /**
  * Returns a story intro card as HTML element.
@@ -12,7 +13,8 @@ export function createStoryIntroCard(storyProperties) {
   card.classList.add("card", "story-intro");
 
   const storyIntroImage = document.createElement("img");
-  storyIntroImage.src = storyProperties.previewUrl;
+
+  storyIntroImage.src = getPreviewUrl(storyProperties.imageUrl);
   card.appendChild(storyIntroImage);
 
   const storyIntroTitle = document.createElement("h1");
@@ -37,8 +39,8 @@ export function createChapterCard(chapter) {
   card.id = chapter.id;
 
   const chapterImage = document.createElement("img");
-  chapterImage.setAttribute("data-input-name", "mediaUrl");
-  chapterImage.src = chapter.previewUrl;
+  chapterImage.setAttribute("data-input-name", "imageUrl");
+  chapterImage.src = getPreviewUrl(chapter.imageUrl);
   card.appendChild(chapterImage);
 
   const chapterDate = document.createElement("p");
@@ -79,6 +81,10 @@ export function addChaptersBar(story) {
 
   const storyIntroCard = createStoryIntroCard(story.properties);
   cardsContainer.appendChild(storyIntroCard);
+  console.log(
+    "🚀 ~ file: chapters.js:81 ~ addChaptersBar ~ storyIntroCard:",
+    storyIntroCard
+  );
 
   for (const chapter of story.chapters) {
     const chapterCard = createChapterCard(chapter);

@@ -16,7 +16,7 @@ type focusOptions = {
 // Define the type for the Segment
 interface Chapter {
   title: string; // Title of the segment
-  mediaUrl: string; // URL for the segment's image or youtube video
+  imageUrl: string; // URL for the segment's image (google or custom)
   imageCredit: string; // Credit for the segment's image
   content: string; // Text content of the segment
   dateTime: string;
@@ -27,7 +27,7 @@ interface Chapter {
 }
 
 interface StoryProperties {
-  mediaUrl: string; // The image url for the intro card
+  imageUrl: string; // The image url for the intro card
   imageCredit: string; // The image credit for the intro card
   title: string; // The title of the story
   date: string; // A date associated with the story

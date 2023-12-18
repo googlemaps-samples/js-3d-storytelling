@@ -22,12 +22,14 @@ import {
   removeMarker,
 } from "./create-markers.js";
 
+import { getPreviewUrl } from "../utils/ui.js";
+
 // Properties of a chapter that can be edited
 const chapterProperties = [
   "title",
   "content",
   "address",
-  "media",
+  "imageUrl",
   "dateTime",
   "imageCredit",
   "showFocus",
@@ -209,6 +211,8 @@ export const storyProxyHandler = {
       return true;
     }
 
+    console.log(target, property, updatedValue);
+
     if (Array.isArray(target)) {
       const isNewChapter = !target.includes(updatedValue.id);
 
@@ -301,11 +305,9 @@ export const storyProxyHandler = {
 
     if (property === "properties") {
       // Update chapter details
-
-      // getMediaUrl(target.properties);
-
       updateChapterContent(target.properties, true);
 
+      // Update story card
       updateStoryCard(target.properties);
     }
 
@@ -397,7 +399,6 @@ function updateChapterCard(target, property, updatedValue) {
   const card = cardsContainer.querySelector(`.card[id="${target.id}"]`);
 
   if (!card) {
-    console.warn(`Chapter card with id ${target.id} not found`);
     return;
   }
 
@@ -405,18 +406,19 @@ function updateChapterCard(target, property, updatedValue) {
   const element = card.querySelector(`[data-input-name="${property}"]`) || null;
 
   if (!element) {
-    console.warn(`Element with data-input-name "${property}" not found`);
     return;
   }
 
   // Update element
 
-  // Check which property of chapter card is being updated
-  if (property === "media") {
-    element.src = updatedValue.previewUrl;
-  }
+  // Check if element is an image
+  // If so, update the src attribute
+  // Otherwise, update the text content
+  if (property === "imageUrl") {
+    const mediaSource = getPreviewUrl(updatedValue) ?? null;
 
-  if (property === "title") {
+    element.src = mediaSource;
+  } else {
     element.textContent = updatedValue;
   }
 }
@@ -455,49 +457,7 @@ function updateStoryCard(updatedValues) {
 
   // Update img in intro-card
   const img = card.querySelector("img");
-  img.src = updatedValues.previewUrl;
+  img.src = getPreviewUrl(updatedValues.imageUrl);
 
   headline.textContent = updatedValues.title;
-
-  // The preview image is determined by media type and set in
-}
-
-function getMediaUrl(properties) {
-  const mediaUrl = properties.mediaUrl;
-  if (isValidYouTubeUrl(mediaUrl)) {
-    const videoId = getYouTubeVideoId(mediaUrl);
-    if (videoId) {
-      const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-      const videoUrl = `https://www.youtube.com/embed/${videoId}?v=2`;
-
-      properties.mediaUrl = videoUrl;
-      properties.previewUrl = thumbnailUrl;
-      properties.mediaType = "video";
-    } else {
-      properties.mediaUrl = "";
-      properties.previewUrl = "";
-      properties.mediaType = "";
-
-      mediaContainer.innerHTML =
-        "<p>Please enter a valid YouTube video URL.</p>";
-    }
-  } else {
-    properties.mediaUrl = mediaUrl;
-    properties.previewUrl = mediaUrl;
-    properties.mediaType = "image";
-  }
-}
-
-function isValidYouTubeUrl(url) {
-  // Regex to check if the URL is a valid YouTube video URL
-  const youtubeRegex =
-    /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-  return youtubeRegex.test(url);
-}
-
-function getYouTubeVideoId(url) {
-  const match = url.match(
-    /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-  );
-  return match ? match[1] : null;
 }

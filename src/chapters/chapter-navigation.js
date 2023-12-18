@@ -8,10 +8,10 @@ import { setSelectedMarker } from "../utils/create-markers.js";
 import { getParams, setParams } from "../utils/params.js";
 import { loadSvg } from "../utils/svg.js";
 import { setTextContent } from "../utils/ui.js";
-import { getYouTubeVideoId } from "../sidebar/sidebar.js";
 import {
+  getYouTubeVideoId,
+  isValidYouTubeUrl,
   loadYouTubeAPI,
-  onPlayerStateChange,
 } from "../utils/youtube-loader.js";
 
 /**
@@ -277,7 +277,7 @@ export function updateDetailsNavigation() {
  * @param {boolean} [isIntro=true] - Flag indicating if the current view is the introduction.
  */
 export function updateChapterContent(chapter, isIntro = true) {
-  const { media, ...chapterData } = chapter;
+  const { imageUrl, ...chapterData } = chapter;
 
   updateDetailsNavigation();
 
@@ -291,11 +291,10 @@ export function updateChapterContent(chapter, isIntro = true) {
   setTextContent(".date", isIntro ? "" : chapterData.dateTime);
   setTextContent(".place", chapterData.address);
 
-  // Update image
-  // chapterDetail.querySelector(".hero").src = chapterData.mediaUrl;
-  displayMedia(chapterData);
+  // Update image or video
+  setMediaContent(imageUrl);
 
-  // Update image credit
+  // Update image or video credit
   const imageCredit = chapterData.imageCredit
     ? `Image credit: ${chapterData.imageCredit}`
     : "";
@@ -332,25 +331,13 @@ function updateChapterIndexAndNavigation() {
 // Wait for the YouTube API to be loaded
 await loadYouTubeAPI();
 
-/**
- * Sets the media content based on the provided media data.
- * @param {Object} mediaData - The media data object.
- * @param {string} mediaData.url - The URL of the media.
- * @param {string} mediaData.type - The type of the media (image or video).
- */
-async function setMediaContent(mediaData) {
+async function setMediaContent(url) {
   const mediaContainer = document.getElementById("media-container");
-
-  const mediaUrl = mediaData.url;
 
   // Clear previous content
   mediaContainer.innerHTML = "";
 
-  if (mediaData.type === "image") {
-    const imgElement = document.createElement("img");
-    imgElement.src = mediaUrl;
-    mediaContainer.appendChild(imgElement);
-  } else if (mediaData.type === "video") {
+  if (isValidYouTubeUrl(url)) {
     const iframeElement = document.createElement("div");
     iframeElement.id = "player";
     mediaContainer.appendChild(iframeElement);
@@ -358,16 +345,11 @@ async function setMediaContent(mediaData) {
     new YT.Player("player", {
       height: "150",
       width: "300",
-      videoId: getYouTubeVideoId(mediaUrl),
-      events: {
-        onReady: (event) => {
-          // Todo: pause interactive mode
-          // event.target.playVideo();
-        },
-        onStateChange: onPlayerStateChange,
-      },
+      videoId: getYouTubeVideoId(url),
     });
   } else {
-    mediaContainer.innerHTML = "No media available or invalid media type";
+    const imgElement = document.createElement("img");
+    imgElement.src = url;
+    mediaContainer.appendChild(imgElement);
   }
 }

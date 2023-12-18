@@ -9,7 +9,7 @@ import {
 } from "../utils/cesium.js";
 import { getStoryDetails, addChapterToStory } from "../utils/config.js";
 import { getParams } from "../utils/params.js";
-
+import { getPreviewUrl } from "../utils/ui.js";
 /**
  * Options for radio buttons in the sidebar.
  * @typedef {Object} LocationMenuOptions
@@ -85,12 +85,16 @@ function updateStoryDetails(properties) {
     properties.createdBy ?? null;
   storyDetailsForm.querySelector('input[name="date"]').value =
     properties.date ?? null;
-  storyDetailsForm.querySelector('input[name="mediaUrl"]').value =
-    properties.media.url ?? null;
+  storyDetailsForm.querySelector('input[name="imageUrl"]').value =
+    properties.imageUrl ?? null;
+  storyDetailsForm.querySelector('input[name="imageCredit"]').value =
+    properties.imageCredit ?? null;
+
+  // Update the preview image
+  const mediaSource = getPreviewUrl(properties.imageUrl) ?? null;
+
   storyDetailsForm.querySelector(".image-credit-container img").src =
-    properties.media.previewUrl ?? null;
-  storyDetailsForm.querySelector('input[name="mediaCredit"]').value =
-    properties.media.mediaCredit ?? null;
+    mediaSource;
 
   // Add event listener to save the camera position to story
   document
@@ -119,24 +123,22 @@ function updateStoryDetails(properties) {
     event.preventDefault();
 
     // Get updated story details
-    const { mediaUrl, mediaCredit, ...updatedStoryDetails } = getStoryDetails();
-
-    // Get media data
-    const media = getMediaData(mediaUrl, mediaCredit);
+    const updatedStoryDetails = getStoryDetails();
 
     // Update story properties
     const updatedStoryProperties = {
       ...story.properties,
       ...updatedStoryDetails,
-      media,
     };
 
     // Update story
     story.properties = updatedStoryProperties;
 
     // update the preview image
+    const mediaSource = getPreviewUrl(story.properties.imageUrl) ?? null;
+
     storyDetailsForm.querySelector(".image-credit-container img").src =
-      updatedStoryProperties.media.previewUrl ?? null;
+      mediaSource;
 
     // Save updated object back to local storage
     localStorage.setItem("story", JSON.stringify(story));
@@ -640,18 +642,17 @@ function handleEditAction(chapter) {
     chapter.address ?? null;
   editForm.querySelector('input[name="dateTime"]').value =
     chapter.dateTime ?? null;
-  editForm.querySelector('input[name="mediaUrl"]').value =
-    chapter.media?.url ?? null;
-  editForm.querySelector('input[name="mediaCredit"]').value =
-    chapter.media?.mediaCredit ?? null;
+  editForm.querySelector('input[name="imageUrl"]').value =
+    chapter.imageUrl ?? null;
+  editForm.querySelector('input[name="imageCredit"]').value =
+    chapter.imageCredit ?? null;
 
   // Update the preview image
-  editForm.querySelector(".image-credit-container img").src =
-    chapter.media?.previewUrl ?? null;
+  const mediaSource = getPreviewUrl(chapter.imageUrl) ?? null;
+  editForm.querySelector(".image-credit-container img").src = mediaSource;
 
   // Fill the "more settings" form inputs with the chapter data
   // Get the radius input element
-
   const isFocusEnabled = chapter.focusOptions.showFocus;
 
   editForm.querySelector('input[name="focus-checkbox"]').checked =
@@ -715,23 +716,12 @@ function handleEditAction(chapter) {
         if (name === "marker-checkbox") {
           chapter.focusOptions.showLocationMarker = checked;
         }
-      }
-
-      if (name === "mediaUrl") {
-        const media = getMediaData(value);
-        editForm.querySelector(".image-credit-container img").src =
-          media.previewUrl ?? null;
-
-        chapter.media = media;
         return;
       }
 
-      if (name === "mediaCredit") {
-        chapter.media = {
-          ...chapter.media,
-          mediaCredit: value,
-        };
-        return;
+      if (name === "imageUrl") {
+        const mediaSource = getPreviewUrl(value) ?? null;
+        editForm.querySelector(".image-credit-container img").src = mediaSource;
       }
 
       chapter[name] = value;
@@ -801,43 +791,4 @@ export function addDownloadConfigHandler() {
       // Revoke the Blob URL to free up resources
       URL.revokeObjectURL(blobUrl);
     });
-}
-
-function getMediaData(mediaUrl, mediaCredit) {
-  let media = {
-    url: "",
-    previewUrl: "",
-    type: "",
-    mediaCredit: mediaCredit ?? "",
-  };
-
-  if (isValidYouTubeUrl(mediaUrl)) {
-    const thumbnailUrl = `https://img.youtube.com/vi/${getYouTubeVideoId(
-      mediaUrl
-    )}/hqdefault.jpg`;
-
-    media.url = mediaUrl;
-    media.previewUrl = thumbnailUrl;
-    media.type = "video";
-  } else {
-    media.url = mediaUrl;
-    media.previewUrl = mediaUrl;
-    media.type = "image";
-  }
-
-  return media;
-}
-
-function isValidYouTubeUrl(url) {
-  // Regex to check if the URL is a valid YouTube video URL
-  const youtubeRegex =
-    /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-  return youtubeRegex.test(url);
-}
-
-export function getYouTubeVideoId(url) {
-  const match = url.match(
-    /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-  );
-  return match ? match[1] : null;
 }
