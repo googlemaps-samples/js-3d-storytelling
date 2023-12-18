@@ -626,17 +626,46 @@ button.add-location:before {
   height: 1rem;
   content: url("../assets/icons/add-icon.svg");
 }
-.save-camera-position {
-  border: 1px solid var(--color-light-grey);
-}
 
-.save-camera-position:not(:active):hover {
-  border: 1px solid var(--border-color-hover);
-}
+.save-camera-position-container {
+  display: flex;
+  justify-content: space-between;
 
-.save-camera-position:before {
-  height: 1rem;
-  content: url("../assets/icons/save-camera-position-icon.svg");
+  .save-camera-position {
+    border: 1px solid var(--color-light-grey);
+  }
+  
+  .save-camera-position:not(:active):hover {
+    border: 1px solid var(--border-color-hover);
+  }
+  
+  .save-camera-position:before {
+    height: 1rem;
+    content: url("../assets/icons/save-camera-position-icon.svg");
+  }
+
+  .save-camera-position-info-icon {
+    cursor: pointer;
+  }
+
+  .save-camera-position-info-tooltip {
+    display: none;
+    background: var(--background-color);
+    text-align: center;
+    position: absolute;
+    bottom: 3rem;
+    padding: var(--spacing-small);
+    border-radius: var(--custom-border-radius);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25),
+      4px 0px 4px 0px rgba(0, 0, 0, 0.25);
+    border: 1px solid #f8f8ff;
+
+    &.story {
+      left: var(--spacing-medium-large);
+      right: var(--spacing-medium-large);
+      bottom: 4rem;
+    }
+  }
 }
 
 button.leave-edit-mode {
