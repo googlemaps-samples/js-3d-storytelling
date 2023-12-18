@@ -126,6 +126,7 @@ export const getStoryDetails = () => {
   );
   return getFormData(storyDetailsForm);
 };
+
 /**
  * Returns the data of an HTML form element in form of an object.
  *

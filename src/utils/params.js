@@ -1,3 +1,8 @@
+/**
+ * Retrieves the parameters from the URL hash.
+ *
+ * @return {URLSearchParams} The URLSearchParams object containing the parameters.
+ */
 export function getParams() {
   return new URLSearchParams(window.location.hash.replace("#", ""));
 }
