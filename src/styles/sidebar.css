@@ -691,6 +691,7 @@ button.leave-edit-mode {
 }
 
 .image-credit-container > img {
+  visibility: invisible;
   width: var(--image-size);
   height: var(--image-size);
   border: 1px solid var(--custom-border-radius);
