@@ -102,6 +102,16 @@ export function addChaptersBar(story) {
   );
   const cardSectionWidth = cardElementWidth + cardsGap;
 
+  // Check if the length and the width of the cards exceeds the container width.
+  // If yes show navigation buttons
+  if (
+    cardSectionWidth * cardsContainer.children.length >
+    cardsContainer.clientWidth
+  ) {
+    barNavigationNextButton.classList.remove("hidden");
+    barNavigationPreviousButton.classList.remove("hidden");
+  }
+
   barNavigationPreviousButton.addEventListener("click", () => {
     // Scroll one card back
     const newScrollLeft = cardsContainer.scrollLeft - cardSectionWidth;
