@@ -384,7 +384,7 @@ function setMediaContent(url) {
       width: "300",
       videoId: getYouTubeVideoId(url),
     });
-  } else {
+  } else if (url) {
     const imgElement = document.createElement("img");
     imgElement.src = url;
     mediaContainer.appendChild(imgElement);
