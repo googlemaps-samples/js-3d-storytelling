@@ -108,7 +108,7 @@ function updateStoryDetails(properties) {
   const storyImage = storyDetailsForm.querySelector(
     ".image-credit-container img"
   );
-  storyImage.src = mediaSource;
+  storyImage.src = mediaSource ?? "#";
   storyImage.style.visibility = mediaSource ? "visible" : "hidden";
 
   // Add event listener to save the camera position to story
@@ -165,7 +165,7 @@ function updateStoryDetails(properties) {
 
     // update the preview image or video
     const mediaSource = getPreviewUrl(story.properties.imageUrl) ?? null;
-    storyImage.src = mediaSource;
+    storyImage.src = mediaSource ?? "#";
     storyImage.style.visibility = mediaSource ? "visible" : "hidden";
 
     // Save updated object back to local storage
