@@ -4,6 +4,7 @@
 
 .chapter {
   --chapter-color: rgba(255, 255, 255, 0.8);
+  --media-container-height: 160px;
   position: absolute;
   display: flex;
   width: 350px;
@@ -59,9 +60,9 @@
   letter-spacing: 0.021px;
 }
 
-.chapter .hero-image-container {
+.chapter .hero-media-container {
   overflow: hidden;
-  height: 160px;
+  height: var(--media-container-height);
   width: 100%;
   display: block;
   overflow: hidden;
@@ -84,7 +85,8 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  background-color: var(--background-color-reduced);
+  /* background-color: var(--background-color-reduced); */
+  background-color: red;
   height: 100%;
   width: 100%;
 }
@@ -337,4 +339,10 @@
 }
 #chapters-bar .navigation-button.previous::after {
   transform: rotate(180deg);
+}
+
+#media-container {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
