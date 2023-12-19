@@ -104,11 +104,11 @@ function updateStoryDetails(properties) {
     properties.imageCredit ?? null;
 
   // Update the preview image or video
-  const mediaSource = getPreviewUrl(properties.imageUrl) ?? null;
+  const mediaSource = getPreviewUrl(properties.imageUrl);
   const storyImage = storyDetailsForm.querySelector(
     ".image-credit-container img"
   );
-  storyImage.src = mediaSource;
+  storyImage.src = mediaSource ?? "#";
   storyImage.style.visibility = mediaSource ? "visible" : "hidden";
 
   // Add event listener to save the camera position to story
@@ -164,8 +164,8 @@ function updateStoryDetails(properties) {
     story.properties = updatedStoryProperties;
 
     // update the preview image or video
-    const mediaSource = getPreviewUrl(story.properties.imageUrl) ?? null;
-    storyImage.src = mediaSource;
+    const mediaSource = getPreviewUrl(story.properties.imageUrl);
+    storyImage.src = mediaSource ?? "#";
     storyImage.style.visibility = mediaSource ? "visible" : "hidden";
 
     // Save updated object back to local storage
@@ -689,10 +689,10 @@ function handleEditAction(chapter) {
     chapter.imageCredit ?? null;
 
   // Update the preview image or video
-  const mediaSource = getPreviewUrl(chapter.imageUrl) ?? null;
+  const mediaSource = getPreviewUrl(chapter.imageUrl);
 
   const chapterImage = editForm.querySelector(".image-credit-container img");
-  chapterImage.src = mediaSource;
+  chapterImage.src = mediaSource ?? "#";
   chapterImage.style.visibility = mediaSource ? "visible" : "hidden";
 
   // Fill the "more settings" form inputs with the chapter data
@@ -785,8 +785,8 @@ function handleEditAction(chapter) {
       }
 
       if (name === "imageUrl") {
-        const mediaSource = getPreviewUrl(value) ?? null;
-        chapterImage.src = mediaSource;
+        const mediaSource = getPreviewUrl(value);
+        chapterImage.src = mediaSource ?? "#";
         chapterImage.style.visibility = mediaSource ? "visible" : "hidden";
       }
 
