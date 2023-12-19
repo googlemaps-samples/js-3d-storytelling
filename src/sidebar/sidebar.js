@@ -14,6 +14,8 @@ import {
 import { story } from "../main.js";
 import { getStoryDetails, addChapterToStory } from "../utils/config.js";
 import { getPreviewUrl } from "../utils/ui.js";
+import { removeCustomRadiusShader } from "../utils/cesium.js";
+
 /**
  * Options for radio buttons in the sidebar.
  * @typedef {Object} LocationMenuOptions
@@ -239,7 +241,7 @@ export function createLocationItem(chapter) {
 /**
  * Initializes the autocomplete functionality for the location input field.
  */
-export function initAutoComplete() {
+export function initGeoSuggest() {
   const locationInput = document.querySelector(".locations-container input");
 
   const options = { fields: ["geometry"] };
@@ -255,6 +257,7 @@ export function initAutoComplete() {
   autocomplete.addListener("place_changed", async () => {
     removeMarker("place-marker");
     const selectedPlace = autocomplete.getPlace();
+    removeCustomRadiusShader();
 
     // Catch user pressed enter key without selecting a place in the list
     if (!selectedPlace?.geometry) {
