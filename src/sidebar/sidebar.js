@@ -737,7 +737,11 @@ function handleEditAction(chapter) {
     .getElementById("save-chapter-camera-position-button")
     .addEventListener(
       "click",
-      () => (selectedChapter.cameraOptions = getCameraOptions()),
+      () => {
+        selectedChapter.cameraOptions = getCameraOptions();
+        // Update story in local storage
+        localStorage.setItem("story", JSON.stringify(story));
+      },
       { signal: editFormEventController.signal }
     );
 
@@ -748,12 +752,20 @@ function handleEditAction(chapter) {
   const saveChapterCameraPositionInfoText = document.getElementById(
     "save-chapter-camera-position-info-tooltip"
   );
-  saveChapterCameraPositionInfoIcon.addEventListener("mouseover", () => {
-    saveChapterCameraPositionInfoText.style.display = "initial";
-  });
-  saveChapterCameraPositionInfoIcon.addEventListener("mouseleave", () => {
-    saveChapterCameraPositionInfoText.style.display = "none";
-  });
+  saveChapterCameraPositionInfoIcon.addEventListener(
+    "mouseover",
+    () => {
+      saveChapterCameraPositionInfoText.style.display = "initial";
+    },
+    { signal: editFormEventController.signal }
+  );
+  saveChapterCameraPositionInfoIcon.addEventListener(
+    "mouseleave",
+    () => {
+      saveChapterCameraPositionInfoText.style.display = "none";
+    },
+    { signal: editFormEventController.signal }
+  );
 
   // Add event listener that listens to changes to the chapter properties
   editForm.addEventListener(
@@ -779,6 +791,8 @@ function handleEditAction(chapter) {
       }
 
       selectedChapter[name] = value;
+      // Update story in local storage
+      localStorage.setItem("story", JSON.stringify(story));
     },
     { signal: editFormEventController.signal }
   );
@@ -789,8 +803,6 @@ function handleEditAction(chapter) {
     "submit",
     async (event) => {
       event.preventDefault();
-
-      localStorage.setItem("story", JSON.stringify(story));
 
       editFormEventController.abort();
 
