@@ -380,8 +380,8 @@ function setMediaContent(url) {
     mediaContainer.appendChild(iframeElement);
 
     new YT.Player("player", {
-      height: "150",
-      width: "300",
+      height: "100%",
+      width: "100%",
       videoId: getYouTubeVideoId(url),
     });
   } else if (url) {
