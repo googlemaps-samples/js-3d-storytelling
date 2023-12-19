@@ -133,11 +133,29 @@
   padding: var(--spacing-small) var(--spacing-medium);
   padding-right: var(--spacing-extra-small);
   align-items: center;
+  transition: all 0.2s;
+}
+
+.chapter .intro-navigation #start-story:hover {
+  background-color: rgb(22, 94, 188);
+}
+
+.chapter .intro-navigation #start-story:active {
+  background-color: rgba(26, 115, 232, 0.25);
 }
 
 .chapter .detail-navigation #autoplay-story svg,
 .chapter .detail-navigation #autoplay-story path {
   fill: var(--accent-color);
+  transition: all 0.2s;
+}
+
+.chapter .detail-navigation #autoplay-story:hover path {
+  fill: rgba(26, 115, 232, 0.5);
+}
+
+.chapter .detail-navigation #autoplay-story:active path {
+  fill: rgba(26, 115, 232, 0.25);
 }
 
 .chapter .intro-navigation {
@@ -157,6 +175,18 @@
 }
 .chapter .detail-navigation button {
   height: 24px;
+}
+
+.chapter .detail-navigation button path {
+  transition: all 0.2s;
+}
+
+.chapter .detail-navigation button:hover path {
+  fill: rgba(26, 115, 232, 0.5);
+}
+
+.chapter .detail-navigation button:active path {
+  fill: rgba(26, 115, 232, 0.25);
 }
 
 .chapter .detail-navigation #chapter-forward-icon {
