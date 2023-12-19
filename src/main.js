@@ -3,7 +3,7 @@ import { loadConfig, storyProxyHandler } from "./utils/config.js";
 import createMarkers from "./utils/create-markers.js";
 import {
   addSidebarToggleHandler,
-  initAutoComplete,
+  initGeoSuggest,
   updateSidebar,
   initDragAndDrop,
   addDownloadConfigHandler,
@@ -58,7 +58,7 @@ async function main() {
   try {
     await initCesiumViewer();
     await initGoogleMaps();
-    initAutoComplete();
+    initGeoSuggest();
     updateSidebar();
 
     // Create markers from chapter coordinates

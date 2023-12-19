@@ -275,10 +275,7 @@ export function removeCustomRadiusShader() {
  * @param {google.maps.LatLngLiteral} coordinates - The center coordinates.
  * @param {number} radius - The radius in meters.
  */
-export function createCustomRadiusShader(
-  coordinates,
-  radius = DEFAULT_HIGHLIGHT_RADIUS
-) {
+export function createCustomRadiusShader(coordinates, radius) {
   const { lat, lng } = coordinates;
   const center = Cesium.Cartesian3.fromDegrees(lng, lat);
 

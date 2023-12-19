@@ -14,6 +14,7 @@ import {
 import {
   createCustomRadiusShader,
   removeCustomRadiusShader,
+  DEFAULT_HIGHLIGHT_RADIUS,
 } from "../utils/cesium.js";
 
 import {
@@ -245,8 +246,9 @@ export const storyProxyHandler = {
       if (property === "radius") {
         const radius = updatedValue;
         const coords = target.coords;
-        createCustomRadiusShader(coords, radius);
         target.focusOptions.focusRadius = radius;
+        createCustomRadiusShader(coords, radius);
+
         return true;
       }
 
@@ -254,10 +256,15 @@ export const storyProxyHandler = {
         const showFocus = updatedValue;
 
         if (showFocus === true) {
+          // If no radius is set yet, use default radius
+          if (!target.focusRadius) {
+            target.focusRadius = DEFAULT_HIGHLIGHT_RADIUS;
+          }
+
           const radius = target.focusRadius;
           const coords = this.parent.coords; // Get the parent object (chapter) and access its coords property
 
-          createCustomRadiusShader(coords, radius || undefined);
+          createCustomRadiusShader(coords, radius);
         } else {
           removeCustomRadiusShader();
         }
