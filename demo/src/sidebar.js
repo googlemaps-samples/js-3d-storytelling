@@ -1,3 +1,11 @@
+import { story as storyConfig } from "../main.js";
+import {
+  getStoryDetails,
+  addChapterToStory,
+  storyProxyHandler,
+  initGoogleMaps,
+} from "./config.js";
+
 import {
   updateChapter,
   resetToIntro,
@@ -11,17 +19,17 @@ import {
   performFlyTo,
   DEFAULT_HIGHLIGHT_RADIUS,
 } from "../utils/cesium.js";
-import { story } from "../main.js";
-import { getStoryDetails, addChapterToStory } from "../utils/config.js";
 import { getPreviewUrl } from "../utils/ui.js";
 import { removeCustomRadiusShader } from "../utils/cesium.js";
 
 /**
- * Options for radio buttons in the sidebar.
- * @typedef {Object} LocationMenuOptions
- * @property {'edit'} edit - Option for editing.
- * @property {'delete'} delete - Option for deleting.
+ * Creates a proxy object for the story object.
+ * This allows us to intercept these operations and update the UI accordingly without having to re-render the whole UI.
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
+ * @type {Story}
  */
+const story = new Proxy(storyConfig, storyProxyHandler);
+console.log({ c: story.chapters });
 
 /**
  * @type {LocationMenuOptions} - Options for radio buttons in the sidebar.
@@ -30,6 +38,13 @@ const locationMenuOptions = {
   edit: "edit",
   delete: "delete",
 };
+
+/**
+ * Options for radio buttons in the sidebar.
+ * @typedef {Object} LocationMenuOptions
+ * @property {'edit'} edit - Option for editing.
+ * @property {'delete'} delete - Option for deleting.
+ */
 
 /**
  * Adds a click event listener to the sidebar toggle button, toggling the "sidebar-is-collapsed" class
@@ -49,6 +64,7 @@ export function addSidebarToggleHandler() {
  */
 export function updateSidebar() {
   const { chapters, properties } = story;
+
   // Fill story details form with the properties data
   updateStoryDetails(properties);
 
@@ -318,6 +334,21 @@ let currentOpenedMenu = null;
 let locationMenuEventController;
 
 /**
+ * Toggles the details section based on the event's new state.
+ * Closes all other details sections except the one with the specified target ID.
+ * @param {Event} event - The event object containing the new state and target ID.
+ */
+const toggleDetailsSection = (event) => {
+  if (event.newState === "open") {
+    const details = document.querySelectorAll(
+      `details:not(#${event.target.id})`
+    );
+
+    details.forEach((detail) => (detail.open = false));
+  }
+};
+
+/**
  * Creates edit menus for chapters in the sidebar.
  */
 export function createEditMenus() {
@@ -349,21 +380,6 @@ export function createEditMenus() {
   // Enable the menu options event listeners
   addEditMenuEventListeners(chapters);
 }
-
-/**
- * Toggles the details section based on the event's new state.
- * Closes all other details sections except the one with the specified target ID.
- * @param {Event} event - The event object containing the new state and target ID.
- */
-const toggleDetailsSection = (event) => {
-  if (event.newState === "open") {
-    const details = document.querySelectorAll(
-      `details:not(#${event.target.id})`
-    );
-
-    details.forEach((detail) => (detail.open = false));
-  }
-};
 
 /**
  * Creates event listeners for closing a dialog.
@@ -858,3 +874,14 @@ export function addDownloadConfigHandler() {
       URL.revokeObjectURL(blobUrl);
     });
 }
+
+const main = async () => {
+  await initGoogleMaps();
+  addSidebarToggleHandler();
+  updateSidebar();
+  initDragAndDrop();
+  addDownloadConfigHandler();
+  initGeoSuggest();
+};
+
+main();
