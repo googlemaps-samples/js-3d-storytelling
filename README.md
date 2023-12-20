@@ -79,7 +79,7 @@ You need to have docker installed to best work with the **demo-app** locally. If
 2. `docker-compose build demo`
 3. `docker-compose up demo`
 
-There is a second docker compose service `docker-compose up app` which only serves the final app. For this you may need to update the `config.json` file to include you data.
+There is a second docker compose service `docker-compose up app` which only serves the final app. For this you may need to update the `config.json` file to include your data.
 
 ### NodeJS server
 
