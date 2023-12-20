@@ -1,4 +1,37 @@
+import { story } from "../main.js";
 import { GOOGLE_MAPS_API_KEY } from "../env.js";
+import {
+  resetToIntro,
+  getChapterIndexFromId,
+  updateDetailsNavigation,
+  updateChapterContent,
+} from "../chapters/chapter-navigation.js";
+import { getPreviewUrl } from "../utils/ui.js";
+import {
+  createCustomRadiusShader,
+  removeCustomRadiusShader,
+  DEFAULT_HIGHLIGHT_RADIUS,
+} from "../utils/cesium.js";
+import {
+  createMarkers,
+  hideMarker,
+  showMarker,
+  removeMarker,
+} from "../utils/create-markers.js";
+
+// Properties of a chapter that can be edited
+const chapterProperties = [
+  "title",
+  "content",
+  "address",
+  "imageUrl",
+  "dateTime",
+  "imageCredit",
+  "showFocus",
+  "radius",
+  "showLocationMarker",
+  "cameraOptions",
+];
 
 /**
  * Asynchronously initializes and loads the Google Maps JavaScript API with specific configurations.
@@ -25,7 +58,7 @@ export async function initGoogleMaps() {
     // assign the PlacesService to the local global variable
     new google.maps.places.PlacesService(document.createElement("div"));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 

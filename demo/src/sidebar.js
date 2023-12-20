@@ -3,7 +3,6 @@ import {
   getStoryDetails,
   addChapterToStory,
   storyProxyHandler,
-  initGoogleMaps,
 } from "./config.js";
 
 import {
@@ -29,7 +28,6 @@ import { removeCustomRadiusShader } from "../utils/cesium.js";
  * @type {Story}
  */
 const story = new Proxy(storyConfig, storyProxyHandler);
-console.log({ c: story.chapters });
 
 /**
  * @type {LocationMenuOptions} - Options for radio buttons in the sidebar.
@@ -876,7 +874,6 @@ export function addDownloadConfigHandler() {
 }
 
 const main = async () => {
-  await initGoogleMaps();
   addSidebarToggleHandler();
   updateSidebar();
   initDragAndDrop();

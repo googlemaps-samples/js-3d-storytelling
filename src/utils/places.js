@@ -1,8 +1,5 @@
 import { GOOGLE_MAPS_API_KEY } from "../env.js";
 
-/** @type {google.maps.places.PlacesService} */
-let placesService = null;
-
 /**
  * Asynchronously initializes and loads the Google Maps JavaScript API with specific configurations.
  * This function is responsible for adding a script to the document head, loading the Google Maps Places library,
@@ -25,12 +22,7 @@ export async function initGoogleMaps() {
 
     // Load the Google Maps places libray
     await google.maps.importLibrary("places");
-
-    // assign the PlacesService to the local global variable
-    placesService = new google.maps.places.PlacesService(
-      document.createElement("div")
-    );
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
