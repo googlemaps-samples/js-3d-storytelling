@@ -11,7 +11,7 @@
 
 ## Overview
 
-This project aims to create a tool to create interactive digital storytelling solutions. The demo will be featured at the Architecture Center, allowing users to show, create and play with different option for a storytelling solution on the backdrop of Google Maps 3d Tiles.
+This project aims to create a tool to create interactive digital storytelling solutions. The demo will be featured at the Architecture Center, allowing users to show, create and play with different option for a storytelling solution on the backdrop of Google Maps 3D Tiles.
 
 This repository consists of two parts. The actual app, Story Telling, and a demo app which adds a control panel for settings.
 
