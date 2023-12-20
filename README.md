@@ -103,4 +103,4 @@ The repositiory is structured to have separate folder for the actual app (`/src`
 
 The app part of the repository is self contained and can be used as is (after updating the configuration). This will show the globe with 3D tiles. Centered on the `location` setting in `config.json`. It will be filled with places from the Google Places API (configured in `config.json`).
 
-The demo folder contains additional code to render a configuration UI to play with the settings in the `config.json`. The code is added to the deployment by way of the `/demo/Dockerfile`.
+The demo folder contains additional code to render a configuration UI to play with the settings in the `config.json`. The code is added to the deployment by running the `/demo/Dockerfile`.
