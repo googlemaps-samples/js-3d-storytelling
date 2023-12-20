@@ -19,7 +19,7 @@ This repository consists of two parts. The actual app, Story Telling, and a demo
 
 ### Prerequisits
 
-You need to create a [Google API Key](https://console.cloud.google.com/apis/credentials) and restrict it to at least these there APIs.
+You need to create a [Google API Key](https://console.cloud.google.com/apis/credentials) and restrict it to at least these APIs.
 
 - Map Tiles API
 - Maps JavaScript API
