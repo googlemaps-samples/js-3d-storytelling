@@ -53,7 +53,7 @@ The `chapters` property of the config object holds an array of all the story cha
 
 ### Camera
 
-The camera object in the story and chapter properties. The location, where the camera is positioned in the 3D space is configured in the `position` object. The heading, where the camera is looking from the position, is set via `heading`, `pitch` and `roll`.
+The camera object in the story and chapter properties. The location, where the camera is positioned in the 3D space is configured in the `position` object. The orientation, what the camera is looking at, is set via `heading`, `pitch` and `roll`.
 
 ### Cesium / Globe
 
