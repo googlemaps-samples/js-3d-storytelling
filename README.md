@@ -93,7 +93,7 @@ Most IDEs include some kind of server for static files. Just point it to the `./
 
 ## Deployment
 
-To deploy the Story Telling app you need to upload everything in the `src` folder to a static webserver or some other hosting service. A static webserver is enough. You need a domain for you webspace, though. Since the Google Maps API key is only restricted on a domain you would risk missuse of the key.
+To deploy the Story Telling app you need to upload everything in the `src` folder to a static web server or some other hosting service. A static web server is enough. You need a domain for you webspace, though. Since the Google Maps API key is only restricted on a domain you would risk misuse of the key.
 
 Included in the repository is a `Dockerfile` which can be used to build a docker image. This can be used to deploy with Google Cloud Run or other container cloud services.
 
