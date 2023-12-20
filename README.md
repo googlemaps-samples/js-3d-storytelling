@@ -83,7 +83,7 @@ There is a second docker compose service `docker-compose up app` which only serv
 
 ### NodeJS server
 
-You can always use your own local webserver to show the Story Telling app like so:
+You can always use your own local web server to show the Story Telling app like so:
 
 `npx http-server -p 5500 ./src`
 
