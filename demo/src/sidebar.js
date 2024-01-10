@@ -837,7 +837,7 @@ function handleEditAction(chapter) {
  */
 function handleDeleteAction(id) {
   // we use delete on an array because the array is proxied
-  // and we handle the actual deletion of the array elemen tin the proxy
+  // and we handle the actual deletion of the array element in the proxy
   delete story.chapters[id];
   // Save updated object back to local storage
   localStorage.setItem("story", JSON.stringify(story));
