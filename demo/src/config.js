@@ -1,4 +1,9 @@
-import { story } from "../main.js";
+import {
+  story,
+  createLocationItem,
+  initDragAndDrop,
+  createEditMenus,
+} from "./sidebar.js";
 import { GOOGLE_MAPS_API_KEY } from "../env.js";
 import {
   resetToIntro,
@@ -18,6 +23,7 @@ import {
   showMarker,
   removeMarker,
 } from "../utils/create-markers.js";
+import { createChapterCard } from "../chapters/chapters.js";
 
 // Properties of a chapter that can be edited
 const chapterProperties = [
@@ -68,7 +74,7 @@ export async function initGoogleMaps() {
  * @returns {void}
  */
 export function addChapterToStory(chapter) {
-  const chapterIds = story.chapters.map(({ id }) => id).filter(Boolean);
+  const chapterIds = story.chapters.map(({ id }) => id);
 
   // Increment hightest existing chapter id by one. If no chapters exist, set id to 0
   const newChapterId = chapterIds.length ? Math.max(...chapterIds) + 1 : 0;

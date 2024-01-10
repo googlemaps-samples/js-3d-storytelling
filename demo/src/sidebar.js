@@ -27,7 +27,7 @@ import { removeCustomRadiusShader } from "../utils/cesium.js";
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
  * @type {Story}
  */
-const story = new Proxy(storyConfig, storyProxyHandler);
+export const story = new Proxy(storyConfig, storyProxyHandler);
 
 /**
  * @type {LocationMenuOptions} - Options for radio buttons in the sidebar.
@@ -836,6 +836,8 @@ function handleEditAction(chapter) {
  * @param {number} id - The id of the chapter to be deleted.
  */
 function handleDeleteAction(id) {
+  // we use delete on an array because the array is proxied
+  // and we handle the actual deletion of the array elemen tin the proxy
   delete story.chapters[id];
   // Save updated object back to local storage
   localStorage.setItem("story", JSON.stringify(story));
