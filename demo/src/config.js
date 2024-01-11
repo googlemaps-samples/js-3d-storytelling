@@ -39,6 +39,15 @@ const chapterProperties = [
   "cameraOptions",
 ];
 
+const downloadIconString = await fetch("/demo/sidebar.html").then((response) =>
+  response.text()
+);
+const parser = new DOMParser();
+const htmlDocument = parser.parseFromString(downloadIconString, "text/html");
+const sidebarElement = htmlDocument.querySelector("aside");
+
+document.body.prepend(sidebarElement);
+
 /**
  * Asynchronously initializes and loads the Google Maps JavaScript API with specific configurations.
  * This function is responsible for adding a script to the document head, loading the Google Maps Places library,

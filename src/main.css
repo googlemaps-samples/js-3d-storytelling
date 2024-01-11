@@ -154,23 +154,9 @@ button {
 }
 
 /* ---- layout ---- */
-.main-container {
-  --sidebar-width: clamp(350px, 50vw, 400px);
-  --sidebar-width-collapsed: 2.5rem;
-  display: grid;
-  grid-template-columns: var(--sidebar-width) 1fr;
-  grid-template-rows: 100dvh;
-  grid-template-areas: "sidebar map";
-  overflow: hidden;
-  transition: grid-template-columns 0.3s ease-in-out;
-}
-
-.main-container.sidebar-is-collapsed {
-  grid-template-columns: var(--sidebar-width-collapsed) 1fr;
-}
-
 .map-container {
   position: relative;
+  height: 100%;
 }
 
 /* ---- cesium ---- */

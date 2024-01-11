@@ -1,0 +1,270 @@
+<aside id="sidebar" class="content-grid">
+<style>
+body {
+  --sidebar-width: clamp(350px, 50vw, 400px);
+  --sidebar-width-collapsed: 2.5rem;
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-rows: 100dvh;
+  grid-template-areas: "sidebar map";
+  overflow: hidden;
+  transition: grid-template-columns 0.3s ease-in-out;
+}
+
+body.sidebar-is-collapsed {
+  grid-template-columns: var(--sidebar-width-collapsed) 1fr;
+}
+</style>
+
+  <button
+    class="sidebar-collapse-toggle"
+    aria-label="Toggle Sidebar"
+  ></button>
+  <img
+    class="google-maps-icon"
+    src="./assets/icons/google-maps-icon.svg"
+    alt="Google Maps Platform"
+  />
+  <div class="storytelling-intro full-width content-grid">
+    <img
+      class="google-maps-platform-text"
+      src="./assets/google-maps-platform-text.svg"
+      alt="Google Maps Platform Logo"
+    />
+    <h1>3D Storytelling Demo</h1>
+    <p>Explore the demo with the default data oder add your owns.</p>
+    <a href="#" target="_blank">Go to Architecture Center</a>
+  </div>
+  <details class="story-details-container full-width" id="story-details">
+    <summary><h2>Story Details:</h2></summary>
+
+    <form class="chapter-form" name="story-details-form" method="dialog">
+      <fieldset>
+        <div class="field-wrapper">
+          <input type="text" name="title" placeholder="Add a title" />
+          <div class="field-placeholder">
+            <span class="label">Title</span>
+          </div>
+        </div>
+        <div class="field-wrapper">
+          <input
+            type="text"
+            name="description"
+            placeholder="Add a description"
+          />
+          <div class="field-placeholder">
+            <span class="label">Description</span>
+          </div>
+        </div>
+        <div class="field-wrapper">
+          <input
+            type="text"
+            name="createdBy"
+            placeholder="Add an author"
+          />
+          <div class="field-placeholder">
+            <span class="label">Author</span>
+          </div>
+        </div>
+        <div class="field-wrapper">
+          <input
+            type="text"
+            name="date"
+            placeholder="Add a date or time"
+          />
+          <div class="field-placeholder">
+            <span class="label">Date or Time</span>
+          </div>
+        </div>
+        <div class="field-wrapper url-input">
+          <input
+            type="text"
+            name="imageUrl"
+            placeholder="Image or Youtube URL"
+          />
+          <div class="field-placeholder">
+            <span class="label">URL</span>
+          </div>
+        </div>
+        <div class="image-credit-container">
+          <img src="#" alt="story image" />
+          <div class="field-wrapper">
+            <input
+              type="text"
+              name="imageCredit"
+              placeholder="Add an image or video credit"
+            />
+            <div class="field-placeholder">
+              <span class="label">Credit</span>
+            </div>
+          </div>
+        </div>
+        <div class="save-camera-position-container"">
+          <button id="save-story-camera-position-button" type="button"
+          class="button save-camera-position">
+          Save Camera Position
+          </button>
+          <img class="save-camera-position-info-icon" id="save-story-camera-position-info-icon"
+            src="./assets/icons/info-icon.svg" alt="" />
+          <span id="save-story-camera-position-info-tooltip" class="save-camera-position-info-tooltip story">
+            With the Tilt
+            and
+            Rotation
+            feature, you can control
+            the map in three dimensions both manually
+            and programatically. To control the map manually, hold down the control key while clicking and dragging
+            with
+            the mouse.
+          </span>
+        </div>
+      </fieldset>
+    </form>
+  </details>
+  <details class="locations-container full-width" id="locations">
+    <summary><h2>Locations:</h2></summary>
+
+    <div class="location-input">
+      <input
+        type="text"
+        onkeyup="event.preventDefault()"
+        placeholder="Search for a new place"
+      />
+      <button class="button add-location" disabled>
+        Add to the Story
+      </button>
+    </div>
+    <ul class="location-list"></ul>
+    <form
+      class="edit chapter-form"
+      name="edit-chapter-form"
+      method="dialog"
+    >
+      <fieldset>
+        <div class="field-wrapper">
+          <input type="text" name="title" placeholder="Add a title" />
+          <div class="field-placeholder">
+            <span class="label">Title</span>
+          </div>
+        </div>
+        <div class="field-wrapper">
+          <input
+            type="text"
+            name="content"
+            placeholder="Add a description"
+          />
+          <div class="field-placeholder">
+            <span class="label">Description</span>
+          </div>
+        </div>
+        <div class="field-wrapper">
+          <input
+            type="text"
+            name="address"
+            placeholder="Add an address"
+          />
+          <div class="field-placeholder">
+            <span class="label">Address</span>
+          </div>
+        </div>
+
+        <div class="field-wrapper">
+          <input
+            type="text"
+            name="dateTime"
+            placeholder="Add a date or time"
+          />
+          <div class="field-placeholder">
+            <span class="label">Date or Time</span>
+          </div>
+        </div>
+        <div class="field-wrapper url-input">
+          <input
+            type="text"
+            name="imageUrl"
+            placeholder="Image or Youtube URL"
+          />
+          <div class="field-placeholder">
+            <span class="label">URL</span>
+          </div>
+        </div>
+        <div class="image-credit-container">
+          <img src="#" alt="chapter image" />
+          <div class="field-wrapper">
+            <input
+              type="text"
+              name="imageCredit"
+              placeholder="Add an image or video credit"
+            />
+            <div class="field-placeholder">
+              <span class="label">Credit</span>
+            </div>
+          </div>
+        </div>
+        <details class="more-settings-container">
+          <summary class="more-settings">More Settings</summary>
+          <ul>
+            <li>
+              <input
+                type="checkbox"
+                id="marker-checkbox"
+                name="marker-checkbox"
+              />
+              <label for="marker-checkbox">Display Location Marker</label>
+            </li>
+            <li>
+              <input
+                type="checkbox"
+                id="focus-checkbox"
+                name="focus-checkbox"
+              />
+              <label for="focus-checkbox">Display Radius Focus</label>
+            </li>
+            <li>
+              <div class="radius-slider-container">
+                <input
+                  type="range"
+                  name="radius"
+                  id="radius"
+                  min="100"
+                  max="5000"
+                  step="100"
+                  style="--value: 0; --min: 100; --max: 5000"
+                /><label>100&thinsp;m</label><label>5&thinsp;km</label>
+              </div>
+            </li>
+            <li>
+              <div class="save-camera-position-container"">
+                <button id="save-chapter-camera-position-button" type="button"
+                class="button save-camera-position">
+                Save Camera Position
+                </button>
+                <img class="save-camera-position-info-icon" id="save-chapter-camera-position-info-icon"
+                  src="./assets/icons/info-icon.svg" alt="" />
+                <span id="save-chapter-camera-position-info-tooltip" class="save-camera-position-info-tooltip">
+                  With the Tilt
+                  and
+                  Rotation
+                  feature, you can control
+                  the map in three dimensions both manually
+                  and programatically. To control the map manually, hold down the control key while clicking and dragging
+                  with
+                  the mouse.
+                </span>
+              </div>
+            </li>
+          </ul>
+        </details>
+
+        <button type="submit" class="button leave-edit-mode">
+          Leave edit mode
+        </button>
+      </fieldset>
+    </form>
+  </details>
+  <div class="download-config-container full-width">
+    <button id="download-config-button" class="download-config">
+      <img src="./assets/icons/download-button-icon.svg" alt="" />
+      Download Config
+    </button>
+  </div>
+</aside>
