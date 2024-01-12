@@ -39,11 +39,11 @@ const chapterProperties = [
   "cameraOptions",
 ];
 
-const downloadIconString = await fetch("/demo/sidebar.html").then((response) =>
+const sidebarHTMLString = await fetch("/demo/sidebar.html").then((response) =>
   response.text()
 );
 const parser = new DOMParser();
-const htmlDocument = parser.parseFromString(downloadIconString, "text/html");
+const htmlDocument = parser.parseFromString(sidebarHTMLString, "text/html");
 const sidebarElement = htmlDocument.querySelector("aside");
 
 document.body.prepend(sidebarElement);
