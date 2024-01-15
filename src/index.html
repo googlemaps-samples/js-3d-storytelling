@@ -13,338 +13,103 @@
     <title>google-maps-3d-storytelling</title>
   </head>
   <body>
-    <main class="main-container">
-      <section class="chapter">
-        <div class="chapter-detail">
-          <div class="story-title"></div>
-          <div class="hero-media-container">
-            <div id="media-container"></div>
-          </div>
-          <header>
-            <div class="story-intro-attribution"></div>
-            <div class="date"></div>
-            <div class="place"></div>
-            <h2></h2>
-          </header>
-          <div class="description"></div>
-          <div class="attribution"></div>
-          <div class="story-intro-author"></div>
-          <div class="story-intro-date"></div>
+    <section class="chapter">
+      <div class="chapter-detail">
+        <div class="story-title"></div>
+        <div class="hero-media-container">
+          <div id="media-container"></div>
         </div>
-        <nav class="intro-navigation active">
-          <button id="start-story">
-            Begin interactive map story
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M9.5 16.5L16.5 12L9.5 7.5V16.5ZM12 22C10.6167 22 9.31667 21.7375 8.1 21.2125C6.88333 20.6875 5.825 19.975 4.925 19.075C4.025 18.175 3.3125 17.1167 2.7875 15.9C2.2625 14.6833 2 13.3833 2 12C2 10.6167 2.2625 9.31667 2.7875 8.1C3.3125 6.88333 4.025 5.825 4.925 4.925C5.825 4.025 6.88333 3.3125 8.1 2.7875C9.31667 2.2625 10.6167 2 12 2C13.3833 2 14.6833 2.2625 15.9 2.7875C17.1167 3.3125 18.175 4.025 19.075 4.925C19.975 5.825 20.6875 6.88333 21.2125 8.1C21.7375 9.31667 22 10.6167 22 12C22 13.3833 21.7375 14.6833 21.2125 15.9C20.6875 17.1167 19.975 18.175 19.075 19.075C18.175 19.975 17.1167 20.6875 15.9 21.2125C14.6833 21.7375 13.3833 22 12 22Z"
-                fill="white"
-              />
-            </svg>
-          </button>
-        </nav>
-        <nav class="detail-navigation">
-          <span class="controls-container">
-            <button id="chapter-backward">
-              <svg id="chapter-backward-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.4099 16.59L10.8299 12L15.4099 7.41L13.9999 6L7.99991 12L13.9999 18L15.4099 16.59Z" fill="#1a73e8"/>
-              </svg>
-            </button>
-            <span id="chapter-index"> </span>
-            <button id="chapter-forward">
-              <svg id="chapter-forward-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.4099 16.59L10.8299 12L15.4099 7.41L13.9999 6L7.99991 12L13.9999 18L15.4099 16.59Z" fill="#1a73e8"/>
-              </svg>
-            </button>
-          </span>
-          <button id="autoplay-story">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M9.5 16.5L16.5 12L9.5 7.5V16.5ZM12 22C10.6167 22 9.31667 21.7375 8.1 21.2125C6.88333 20.6875 5.825 19.975 4.925 19.075C4.025 18.175 3.3125 17.1167 2.7875 15.9C2.2625 14.6833 2 13.3833 2 12C2 10.6167 2.2625 9.31667 2.7875 8.1C3.3125 6.88333 4.025 5.825 4.925 4.925C5.825 4.025 6.88333 3.3125 8.1 2.7875C9.31667 2.2625 10.6167 2 12 2C13.3833 2 14.6833 2.2625 15.9 2.7875C17.1167 3.3125 18.175 4.025 19.075 4.925C19.975 5.825 20.6875 6.88333 21.2125 8.1C21.7375 9.31667 22 10.6167 22 12C22 13.3833 21.7375 14.6833 21.2125 15.9C20.6875 17.1167 19.975 18.175 19.075 19.075C18.175 19.975 17.1167 20.6875 15.9 21.2125C14.6833 21.7375 13.3833 22 12 22Z"
-              />
-            </svg>
-          </button>
-        </nav>
-      </section>
-      <aside id="sidebar" class="content-grid">
-        <button
-          class="sidebar-collapse-toggle"
-          aria-label="Toggle Sidebar"
-        ></button>
-        <img
-          class="google-maps-icon"
-          src="./assets/icons/google-maps-icon.svg"
-          alt="Google Maps Platform"
-        />
-        <div class="storytelling-intro full-width content-grid">
-          <img
-            class="google-maps-platform-text"
-            src="./assets/google-maps-platform-text.svg"
-            alt="Google Maps Platform Logo"
-          />
-          <h1>3D Storytelling Demo</h1>
-          <p>Explore the demo with the default data oder add your owns.</p>
-          <a href="#" target="_blank">Go to Architecture Center</a>
-        </div>
-        <details class="story-details-container full-width" id="story-details">
-          <summary><h2>Story Details:</h2></summary>
-
-          <form class="chapter-form" name="story-details-form" method="dialog">
-            <fieldset>
-              <div class="field-wrapper">
-                <input type="text" name="title" placeholder="Add a title" />
-                <div class="field-placeholder">
-                  <span class="label">Title</span>
-                </div>
-              </div>
-              <div class="field-wrapper">
-                <input
-                  type="text"
-                  name="description"
-                  placeholder="Add a description"
-                />
-                <div class="field-placeholder">
-                  <span class="label">Description</span>
-                </div>
-              </div>
-              <div class="field-wrapper">
-                <input
-                  type="text"
-                  name="createdBy"
-                  placeholder="Add an author"
-                />
-                <div class="field-placeholder">
-                  <span class="label">Author</span>
-                </div>
-              </div>
-              <div class="field-wrapper">
-                <input
-                  type="text"
-                  name="date"
-                  placeholder="Add a date or time"
-                />
-                <div class="field-placeholder">
-                  <span class="label">Date or Time</span>
-                </div>
-              </div>
-              <div class="field-wrapper url-input">
-                <input
-                  type="text"
-                  name="imageUrl"
-                  placeholder="Image or Youtube URL"
-                />
-                <div class="field-placeholder">
-                  <span class="label">URL</span>
-                </div>
-              </div>
-              <div class="image-credit-container">
-                <img src="#" alt="story image" />
-                <div class="field-wrapper">
-                  <input
-                    type="text"
-                    name="imageCredit"
-                    placeholder="Add an image or video credit"
-                  />
-                  <div class="field-placeholder">
-                    <span class="label">Credit</span>
-                  </div>
-                </div>
-              </div>
-              <div class="save-camera-position-container"">
-                <button id="save-story-camera-position-button" type="button"
-                class="button save-camera-position">
-                Save Camera Position
-                </button>
-                <img class="save-camera-position-info-icon" id="save-story-camera-position-info-icon"
-                  src="./assets/icons/info-icon.svg" alt="" />
-                <span id="save-story-camera-position-info-tooltip" class="save-camera-position-info-tooltip story">
-                  With the Tilt
-                  and
-                  Rotation
-                  feature, you can control
-                  the map in three dimensions both manually
-                  and programatically. To control the map manually, hold down the control key while clicking and dragging
-                  with
-                  the mouse.
-                </span>
-              </div>
-            </fieldset>
-          </form>
-        </details>
-        <details class="locations-container full-width" id="locations">
-          <summary><h2>Locations:</h2></summary>
-
-          <div class="location-input">
-            <input
-              type="text"
-              onkeyup="event.preventDefault()"
-              placeholder="Search for a new place"
-            />
-            <button class="button add-location" disabled>
-              Add to the Story
-            </button>
-          </div>
-          <ul class="location-list"></ul>
-          <form
-            class="edit chapter-form"
-            name="edit-chapter-form"
-            method="dialog"
-          >
-            <fieldset>
-              <div class="field-wrapper">
-                <input type="text" name="title" placeholder="Add a title" />
-                <div class="field-placeholder">
-                  <span class="label">Title</span>
-                </div>
-              </div>
-              <div class="field-wrapper">
-                <input
-                  type="text"
-                  name="content"
-                  placeholder="Add a description"
-                />
-                <div class="field-placeholder">
-                  <span class="label">Description</span>
-                </div>
-              </div>
-              <div class="field-wrapper">
-                <input
-                  type="text"
-                  name="address"
-                  placeholder="Add an address"
-                />
-                <div class="field-placeholder">
-                  <span class="label">Address</span>
-                </div>
-              </div>
-
-              <div class="field-wrapper">
-                <input
-                  type="text"
-                  name="dateTime"
-                  placeholder="Add a date or time"
-                />
-                <div class="field-placeholder">
-                  <span class="label">Date or Time</span>
-                </div>
-              </div>
-              <div class="field-wrapper url-input">
-                <input
-                  type="text"
-                  name="imageUrl"
-                  placeholder="Image or Youtube URL"
-                />
-                <div class="field-placeholder">
-                  <span class="label">URL</span>
-                </div>
-              </div>
-              <div class="image-credit-container">
-                <img src="#" alt="chapter image" />
-                <div class="field-wrapper">
-                  <input
-                    type="text"
-                    name="imageCredit"
-                    placeholder="Add an image or video credit"
-                  />
-                  <div class="field-placeholder">
-                    <span class="label">Credit</span>
-                  </div>
-                </div>
-              </div>
-              <details class="more-settings-container">
-                <summary class="more-settings">More Settings</summary>
-                <ul>
-                  <li>
-                    <input
-                      type="checkbox"
-                      id="marker-checkbox"
-                      name="marker-checkbox"
-                    />
-                    <label for="marker-checkbox">Display Location Marker</label>
-                  </li>
-                  <li>
-                    <input
-                      type="checkbox"
-                      id="focus-checkbox"
-                      name="focus-checkbox"
-                    />
-                    <label for="focus-checkbox">Display Radius Focus</label>
-                  </li>
-                  <li>
-                    <div class="radius-slider-container">
-                      <input
-                        type="range"
-                        name="radius"
-                        id="radius"
-                        min="100"
-                        max="5000"
-                        step="100"
-                        style="--value: 0; --min: 100; --max: 5000"
-                      /><label>100&thinsp;m</label><label>5&thinsp;km</label>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="save-camera-position-container"">
-                      <button id="save-chapter-camera-position-button" type="button"
-                      class="button save-camera-position">
-                      Save Camera Position
-                      </button>
-                      <img class="save-camera-position-info-icon" id="save-chapter-camera-position-info-icon"
-                        src="./assets/icons/info-icon.svg" alt="" />
-                      <span id="save-chapter-camera-position-info-tooltip" class="save-camera-position-info-tooltip">
-                        With the Tilt
-                        and
-                        Rotation
-                        feature, you can control
-                        the map in three dimensions both manually
-                        and programatically. To control the map manually, hold down the control key while clicking and dragging
-                        with
-                        the mouse.
-                      </span>
-                    </div>
-                  </li>
-                </ul>
-              </details>
-
-              <button type="submit" class="button leave-edit-mode">
-                Leave edit mode
-              </button>
-            </fieldset>
-          </form>
-        </details>
-        <div class="download-config-container full-width">
-          <button id="download-config-button" class="download-config">
-            <img src="./assets/icons/download-button-icon.svg" alt="" />
-            Download Config
-          </button>
-        </div>
-      </aside>
-      <div class="map-container">
-        <div id="cesium-container"></div>
-        <div id="chapters-bar">
-          <button
-            class="navigation-button previous hidden"
-            aria-label="Show previous cards"
-          ></button>
-          <div class="cards"></div>
-          <button
-            class="navigation-button next hidden"
-            aria-label="Show next cards"
-          ></button>
-        </div>
+        <header>
+          <div class="story-intro-attribution"></div>
+          <div class="date"></div>
+          <div class="place"></div>
+          <h2></h2>
+        </header>
+        <div class="description"></div>
+        <div class="attribution"></div>
+        <div class="story-intro-author"></div>
+        <div class="story-intro-date"></div>
       </div>
-    </main>
+      <nav class="intro-navigation active">
+        <button id="start-story">
+          Begin interactive map story
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.5 16.5L16.5 12L9.5 7.5V16.5ZM12 22C10.6167 22 9.31667 21.7375 8.1 21.2125C6.88333 20.6875 5.825 19.975 4.925 19.075C4.025 18.175 3.3125 17.1167 2.7875 15.9C2.2625 14.6833 2 13.3833 2 12C2 10.6167 2.2625 9.31667 2.7875 8.1C3.3125 6.88333 4.025 5.825 4.925 4.925C5.825 4.025 6.88333 3.3125 8.1 2.7875C9.31667 2.2625 10.6167 2 12 2C13.3833 2 14.6833 2.2625 15.9 2.7875C17.1167 3.3125 18.175 4.025 19.075 4.925C19.975 5.825 20.6875 6.88333 21.2125 8.1C21.7375 9.31667 22 10.6167 22 12C22 13.3833 21.7375 14.6833 21.2125 15.9C20.6875 17.1167 19.975 18.175 19.075 19.075C18.175 19.975 17.1167 20.6875 15.9 21.2125C14.6833 21.7375 13.3833 22 12 22Z"
+              fill="white"
+            />
+          </svg>
+        </button>
+      </nav>
+      <nav class="detail-navigation">
+        <span class="controls-container">
+          <button id="chapter-backward">
+            <svg
+              id="chapter-backward-icon"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.4099 16.59L10.8299 12L15.4099 7.41L13.9999 6L7.99991 12L13.9999 18L15.4099 16.59Z"
+                fill="#1a73e8"
+              />
+            </svg>
+          </button>
+          <span id="chapter-index"> </span>
+          <button id="chapter-forward">
+            <svg
+              id="chapter-forward-icon"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.4099 16.59L10.8299 12L15.4099 7.41L13.9999 6L7.99991 12L13.9999 18L15.4099 16.59Z"
+                fill="#1a73e8"
+              />
+            </svg>
+          </button>
+        </span>
+        <button id="autoplay-story">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.5 16.5L16.5 12L9.5 7.5V16.5ZM12 22C10.6167 22 9.31667 21.7375 8.1 21.2125C6.88333 20.6875 5.825 19.975 4.925 19.075C4.025 18.175 3.3125 17.1167 2.7875 15.9C2.2625 14.6833 2 13.3833 2 12C2 10.6167 2.2625 9.31667 2.7875 8.1C3.3125 6.88333 4.025 5.825 4.925 4.925C5.825 4.025 6.88333 3.3125 8.1 2.7875C9.31667 2.2625 10.6167 2 12 2C13.3833 2 14.6833 2.2625 15.9 2.7875C17.1167 3.3125 18.175 4.025 19.075 4.925C19.975 5.825 20.6875 6.88333 21.2125 8.1C21.7375 9.31667 22 10.6167 22 12C22 13.3833 21.7375 14.6833 21.2125 15.9C20.6875 17.1167 19.975 18.175 19.075 19.075C18.175 19.975 17.1167 20.6875 15.9 21.2125C14.6833 21.7375 13.3833 22 12 22Z"
+            />
+          </svg>
+        </button>
+      </nav>
+    </section>
+    <div class="map-container">
+      <div id="cesium-container"></div>
+      <div id="chapters-bar">
+        <button
+          class="navigation-button previous hidden"
+          aria-label="Show previous cards"
+        ></button>
+        <div class="cards"></div>
+        <button
+          class="navigation-button next hidden"
+          aria-label="Show next cards"
+        ></button>
+      </div>
+    </div>
     <script type="module" src="./main.js"></script>
   </body>
 </html>
