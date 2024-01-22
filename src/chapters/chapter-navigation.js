@@ -311,26 +311,27 @@ export function updateDetailsNavigation() {
  * @param {boolean} [isIntro=true] - Flag indicating if the current view is the introduction.
  */
 export function updateChapterContent(chapter, isIntro = true) {
-  const { imageUrl, ...chapterData } = chapter;
-
   updateDetailsNavigation();
 
   setTextContent(".story-title", isIntro ? "" : story.properties.title);
-  setTextContent("h2", isIntro ? story.properties.title : chapterData.title);
+  setTextContent(
+    ".chapter-detail h2",
+    isIntro ? story.properties.title : chapter.title
+  );
   setTextContent(
     ".description",
-    isIntro ? story.properties.description : chapterData.content
+    isIntro ? story.properties.description : chapter.content
   );
 
-  setTextContent(".date", isIntro ? "" : chapterData.dateTime);
-  setTextContent(".place", chapterData.address);
+  setTextContent(".date", isIntro ? "" : chapter.dateTime);
+  setTextContent(".place", chapter.address);
 
   // Update image or video
-  setMediaContent(imageUrl);
+  setMediaContent(chapter.imageUrl);
 
   // Update image or video credit
-  const imageCredit = chapterData.imageCredit
-    ? `Image credit: ${chapterData.imageCredit}`
+  const imageCredit = chapter.imageCredit
+    ? `Image credit: ${chapter.imageCredit}`
     : "";
 
   setTextContent(".story-intro-attribution", isIntro ? imageCredit : "");
