@@ -44,7 +44,7 @@
   height: 100%;
 }
 
-.main-container.sidebar-is-collapsed .sidebar-collapse-toggle::after {
+.sidebar-is-collapsed .sidebar-collapse-toggle::after {
   transform: rotate(180deg);
 }
 
@@ -77,17 +77,17 @@
   grid-column: full-width;
 }
 
-.main-container #sidebar > div,
-.main-container #sidebar > details {
+body #sidebar > div,
+body #sidebar > details {
   transition: translate 0.3s ease-in-out;
 }
 
-.main-container.sidebar-is-collapsed #sidebar div,
-.main-container.sidebar-is-collapsed #sidebar details {
+.sidebar-is-collapsed #sidebar div,
+.sidebar-is-collapsed #sidebar details {
   translate: calc(-1 * var(--sidebar-width));
 }
 
-.main-container.sidebar-is-collapsed #sidebar {
+.sidebar-is-collapsed #sidebar {
   display: block;
 }
 
@@ -119,7 +119,7 @@
   margin-left: var(--spacing-small);
 }
 
-.main-container.sidebar-is-collapsed .google-maps-icon {
+.sidebar-is-collapsed .google-maps-icon {
   display: block;
 }
 

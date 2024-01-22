@@ -52,8 +52,7 @@ export function addSidebarToggleHandler() {
   const sidebarToggle = document.querySelector(".sidebar-collapse-toggle");
 
   sidebarToggle.addEventListener("click", () => {
-    const main = document.querySelector(".main-container");
-    main.classList.toggle("sidebar-is-collapsed");
+    document.body.classList.toggle("sidebar-is-collapsed");
   });
 }
 
