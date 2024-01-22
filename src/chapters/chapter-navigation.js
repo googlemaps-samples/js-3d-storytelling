@@ -314,7 +314,10 @@ export function updateChapterContent(chapter, isIntro = true) {
   updateDetailsNavigation();
 
   setTextContent(".story-title", isIntro ? "" : story.properties.title);
-  setTextContent("h2", isIntro ? story.properties.title : chapter.title);
+  setTextContent(
+    ".chapter-detail h2",
+    isIntro ? story.properties.title : chapter.title
+  );
   setTextContent(
     ".description",
     isIntro ? story.properties.description : chapter.content
