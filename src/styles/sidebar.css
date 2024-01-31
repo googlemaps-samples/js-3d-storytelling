@@ -123,7 +123,7 @@ body #sidebar > details {
   display: block;
 }
 
-.storytelling-intro. h1 {
+.storytelling-intro h1 {
   margin-bottom: var(--spacing-small);
 }
 
@@ -140,12 +140,8 @@ body #sidebar > details {
 
 form.edit {
   font-family: var(--font-family-inter);
-  overflow: auto;
-  position: absolute;
   padding-inline: var(--spacing-medium-large);
-  top: 2.5rem;
   width: 100%;
-  bottom: 0;
 }
 
 .location-list {
@@ -162,11 +158,13 @@ details {
 }
 
 details > summary {
+  user-select: none;
+  cursor: pointer;
   list-style: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: var(--spacing-medium);
+  padding-block: var(--spacing-medium);
 }
 
 details > summary::-webkit-details-marker {
@@ -184,11 +182,6 @@ summary::after {
   height: 1.5rem;
   /* expand icon */
   content: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 15.3746L6 9.37461L7.4 7.97461L12 12.5746L16.6 7.97461L18 9.37461L12 15.3746Z' fill='%231A73E8'/%3E%3C/svg%3E");
-}
-
-.locations-container:not([open]),
-.story-details-container:not([open]) {
-  padding-bottom: var(--spacing-medium);
 }
 
 .locations-container[open] summary::after,
@@ -265,6 +258,7 @@ form input[type="checkbox"]:after {
 
 .locations-container[data-mode="edit"] {
   border-bottom: 1px solid var(--color-light-grey);
+  overflow: auto;
 }
 
 .locations-container[data-mode="edit"] > .location-input,
@@ -280,10 +274,6 @@ form input[type="checkbox"]:after {
 .locations-container > summary,
 .locations-container > .location-input {
   padding-inline: var(--spacing-medium-large);
-}
-
-.locations-container > .location-input {
-  padding-block: var(--spacing-medium);
 }
 
 /* --- RANGE SLIDER --- */
@@ -363,9 +353,10 @@ form input[type="checkbox"]:after {
 }
 
 .location-input::before {
-  content: url("../assets/icons/search-icon.svg");
+  content: url(../assets/icons/search-icon.svg);
   position: absolute;
-  top: 1.25rem;
+  padding: 0.25rem 0;
+  height: 2rem;
   margin: 0 var(--spacing-medium);
   pointer-events: none;
 }
@@ -412,10 +403,6 @@ form input[type="checkbox"]:after {
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25),
     4px 0px 4px 0px rgba(0, 0, 0, 0.25);
   border: 1px solid #f8f8ff;
-}
-
-.chapter-form details summary:after {
-  content: "";
 }
 
 .location-list-item input[type="radio"] {
@@ -548,7 +535,7 @@ button.download-config {
 }
 
 .chapter-form > fieldset {
-  padding-block: var(--spacing-medium);
+  padding-bottom: var(--spacing-medium);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-medium);
