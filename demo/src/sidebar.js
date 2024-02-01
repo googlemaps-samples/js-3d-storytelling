@@ -21,17 +21,13 @@ import {
 import { getPreviewUrl } from "../utils/ui.js";
 import { removeCustomRadiusShader } from "../utils/cesium.js";
 
-const storyObject = localStorage.getItem("story")
-  ? JSON.parse(localStorage.getItem("story"))
-  : storyConfig;
-
 /**
  * Creates a proxy object for the story object.
  * This allows us to intercept these operations and update the UI accordingly without having to re-render the whole UI.
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
  * @type {Story}
  */
-export const story = new Proxy(storyObject, storyProxyHandler);
+export const story = new Proxy(storyConfig, storyProxyHandler);
 
 /**
  * @type {LocationMenuOptions} - Options for radio buttons in the sidebar.

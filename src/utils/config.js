@@ -25,9 +25,7 @@ export async function loadConfig(configUrl) {
     // Fetch the configuration data from the specified URL.
     const configResponse = await fetch(configUrl);
     // Parse the JSON data
-    const configData = await configResponse.json();
-
-    return configData;
+    return await configResponse.json();
   } catch (error) {
     // Handle and report any errors during the process.
     throw `Failed to load and parse configuration data: ${error}`;
