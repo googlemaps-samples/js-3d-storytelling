@@ -25,12 +25,9 @@ export async function loadConfig(configUrl) {
     // Fetch the configuration data from the specified URL.
     const configResponse = await fetch(configUrl);
     // Parse the JSON data
-
-    const localData = JSON.parse(localStorage.getItem("story"));
-
     const configData = await configResponse.json();
 
-    return localData || configData;
+    return configData;
   } catch (error) {
     // Handle and report any errors during the process.
     throw `Failed to load and parse configuration data: ${error}`;

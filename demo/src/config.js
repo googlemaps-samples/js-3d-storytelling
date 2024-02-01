@@ -23,7 +23,6 @@ import {
   showMarker,
   removeMarker,
 } from "../utils/create-markers.js";
-import { createChapterCard } from "../chapters/chapters.js";
 
 // Properties of a chapter that can be edited
 const chapterProperties = [
