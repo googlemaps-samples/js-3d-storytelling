@@ -110,6 +110,7 @@ body #sidebar > details {
 
 .storytelling-intro p {
   padding-bottom: var(--spacing-small);
+  text-wrap: balance;
 }
 
 .google-maps-icon {
