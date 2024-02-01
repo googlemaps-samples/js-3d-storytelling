@@ -216,6 +216,7 @@
   align-items: flex-end;
   gap: 0.75rem;
   overflow: auto;
+  user-select: none;
 }
 
 .card {
@@ -234,6 +235,7 @@
 }
 
 .card:hover {
+  cursor: pointer;
   --card-background-color: rgba(0, 0, 0, 0.8);
   --card-text-color: var(--text-color-white);
 }
