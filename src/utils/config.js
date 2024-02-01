@@ -1,40 +1,3 @@
-import { story } from "../main.js";
-import { createChapterCard } from "../chapters/chapters.js";
-import {
-  getChapterIndexFromId,
-  resetToIntro,
-  updateChapterContent,
-  updateDetailsNavigation,
-} from "../chapters/chapter-navigation.js";
-import {
-  createCustomRadiusShader,
-  removeCustomRadiusShader,
-  DEFAULT_HIGHLIGHT_RADIUS,
-} from "../utils/cesium.js";
-
-import {
-  createMarkers,
-  hideMarker,
-  showMarker,
-  removeMarker,
-} from "./create-markers.js";
-
-import { getPreviewUrl } from "../utils/ui.js";
-
-// Properties of a chapter that can be edited
-const chapterProperties = [
-  "title",
-  "content",
-  "address",
-  "imageUrl",
-  "dateTime",
-  "imageCredit",
-  "showFocus",
-  "radius",
-  "showLocationMarker",
-  "cameraOptions",
-];
-
 /**
  * Asynchronously fetches and loads a configuration file in JSON format.
  *
@@ -62,9 +25,12 @@ export async function loadConfig(configUrl) {
     // Fetch the configuration data from the specified URL.
     const configResponse = await fetch(configUrl);
     // Parse the JSON data
+
+    const localData = JSON.parse(localStorage.getItem("story"));
+
     const configData = await configResponse.json();
 
-    return configData;
+    return localData || configData;
   } catch (error) {
     // Handle and report any errors during the process.
     throw `Failed to load and parse configuration data: ${error}`;

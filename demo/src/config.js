@@ -209,7 +209,7 @@ export const storyProxyHandler = {
    * @returns {boolean} - Returns true if the value was successfully set.
    */
   set(target, property, updatedValue) {
-    // Check if the property being is the length property
+    // Check if the property is the length property
     // If so, return true to ignore changes to the length property (for example when adding a new chapter)
     if (property === "length") {
       return true;
@@ -287,6 +287,7 @@ export const storyProxyHandler = {
 
         return true;
       }
+
       // Update the value
       target[property] = updatedValue;
 
@@ -313,7 +314,7 @@ export const storyProxyHandler = {
 
     if (property === "properties") {
       // Update chapter details
-      updateChapterContent(target.properties, true);
+      updateChapterContent(target.properties);
 
       // Update story card
       updateStoryCard(target.properties);

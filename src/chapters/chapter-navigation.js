@@ -11,7 +11,6 @@ import { setTextContent } from "../utils/ui.js";
 import {
   getYouTubeVideoId,
   isValidYouTubeUrl,
-  loadYouTubeAPI,
 } from "../utils/youtube-loader.js";
 
 /**
@@ -313,14 +312,11 @@ export function updateDetailsNavigation() {
 export function updateChapterContent(chapter, isIntro = true) {
   updateDetailsNavigation();
 
-  setTextContent(".story-title", isIntro ? "" : story.properties.title);
-  setTextContent(
-    ".chapter-detail h2",
-    isIntro ? story.properties.title : chapter.title
-  );
+  setTextContent(".story-title", isIntro ? "" : chapter.title);
+  setTextContent(".chapter-detail h2", chapter.title);
   setTextContent(
     ".description",
-    isIntro ? story.properties.description : chapter.content
+    isIntro ? chapter.description : chapter.content
   );
 
   setTextContent(".date", isIntro ? "" : chapter.dateTime);
@@ -340,12 +336,10 @@ export function updateChapterContent(chapter, isIntro = true) {
   // Update author and date in intro
   setTextContent(
     ".story-intro-author",
-    isIntro && story.properties.createdBy
-      ? `by: ${story.properties.createdBy}`
-      : ""
+    isIntro && chapter.createdBy ? `by: ${chapter.createdBy}` : ""
   );
 
-  setTextContent(".story-intro-date", isIntro ? story.properties.date : "");
+  setTextContent(".story-intro-date", isIntro ? chapter.date : "");
 
   // Update chapter index and forward button state
   updateChapterIndexAndNavigation();
