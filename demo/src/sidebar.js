@@ -886,7 +886,7 @@ function initData() {
 
     story.chapters = localData.chapters;
     story.properties = localData.properties;
-  } catch (error) {
+  } catch {
     console.info("No local storage data.");
   }
 }
