@@ -2,7 +2,6 @@ import {
   getChapterIndexFromId,
   updateChapter,
 } from "../chapters/chapter-navigation.js";
-import { story } from "../main.js";
 import { cesiumViewer } from "./cesium.js";
 
 // The size of the marker in relation to the original SVG size.

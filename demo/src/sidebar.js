@@ -874,12 +874,29 @@ export function addDownloadConfigHandler() {
     });
 }
 
-const main = async () => {
+/** Initialize data if local storage is available */
+function initData() {
+  try {
+    // Load story from local storage
+    const localData = JSON.parse(localStorage.getItem("story"));
+
+    if (!localData) {
+      return;
+    }
+
+    story.chapters = localData.chapters;
+    story.properties = localData.properties;
+  } catch {
+    console.info("No local storage data.");
+  }
+}
+
+(function () {
+  initData();
+
   addSidebarToggleHandler();
   updateSidebar();
   initDragAndDrop();
   addDownloadConfigHandler();
   initGeoSuggest();
-};
-
-main();
+})();
