@@ -1,11 +1,11 @@
 {
   "properties": {
-    "imageUrl": "https://media.tacdn.com/media/attractions-splice-spp-674x446/0b/27/86/14.jpg",
+    "imageUrl": "https://storage.googleapis.com/3d-solutions/cheleas-area-overview.gif",
     "title": "Explore the Chelsea neighbourhood of NYC",
     "date": "1967",
     "description": "Chelsea is a vibrant neighborhood located on the west side of Manhattan, stretching from 14th Street to 30th Street between the Hudson River and Sixth Avenue.",
-    "createdBy": "Hunter S. Thompson",
-    "imageCredit": "leohousenyc",
+    "createdBy": "Google gemini",
+    "imageCredit": "AI powered",
     "cameraOptions": {
       "position": {
         "x": 1333265.6314909444,
@@ -122,7 +122,7 @@
       "content": "The High Line is a public park built on a historic freight rail line elevated above the streets on Manhattan's West Side. It offers a unique urban green space with walking paths, gardens, and art installations, providing stunning views of the city",
       "imageUrl": "https://storage.googleapis.com/3d-solutions/high-line.jpeg",
       "dateTime": "2009",
-      "address": "HIgh line"
+      "address": "High line"
     },
     {
       "focusOptions": {
@@ -201,9 +201,9 @@
       },
       "id": 6,
       "dateTime": "2019",
-      "imageUrl": "https://media.tacdn.com/media/attractions-splice-spp-674x446/0a/8c/cc/51.jpg",
+      "imageUrl": "https://storage.googleapis.com/3d-solutions/hudson-yards-nyc.jpeg",
       "content": "Hudson Yards is a massive real-estate development on Manhattan’s West Side, transforming the formerly industrial area into a vibrant neighborhood brimming with luxury residences, high-end shops, trendy restaurants, and public art installations.",
-      "imageCredit": "viator"
+      "imageCredit": "Google Gemini"
     }
   ]
 }
