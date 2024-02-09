@@ -60,17 +60,21 @@
   letter-spacing: 0.021px;
 }
 
-.chapter .hero-media-container {
+/*.chapter .hero-media-container {
   overflow: hidden;
   /*height: var(--media-container-height);*/
-  height: 100%; /* Adjust height automatically to maintain aspect ratio */
-  object-fit: cover; /* Resize while maintaining aspect ratio, allowing cropping */
-  width: 100%;
+  /*width: 100%;
   display: block;
   overflow: hidden;
   border-radius: var(--spacing-small);
   margin-bottom: var(--spacing-small);
   background-color: var(--background-color-reduced);
+}*/
+
+.chapter .hero-media-container img { /* Target the image within the container */
+  width: 100%;  /* Make the image take the full width of the container */
+  height: auto; /* Adjust height automatically to maintain aspect ratio */
+  object-fit: cover; /* Resize while maintaining aspect ratio, allowing cropping */
 }
 
 .chapter .hero {
