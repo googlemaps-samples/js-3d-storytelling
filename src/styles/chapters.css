@@ -63,7 +63,7 @@
 .chapter .hero-media-container {
   overflow: hidden;
   /*height: var(--media-container-height);*/
-  height: auto; /* Adjust height automatically to maintain aspect ratio */
+  height: 100%; /* Adjust height automatically to maintain aspect ratio */
   object-fit: cover; /* Resize while maintaining aspect ratio, allowing cropping */
   width: 100%;
   display: block;
