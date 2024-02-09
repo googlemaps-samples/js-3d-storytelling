@@ -94,7 +94,7 @@
       },
       "id": 11,
       "content": "The massive Art Deco building at 111 8th Avenue in Chelsea was erected in the 1930s and served as a warehouse facility until it was converted to office space in the late 1990s.",
-      "imageUrl": "https://lh3.googleusercontent.com/Bjxr6qfzx_dYJP4EIZDyvqWlhhvliyRiW4jJbnQPRs5bax-ovGr8N1yvQs6Pwut4-EYVUUW0PHMdg6ICYAfZrhMcnEe5Lxks99zL0DIUpPPI-aHLow",
+      "imageUrl": "https://www.youtube.com/watch?v=s3eq-l4ftS4",
       "dateTime": "1930"
     },
     {
@@ -120,7 +120,7 @@
       },
       "id": 3,
       "content": "The High Line is a public park built on a historic freight rail line elevated above the streets on Manhattan's West Side. It offers a unique urban green space with walking paths, gardens, and art installations, providing stunning views of the city",
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/The_High_Line%2C_New_York_%2817643199203%29.jpg/640px-The_High_Line%2C_New_York_%2817643199203%29.jpg",
+      "imageUrl": "https://storage.googleapis.com/3d-solutions/high-line.jpeg",
       "dateTime": "2009",
       "address": "HIgh line"
     },
@@ -174,7 +174,7 @@
       },
       "id": 5,
       "imageCredit": "",
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/95/Meatpacking_District_3_crop.jpg",
+      "imageUrl": "https://storage.googleapis.com/3d-solutions/meatpacking.gif",
       "dateTime": "1884",
       "content": "Once a gritty industrial hub for meatpackers, the Meatpacking District is now a vibrant Manhattan neighborhood filled with high-end fashion, trendy restaurants, exclusive nightclubs, and the stunning High Line park."
     },
