@@ -64,7 +64,7 @@
   overflow: hidden;
   /*height: var(--media-container-height);*/
   height: auto; /* Adjust height automatically to maintain aspect ratio */
-  object-fit: cover; /* Resize while maintaining aspect ratio, allowing cropping */
+  object-fit: contain; /* Resize while maintaining aspect ratio, allowing cropping */
   width: 100%;
   display: block;
   overflow: hidden;
