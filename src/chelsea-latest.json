@@ -1,0 +1,209 @@
+{
+    "properties": {
+      "imageUrl": "https://media.tacdn.com/media/attractions-splice-spp-674x446/0b/27/86/14.jpg",
+      "title": "Explore the Chelsea neighbourhood of NYC",
+      "date": "1967",
+      "description": "Chelsea is a vibrant neighborhood located on the west side of Manhattan, stretching from 14th Street to 30th Street between the Hudson River and Sixth Avenue.",
+      "createdBy": "Hunter S. Thompson",
+      "imageCredit": "leohousenyc",
+      "cameraOptions": {
+        "position": {
+          "x": 1333265.6314909444,
+          "y": -4651499.286331753,
+          "z": 4142456.7933298484
+        },
+        "heading": 3.141589999999998,
+        "pitch": -0.5235990029423698,
+        "roll": 6.283185307179572
+      }
+    },
+    "chapters": [
+      {
+        "focusOptions": {
+          "focusRadius": null,
+          "showFocus": false,
+          "showLocationMarker": true
+        },
+        "title": "Chelsea Market, 9th Avenue, New York, NY, USA",
+        "coords": {
+          "lat": 40.7424396,
+          "lng": -74.0061439
+        },
+        "cameraOptions": {
+          "position": {
+            "x": 1333057.410832531,
+            "y": -4652119.590759073,
+            "z": 4140882.380100282
+          },
+          "heading": 1.7398223704758458,
+          "pitch": -0.17767404654644636,
+          "roll": 6.283184756882752
+        },
+        "id": 1,
+        "imageUrl": "https://s3-media0.fl.yelpcdn.com/bphoto/Jmhu1BcJThMwtCzynTfsKw/348s.jpg",
+        "content": "Chelsea Market is a historic food hall, shopping mall, and office space located in the Meatpacking District. Originally built as a National Biscuit Company factory, it has become a popular destination for food enthusiasts and shoppers.",
+        "dateTime": "1890"
+      },
+      {
+        "focusOptions": {
+          "focusRadius": null,
+          "showFocus": false,
+          "showLocationMarker": true
+        },
+        "title": "Pier 54, New York, NY, USA",
+        "coords": {
+          "lat": 40.7415481,
+          "lng": -74.00997389999999
+        },
+        "cameraOptions": {
+          "position": {
+            "x": 1333271.7448749165,
+            "y": -4652095.671744917,
+            "z": 4140807.4865346956
+          },
+          "heading": 4.600841085642494,
+          "pitch": -0.4721035008674823,
+          "roll": 2.610345637421574e-7
+        },
+        "id": 2,
+        "content": "Pier 54, located along the Hudson River in Chelsea, holds a poignant place in history as the intended arrival destination for the ill-fated RMS Titanic. The pier was part of the White Star Line's operations and played a role in the tragic events of April 15, 1912",
+        "address": "Pier 54",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/High_Line%2C_New_York_2012_48.jpg/220px-High_Line%2C_New_York_2012_48.jpg",
+        "dateTime": "1912"
+      },
+      {
+        "focusOptions": {
+          "focusRadius": null,
+          "showFocus": false,
+          "showLocationMarker": true
+        },
+        "title": "111 8th Avenue, New York, NY, USA",
+        "coords": {
+          "lat": 40.7414911,
+          "lng": -74.00338889999999
+        },
+        "cameraOptions": {
+          "position": {
+            "x": 1333606.4540231945,
+            "y": -4651876.832518738,
+            "z": 4141531.579385723
+          },
+          "heading": 3.14159,
+          "pitch": -0.523599,
+          "roll": 0
+        },
+        "id": 11,
+        "content": "The massive Art Deco building at 111 8th Avenue in Chelsea was erected in the 1930s and served as a warehouse facility until it was converted to office space in the late 1990s.",
+        "imageUrl": "https://lh3.googleusercontent.com/Bjxr6qfzx_dYJP4EIZDyvqWlhhvliyRiW4jJbnQPRs5bax-ovGr8N1yvQs6Pwut4-EYVUUW0PHMdg6ICYAfZrhMcnEe5Lxks99zL0DIUpPPI-aHLow",
+        "dateTime": "1930"
+      },
+      {
+        "focusOptions": {
+          "focusRadius": 250,
+          "showFocus": true,
+          "showLocationMarker": false
+        },
+        "title": "High Line ",
+        "coords": {
+          "lat": 40.743931,
+          "lng": -74.0068848
+        },
+        "cameraOptions": {
+          "position": {
+            "x": 1334322.238475932,
+            "y": -4651666.660503661,
+            "z": 4142100.555545697
+          },
+          "heading": 4.29185884101018,
+          "pitch": -0.5158926475180148,
+          "roll": 0.0000059166884174288725
+        },
+        "id": 3,
+        "content": "The High Line is a public park built on a historic freight rail line elevated above the streets on Manhattan's West Side. It offers a unique urban green space with walking paths, gardens, and art installations, providing stunning views of the city",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/The_High_Line%2C_New_York_%2817643199203%29.jpg/640px-The_High_Line%2C_New_York_%2817643199203%29.jpg",
+        "dateTime": "2009",
+        "address": "HIgh line"
+      },
+      {
+        "focusOptions": {
+          "focusRadius": null,
+          "showFocus": false,
+          "showLocationMarker": true
+        },
+        "title": "Whitney Museum of American Art, Gansevoort Street, New York, NY, USA",
+        "coords": {
+          "lat": 40.73958770000001,
+          "lng": -74.0088629
+        },
+        "cameraOptions": {
+          "position": {
+            "x": 1333142.3192468386,
+            "y": -4652214.332969229,
+            "z": 4140825.4277005014
+          },
+          "heading": 3.141589999999989,
+          "pitch": -0.5235990072603429,
+          "roll": 6.283185307179586
+        },
+        "id": 4,
+        "imageCredit": "",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/The_Whitney_Museum%2C_New_York_City_in_2015.JPG/275px-The_Whitney_Museum%2C_New_York_City_in_2015.JPG",
+        "dateTime": "2015",
+        "content": "The Whitney Museum, founded in 1930, is dedicated to American art. The museum moved to its current location in the Meatpacking District in 2015, providing visitors with a modern space to explore a vast collection of contemporary and 20th-century American art."
+      },
+      {
+        "focusOptions": {
+          "focusRadius": null,
+          "showFocus": false,
+          "showLocationMarker": true
+        },
+        "title": "Meatpacking District, Manhattan, New York, NY, USA",
+        "coords": {
+          "lat": 40.7409865,
+          "lng": -74.0076108
+        },
+        "cameraOptions": {
+          "position": {
+            "x": 1334099.1447928643,
+            "y": -4652228.788063004,
+            "z": 4140948.4898364777
+          },
+          "heading": 5.001512980249615,
+          "pitch": -0.49756569148841345,
+          "roll": 6.283169802392831
+        },
+        "id": 5,
+        "imageCredit": "",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/95/Meatpacking_District_3_crop.jpg",
+        "dateTime": "1884",
+        "content": "Once a gritty industrial hub for meatpackers, the Meatpacking District is now a vibrant Manhattan neighborhood filled with high-end fashion, trendy restaurants, exclusive nightclubs, and the stunning High Line park."
+      },
+      {
+        "focusOptions": {
+          "focusRadius": null,
+          "showFocus": false,
+          "showLocationMarker": true
+        },
+        "title": "The Vessel, Hudson Yards, New York, NY, USA",
+        "coords": {
+          "lat": 40.7538073,
+          "lng": -74.0021537
+        },
+        "cameraOptions": {
+          "position": {
+            "x": 1333657.3772551534,
+            "y": -4650932.012407829,
+            "z": 4142110.964868654
+          },
+          "heading": 4.0735373816488565,
+          "pitch": -0.3580416179705206,
+          "roll": 6.283169782911146
+        },
+        "id": 6,
+        "dateTime": "2019",
+        "imageUrl": "https://media.tacdn.com/media/attractions-splice-spp-674x446/0a/8c/cc/51.jpg",
+        "content": "Hudson Yards is a massive real-estate development on Manhattan’s West Side, transforming the formerly industrial area into a vibrant neighborhood brimming with luxury residences, high-end shops, trendy restaurants, and public art installations.",
+        "imageCredit": "viator"
+      }
+    ]
+  }
