@@ -1,19 +1,10 @@
 # 3D Storytelling
 
-## Team
-
-- PM Ubilabs: Martin Kleppe <kleppe@ubilabs.com>
-- PM Ubilabs: Annika Bock <bock@ubilabs.com>
-- DEV Ubilabs: Moritz Becker <becker@ubilabs.com>
-- DEV Ubilabs: Immo Beeck <beeck@ubilabs.com>
-- DEV Ubilabs: Frank Mecklenburg <mecklenburg@ubilabs.com>
-- Design Ubilabs: Elena Menzel <menzel@ubilabs.com>
-
 ## Overview
 
-This project aims to create a tool to create interactive digital storytelling solutions. The demo will be featured at the Architecture Center, allowing users to show, create and play with different option for a storytelling solution on the backdrop of Google Maps 3D Tiles.
+This project aims to create a tool to create interactive 3D Storytelling solutions. The demo will be featured at the Architecture Center, allowing users to show, create and play with different option for a storytelling solution on the backdrop of Google Maps 3D Tiles.
 
-This repository consists of two parts. The actual app, Story Telling, and a demo app which adds a control panel for settings.
+This repository consists of two parts. The demo app- Storytelling, and an Admin app which adds a control panel for settings.
 
 ## Installation
 
