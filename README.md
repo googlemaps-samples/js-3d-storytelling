@@ -70,13 +70,24 @@ You need to have docker installed to best work with the **demo-app** locally. If
 2. `docker-compose build demo`
 3. `docker-compose up demo`
 
-There is a second docker compose service `docker-compose up app` which only serves the final app. For this you may need to update the `config.json` file to include your data.
+There is a second docker compose service `docker-compose up app` which  serves the admin app. For this you may need to update the `config.json` file to include your data.
 
 ### NodeJS server
 
-You can always use your own local web server to show the Story Telling app like so:
+You can always use your own local web server to show the Story telling app like:
 
 `npx http-server -p 5500 ./src`
+
+
+To start the local server in admin mode do the following: 
+
+- Copy the files in demo/src to demo/
+Bash command for above `cp -r ../demo/src ./demo` 
+
+- In index.html, at the end of the file, it has reference to main.js. Change it to demo/sidebar.js
+bash command for above `sed -i "s/main.js/demo\/sidebar.js/g" index.html` 
+
+And then you can start the node app by running `npx http-server -p 5500 ./src`
 
 ### IDEs
 
@@ -84,7 +95,7 @@ Most IDEs include some kind of server for static files. Just point it to the `./
 
 ## Deployment
 
-To deploy the Story Telling app you need to upload everything in the `src` folder to a static web server or some other hosting service. A static web server is enough. You need a domain for you webspace, though. Since the Google Maps API key is only restricted on a domain you would risk misuse of the key.
+To deploy the 3D Story telling app you need to upload everything in the `src` folder to a static web server or some other hosting service. A static web server is enough. You need a domain for you webspace, though. Since the Google Maps API key is only restricted on a domain you would risk misuse of the key.
 
 Included in the repository is a `Dockerfile` which can be used to build a docker image. This can be used to deploy with Google Cloud Run or other container cloud services.
 
@@ -95,3 +106,20 @@ The repositiory is structured to have separate folder for the actual app (`/src`
 The app part of the repository is self contained and can be used as is (after updating the configuration). This will show the globe with 3D tiles. Centered on the `location` setting in `config.json`. It will be filled with places from the Google Places API (configured in `config.json`).
 
 The demo folder contains additional code to render a configuration UI to play with the settings in the `config.json`. The code is added to the deployment by running the `/demo/Dockerfile`.
+
+
+## Terms of Service
+
+This library uses Google Maps Platform services, and any use of Google Maps Platform is subject to the Terms of Service.
+
+For clarity, this library, and each underlying component, is not a Google Maps Platform Core Service.
+
+## Support
+
+This library is offered via an open source license. It is not governed by the Google Maps Platform Support Technical Support Services Guidelines, the SLA, or the Deprecation Policy (however, any Google Maps Platform services used by the library remain subject to the Google Maps Platform Terms of Service).
+
+This library adheres to semantic versioning to indicate when backwards-incompatible changes are introduced. Accordingly, while the library is in version 0.x, backwards-incompatible changes may be introduced at any time.
+
+If you find a bug, or have a feature request, please file an issue on GitHub. If you would like to get answers to technical questions from other Google Maps Platform developers, ask through one of our developer community channels. If you'd like to contribute, please check the Contributing guide.
+
+You can also discuss this library on our Discord server.
