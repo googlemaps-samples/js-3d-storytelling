@@ -74,9 +74,11 @@ There is a second docker compose service `docker-compose up app` which  serves t
 
 ### NodeJS server
 
-You can always use your own local web server to show the Story telling app like:
+You can always use your own local web server to show the Story telling app:
 
-`npx http-server -p 5500 ./src`
+- Copy the env.example.js to env.js and update the APIKEY variable
+
+- `npx http-server -p 5500 ./src`
 
 
 To start the local server in admin mode do the following: 
