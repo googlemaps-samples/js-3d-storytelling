@@ -1,0 +1,156 @@
+{
+    "properties": {
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fa/The_tallest_buildings_in_US.png",
+        "title": "Reaching for the Clouds:  North America's Top 5 Architectural Giants",
+        "date": "1970-2022",
+        "description": "Meet the titans of the urban landscape.  We begin with the legendary  Willis Tower, a Chicago icon steeped in history. Then, we journey to New York City to take in the cutting-edge designs of supertall newcomers like Central Park Tower and One Vanderbilt.   Let's trace the evolution of North America's quest for the skies.",
+        "createdBy": "",
+        "imageCredit": "Ali Zifan",
+        "cameraOptions": {
+            "position": {
+                "x": 4629451.206019842,
+                "y": 433681.23388555116,
+                "z": 4354246.670415369
+            },
+            "heading": 2.8985576035390075,
+            "pitch": -0.7716466693426924,
+            "roll": 6.283142021321285
+        }
+    },
+    "chapters": [
+        {
+            "focusOptions": {
+                "focusRadius": null,
+                "showFocus": false,
+                "showLocationMarker": true
+            },
+            "title": "One World Trade Center, Fulton Street, New York, NY, USA",
+            "coords": {
+                "lat": 40.7127431,
+                "lng": -74.0133795
+            },
+            "cameraOptions": {
+                "position": {
+                    "x": 1335090.8675863359,
+                    "y": -4650666.219319582,
+                    "z": 4142603.7876033112
+                },
+                "heading": 0.351793677057894,
+                "pitch": -0.4608386692058928,
+                "roll": 6.2831558705420605
+            },
+            "id": 0,
+            "content": "A supertall, ultra-slender residential skyscraper, 111 West 57th Street stands at 1,428 feet. Its unique, narrow profile grants its inhabitants exceptional views of Central Park.",
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/09/111_West_57th_Street_from_Top_of_the_Rock.jpg",
+            "imageCredit": "Percival Kestreltail",
+            "dateTime": "2021"
+        },
+        {
+            "focusOptions": {
+                "focusRadius": null,
+                "showFocus": false,
+                "showLocationMarker": true
+            },
+            "title": "Willis Tower, South Wacker Drive, Chicago, IL, USA",
+            "coords": {
+                "lat": 41.8788764,
+                "lng": -87.6359149
+            },
+            "cameraOptions": {
+                "position": {
+                    "x": 196193.43124573558,
+                    "y": -4752229.741815249,
+                    "z": 4236784.636840465
+                },
+                "heading": 3.14159,
+                "pitch": -0.523599,
+                "roll": 0
+            },
+            "id": 1,
+            "dateTime": "1973",
+            "content": "An iconic part of the Chicago skyline, Willis Tower reaches 1,450 feet. This mixed-use skyscraper famously features the Skydeck, a thrilling glass-floor observation area.",
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/02/Willis_Tower_From_Lake.jpg",
+            "imageCredit": "https://commons.wikimedia.org/wiki/User:Chris6d"
+        },
+        {
+            "focusOptions": {
+                "focusRadius": null,
+                "showFocus": false,
+                "showLocationMarker": true
+            },
+            "title": "Central Park Tower, West 57th Street, New York, NY, USA",
+            "coords": {
+                "lat": 40.7661235,
+                "lng": -73.981025
+            },
+            "cameraOptions": {
+                "position": {
+                    "x": 1335090.8675863359,
+                    "y": -4650666.219319582,
+                    "z": 4142603.7876033112
+                },
+                "heading": 0.351793677057894,
+                "pitch": -0.4608386692058928,
+                "roll": 6.2831558705420605
+            },
+            "id": 2,
+            "dateTime": "2020",
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/81/Central_Park_Tower_April_2021.jpg",
+            "imageCredit": "Percival Kestreltail"
+        },
+        {
+            "focusOptions": {
+                "focusRadius": null,
+                "showFocus": false,
+                "showLocationMarker": true
+            },
+            "title": "One Vanderbilt, Vanderbilt Avenue, New York, NY, USA",
+            "coords": {
+                "lat": 40.752954,
+                "lng": -73.978528
+            },
+            "cameraOptions": {
+                "position": {
+                    "x": 1335461.1546164125,
+                    "y": -4650727.8470897125,
+                    "z": 4142701.136576726
+                },
+                "heading": 3.14159,
+                "pitch": -0.523599,
+                "roll": 0
+            },
+            "id": 3,
+            "content": "This 1,401-foot skyscraper serves as a prominent office building adjacent to Grand Central Terminal. One Vanderbilt also features the Summit, an observation experience with glass-floor elevators.",
+            "dateTime": "2020",
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9f/One_Vanderbilt_April_2021.jpg",
+            "imageCredit": "Percival Kestreltail"
+        },
+        {
+            "focusOptions": {
+                "focusRadius": null,
+                "showFocus": false,
+                "showLocationMarker": true
+            },
+            "title": "111 West 57th Street, New York, NY, USA",
+            "coords": {
+                "lat": 40.76494599999999,
+                "lng": -73.9776668
+            },
+            "cameraOptions": {
+                "position": {
+                    "x": 1335227.1283413651,
+                    "y": -4649649.400251251,
+                    "z": 4143510.3039906905
+                },
+                "heading": 3.14159,
+                "pitch": -0.523599,
+                "roll": 0
+            },
+            "id": 4,
+            "content": "A supertall, ultra-slender residential skyscraper, 111 West 57th Street stands at 1,428 feet. Its unique, narrow profile grants its inhabitants exceptional views of Central Park.",
+            "dateTime": "2021",
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/09/111_West_57th_Street_from_Top_of_the_Rock.jpg",
+            "imageCredit": "Percival Kestreltail"
+        }
+    ]
+}
