@@ -2,9 +2,9 @@
 
 ## Overview
 
-This project aims to create a tool to create interactive 3D Storytelling solutions. The demo will be featured at the Architecture Center, allowing users to show, create and play with different option for a storytelling solution on the backdrop of Google Maps 3D Tiles.
+This project aims to create a tool to create interactive 3D Storytelling. 
 
-This repository consists of two parts. The demo app- Storytelling, and an Admin app which adds a control panel for settings.
+This repository consists of two parts. The demo app and an Admin app which adds a control panel for settings.
 
 ## Installation
 
@@ -12,9 +12,9 @@ This repository consists of two parts. The demo app- Storytelling, and an Admin 
 
 You need to create a [Google API Key](https://console.cloud.google.com/apis/credentials) and restrict it to at least these APIs.
 
-- Map Tiles API
-- Maps JavaScript API
-- Places API
+- [Map Tiles API](https://console.cloud.google.com/marketplace/product/google/tile.googleapis.com?utm_source=3d_solutions_storytelling)
+- Maps JavaScript API 
+- [Places API](https://console.cloud.google.com/marketplace/product/google/places-backend.googleapis.com?utm_source=3d_solutions_storytelling)
 
 Also, it is always a good idea to add restrictions for specific websites (i.e. `localhost:5500` for local development).
 
