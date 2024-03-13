@@ -206,33 +206,6 @@
       "imageUrl": "https://storage.googleapis.com/3d-solutions-assets/hudson-yards-nyc.jpeg",
       "content": "Hudson Yards is a massive real-estate development on Manhattan’s West Side, transforming the formerly industrial area into a vibrant neighborhood brimming with luxury residences, high-end shops, trendy restaurants, and public art installations.",
       "imageCredit": "Built with Gemini"
-    },
-    {
-      "focusOptions": {
-        "focusRadius": null,
-        "showFocus": false,
-        "showLocationMarker": true
-      },
-      "title": "St. John’s Terminal",
-      "coords": {
-        "lat": 40.728609,
-        "lng": -74.009533
-      },
-      "cameraOptions": {
-        "position": {
-          "x": 1333657.3772551534,
-          "y": -4650932.012407829,
-          "z": 4142110.964868654
-        },
-        "heading": 4.0735373816488565,
-        "pitch": -0.3580416179705206,
-        "roll": 6.283169782911146
-      },
-      "id": 7,
-      "dateTime": "2024",
-      "imageUrl": "https://www.youtube.com/watch?v=45nwSugxg6Q",
-      "content": "Take a look inside St. John's Terminal, Google's newest office in New York City. We've adapted this historic freight train terminal (the original end of NYC's High Line) into an innovative workplace designed around teams first, with multiple floors dedicated to working alongside our clients and business partners. St. John's Terminal was also built for a sustainable future, with solar panels, stormwater retention, and roughly 1.5 acres of native vegetation that supports local bird and insect species.",
-      "imageCredit": "Google"
     }
   ]
 }
