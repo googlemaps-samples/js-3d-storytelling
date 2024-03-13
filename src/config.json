@@ -24,7 +24,7 @@
         "showFocus": false,
         "showLocationMarker": true
       },
-      "title": "Chelsea Market, 9th Avenue, New York, NY, USA",
+      "title": "Chelsea Market, 9th Avenue",
       "coords": {
         "lat": 40.7424396,
         "lng": -74.0061439
@@ -50,7 +50,7 @@
         "showFocus": false,
         "showLocationMarker": true
       },
-      "title": "Pier 54, New York, NY, USA",
+      "title": "Pier 54",
       "coords": {
         "lat": 40.7415481,
         "lng": -74.00997389999999
@@ -78,7 +78,7 @@
         "showFocus": false,
         "showLocationMarker": true
       },
-      "title": "111 8th Avenue, New York, NY, USA",
+      "title": "111 8th Avenue",
       "coords": {
         "lat": 40.7414911,
         "lng": -74.00338889999999
@@ -132,7 +132,7 @@
         "showFocus": false,
         "showLocationMarker": true
       },
-      "title": "Whitney Museum of American Art, Gansevoort Street, New York, NY, USA",
+      "title": "Whitney Museum of American Art",
       "coords": {
         "lat": 40.73958770000001,
         "lng": -74.0088629
@@ -159,7 +159,7 @@
         "showFocus": false,
         "showLocationMarker": true
       },
-      "title": "Meatpacking District, Manhattan, New York, NY, USA",
+      "title": "Meatpacking District",
       "coords": {
         "lat": 40.7409865,
         "lng": -74.0076108
@@ -186,7 +186,7 @@
         "showFocus": false,
         "showLocationMarker": true
       },
-      "title": "The Vessel, Hudson Yards, New York, NY, USA",
+      "title": "The Vessel, Hudson Yards",
       "coords": {
         "lat": 40.7538073,
         "lng": -74.0021537
