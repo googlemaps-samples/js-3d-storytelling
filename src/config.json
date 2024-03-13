@@ -105,6 +105,7 @@
         "showLocationMarker": false
       },
       "title": "High Line ",
+      "imageCredit": "Built with Gemini",
       "coords": {
         "lat": 40.743931,
         "lng": -74.0068848
