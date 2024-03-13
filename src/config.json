@@ -5,7 +5,7 @@
     "date": "1967",
     "description": "Chelsea is a vibrant neighborhood located on the west side of Manhattan, stretching from 14th Street to 30th Street between the Hudson River and Sixth Avenue.",
     "createdBy": "Developer reations team",
-    "imageCredit": "Google Gemini",
+    "imageCredit": "Built with Gemini",
     "cameraOptions": {
       "position": {
         "x": 1333265.6314909444,
@@ -174,7 +174,7 @@
         "roll": 6.283169802392831
       },
       "id": 5,
-      "imageCredit": "Google Gemini",
+      "imageCredit": "Built with Gemini",
       "imageUrl": "https://storage.googleapis.com/3d-solutions-assets/meatpacking.gif",
       "dateTime": "1884",
       "content": "Once a gritty industrial hub for meatpackers, the Meatpacking District is now a vibrant Manhattan neighborhood filled with high-end fashion, trendy restaurants, exclusive nightclubs, and the stunning High Line park."
@@ -204,7 +204,7 @@
       "dateTime": "2019",
       "imageUrl": "https://storage.googleapis.com/3d-solutions-assets/hudson-yards-nyc.jpeg",
       "content": "Hudson Yards is a massive real-estate development on Manhattan’s West Side, transforming the formerly industrial area into a vibrant neighborhood brimming with luxury residences, high-end shops, trendy restaurants, and public art installations.",
-      "imageCredit": "Google Gemini"
+      "imageCredit": "Built with Gemini"
     }
   ]
 }
