@@ -1,11 +1,11 @@
 {
   "properties": {
-    "imageUrl": "https://storage.googleapis.com/3d-solutions/cheleas-area-overview.gif",
+    "imageUrl": "https://storage.googleapis.com/3d-solutions-assets/cheleas-area-overview.gif",
     "title": "Explore the Chelsea neighbourhood of NYC",
     "date": "1967",
     "description": "Chelsea is a vibrant neighborhood located on the west side of Manhattan, stretching from 14th Street to 30th Street between the Hudson River and Sixth Avenue.",
-    "createdBy": "Google gemini",
-    "imageCredit": "AI powered",
+    "createdBy": "Developer reations team",
+    "imageCredit": "Google Gemini",
     "cameraOptions": {
       "position": {
         "x": 1333265.6314909444,
@@ -40,7 +40,7 @@
         "roll": 6.283184756882752
       },
       "id": 1,
-      "imageUrl": "https://storage.googleapis.com/3d-solutions/chelsea-market.jpeg",
+      "imageUrl": "https://storage.googleapis.com/3d-solutions-assets/chelsea-market.jpeg",
       "content": "Chelsea Market is a historic food hall, shopping mall, and office space located in the Meatpacking District. Originally built as a National Biscuit Company factory, it has become a popular destination for food enthusiasts and shoppers.",
       "dateTime": "1890"
     },
@@ -66,6 +66,7 @@
         "roll": 2.610345637421574e-7
       },
       "id": 2,
+      "imageCredit": "Photograph by Mike Peel (www.mikepeel.net)",
       "content": "Pier 54, located along the Hudson River in Chelsea, holds a poignant place in history as the intended arrival destination for the ill-fated RMS Titanic. The pier was part of the White Star Line's operations and played a role in the tragic events of April 15, 1912",
       "address": "Pier 54",
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/High_Line%2C_New_York_2012_48.jpg/220px-High_Line%2C_New_York_2012_48.jpg",
@@ -120,7 +121,7 @@
       },
       "id": 3,
       "content": "The High Line is a public park built on a historic freight rail line elevated above the streets on Manhattan's West Side. It offers a unique urban green space with walking paths, gardens, and art installations, providing stunning views of the city",
-      "imageUrl": "https://storage.googleapis.com/3d-solutions/high-line.jpeg",
+      "imageUrl": "https://storage.googleapis.com/3d-solutions-assets/high-line.jpeg",
       "dateTime": "2009",
       "address": "High line"
     },
@@ -146,7 +147,7 @@
         "roll": 6.283185307179586
       },
       "id": 4,
-      "imageCredit": "",
+      "imageCredit": "https://commons.wikimedia.org/wiki/User:MusikAnimal",
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/The_Whitney_Museum%2C_New_York_City_in_2015.JPG/275px-The_Whitney_Museum%2C_New_York_City_in_2015.JPG",
       "dateTime": "2015",
       "content": "The Whitney Museum, founded in 1930, is dedicated to American art. The museum moved to its current location in the Meatpacking District in 2015, providing visitors with a modern space to explore a vast collection of contemporary and 20th-century American art."
@@ -173,8 +174,8 @@
         "roll": 6.283169802392831
       },
       "id": 5,
-      "imageCredit": "",
-      "imageUrl": "https://storage.googleapis.com/3d-solutions/meatpacking.gif",
+      "imageCredit": "Google Gemini",
+      "imageUrl": "https://storage.googleapis.com/3d-solutions-assets/meatpacking.gif",
       "dateTime": "1884",
       "content": "Once a gritty industrial hub for meatpackers, the Meatpacking District is now a vibrant Manhattan neighborhood filled with high-end fashion, trendy restaurants, exclusive nightclubs, and the stunning High Line park."
     },
@@ -201,7 +202,7 @@
       },
       "id": 6,
       "dateTime": "2019",
-      "imageUrl": "https://storage.googleapis.com/3d-solutions/hudson-yards-nyc.jpeg",
+      "imageUrl": "https://storage.googleapis.com/3d-solutions-assets/hudson-yards-nyc.jpeg",
       "content": "Hudson Yards is a massive real-estate development on Manhattan’s West Side, transforming the formerly industrial area into a vibrant neighborhood brimming with luxury residences, high-end shops, trendy restaurants, and public art installations.",
       "imageCredit": "Google Gemini"
     }
