@@ -5,11 +5,13 @@
 
 ## Overview
 
-This is a sample app to create interactive 3D Storytelling. 
+You can build your 3D Storytelling solution using the sample app.
 
-Explore the [hosted app](https://js-3d-storytelling-admin-t6a6o7lkja-uc.a.run.app/)
+Explore the [hosted app](https://js-3d-storytelling-admin-t6a6o7lkja-uc.a.run.app/).
 
-This repository consists of two parts. The demo app and an Admin app which adds a control panel for settings.
+Create a fork and 
+
+This repository consists of two parts. The Storytelling app and an Admin app which adds a control panel for settings.
 
 ## Installation
 
