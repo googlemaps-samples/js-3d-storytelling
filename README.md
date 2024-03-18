@@ -1,8 +1,13 @@
 # 3D Storytelling
 
+![3D Storytelling video](https://storage.googleapis.com/3d-solutions-assets/v1_03_User_App_3D_Storytelling.gif)
+
+
 ## Overview
 
-This project aims to create a tool to create interactive 3D Storytelling. 
+This is a sample app to create interactive 3D Storytelling. 
+
+Explore the [hosted app] (https://js-3d-storytelling-admin-t6a6o7lkja-uc.a.run.app/)
 
 This repository consists of two parts. The demo app and an Admin app which adds a control panel for settings.
 
@@ -13,7 +18,7 @@ This repository consists of two parts. The demo app and an Admin app which adds 
 You need to create a [Google API Key](https://console.cloud.google.com/apis/credentials) and restrict it to at least these APIs.
 
 - [Map Tiles API](https://console.cloud.google.com/marketplace/product/google/tile.googleapis.com?utm_source=3d_solutions_storytelling)
-- Maps JavaScript API 
+- Maps JavaScript API (https://console.cloud.google.com/marketplace/product/google/maps-backend.googleapis.com?utm_source=3d_solutions_storytelling)
 - [Places API](https://console.cloud.google.com/marketplace/product/google/places-backend.googleapis.com?utm_source=3d_solutions_storytelling)
 
 Also, it is always a good idea to add restrictions for specific websites (i.e. `localhost:5500` for local development).
@@ -62,6 +67,26 @@ Here are some highlights:
 
 For the local development you still need the API key for 3D Map Tiles and Google Places/Maps requests.
 
+### NodeJS server
+
+You can  use your own local web server to show the Storytelling app:
+
+- Copy the env.example.js to env.js and update the APIKEY variable
+
+- `npx http-server -p 5500 ./src`
+
+To start the local server in admin mode do the following: 
+
+- Copy the files in demo/src to demo/
+
+Bash command for above step is `cp -r ../demo/src ./demo` 
+
+- In index.html, at the end of the file, it has reference to main.js. Change it to demo/sidebar.js.
+
+Bash command for above `sed -i "s/main.js/demo\/sidebar.js/g" index.html` 
+
+And then you can start the node app by running `npx http-server -p 5500 ./src`
+
 ### Docker
 
 You need to have docker installed to best work with the **demo-app** locally. If you want to play with the demo without a local installation you can always use our [hosted version](url)
@@ -71,25 +96,6 @@ You need to have docker installed to best work with the **demo-app** locally. If
 3. `docker-compose up demo`
 
 There is a second docker compose service `docker-compose up app` which  serves the admin app. For this you may need to update the `config.json` file to include your data.
-
-### NodeJS server
-
-You can always use your own local web server to show the Story telling app:
-
-- Copy the env.example.js to env.js and update the APIKEY variable
-
-- `npx http-server -p 5500 ./src`
-
-
-To start the local server in admin mode do the following: 
-
-- Copy the files in demo/src to demo/
-Bash command for above `cp -r ../demo/src ./demo` 
-
-- In index.html, at the end of the file, it has reference to main.js. Change it to demo/sidebar.js
-bash command for above `sed -i "s/main.js/demo\/sidebar.js/g" index.html` 
-
-And then you can start the node app by running `npx http-server -p 5500 ./src`
 
 ### IDEs
 
