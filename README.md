@@ -1,6 +1,6 @@
 # 3D Storytelling
 
-![3D Storytelling video](https://storage.googleapis.com/3d-solutions-assets/storytelling-1080p-overview.gif)
+[3D Storytelling video](https://storage.googleapis.com/3d-solutions-assets/storytelling-1080p-overview.gif)
 
 
 ## Overview
@@ -9,7 +9,7 @@ You can build your 3D Storytelling solution using the sample app.
 
 Explore the [hosted app](https://js-3d-storytelling-admin-t6a6o7lkja-uc.a.run.app/).
 
-Create a fork and 
+Create a fork and start building your own 3D Storytelling solution.
 
 This repository consists of two parts. The Storytelling app and an Admin app which adds a control panel for settings.
 
