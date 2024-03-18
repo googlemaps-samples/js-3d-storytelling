@@ -1,13 +1,13 @@
 # 3D Storytelling
 
-![3D Storytelling video](https://storage.googleapis.com/3d-solutions-assets/v1_03_User_App_3D_Storytelling.gif)
+![3D Storytelling video](https://storage.googleapis.com/3d-solutions-assets/storytelling-1080p-overview.gif)
 
 
 ## Overview
 
 This is a sample app to create interactive 3D Storytelling. 
 
-Explore the [hosted app] (https://js-3d-storytelling-admin-t6a6o7lkja-uc.a.run.app/)
+Explore the [hosted app](https://js-3d-storytelling-admin-t6a6o7lkja-uc.a.run.app/)
 
 This repository consists of two parts. The demo app and an Admin app which adds a control panel for settings.
 
@@ -15,11 +15,13 @@ This repository consists of two parts. The demo app and an Admin app which adds 
 
 ### Prerequisits
 
-You need to create a [Google API Key](https://console.cloud.google.com/apis/credentials) and restrict it to at least these APIs.
+The solution leverages Google maps Platform Photorealistic 3D tiles with Cesium.js as the renderer. Enable all the following APIs:
 
 - [Map Tiles API](https://console.cloud.google.com/marketplace/product/google/tile.googleapis.com?utm_source=3d_solutions_storytelling)
-- Maps JavaScript API (https://console.cloud.google.com/marketplace/product/google/maps-backend.googleapis.com?utm_source=3d_solutions_storytelling)
+- [Maps JavaScript API](https://console.cloud.google.com/marketplace/product/google/maps-backend.googleapis.com?utm_source=3d_solutions_storytelling)
 - [Places API](https://console.cloud.google.com/marketplace/product/google/places-backend.googleapis.com?utm_source=3d_solutions_storytelling)
+
+You need to create a [Google API Key](https://console.cloud.google.com/apis/credentials) and restrict it to at least these APIs.
 
 Also, it is always a good idea to add restrictions for specific websites (i.e. `localhost:5500` for local development).
 
