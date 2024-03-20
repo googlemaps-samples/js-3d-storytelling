@@ -5,7 +5,7 @@ import {
   createEditMenus,
 } from "./sidebar.js";
 import { GOOGLE_MAPS_API_KEY } from "../env.js";
-import { createChapterCard } from "../chapters/chapter.js"
+import { createChapterCard } from "../chapters/chapters.js"
 import {
   resetToIntro,
   getChapterIndexFromId,
