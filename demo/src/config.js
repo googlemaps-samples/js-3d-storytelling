@@ -237,6 +237,8 @@ export const storyProxyHandler = {
 
         // Create edit menus
         createEditMenus();
+
+        const story = localStorage.getItem('story')
         return true;
       }
     }

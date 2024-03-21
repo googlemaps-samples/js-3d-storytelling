@@ -1,0 +1,50 @@
+{
+    "properties": {
+        "imageUrl": "https://media.tacdn.com/media/attractions-splice-spp-674x446/0b/27/86/14.jpg",
+        "title": "This is the storytelling cover  page",
+        "date": "Year when this story took place",
+        "description": "This is how the overview page of a story looks like",
+        "createdBy": "Here you put the Author name",
+        "imageCredit": "Google",
+        "cameraOptions": {
+            "position": {
+                "x": 1333606.4655688345,
+                "y": -4651876.872792171,
+                "z": 4141531.615474558
+            },
+            "heading": 3.14159,
+            "pitch": -0.5235989999999999,
+            "roll": 6.283185307179586
+        }
+    },
+    "chapters": [
+        {
+            "focusOptions": {
+                "focusRadius": null,
+                "showFocus": false,
+                "showLocationMarker": true
+            },
+            "title": "111 8th Avenue, New York, NY, USA",
+            "coords": {
+                "lat": 40.7414911,
+                "lng": -74.00338889999999
+            },
+            "cameraOptions": {
+                "position": {
+                    "x": 1333606.4655688372,
+                    "y": -4651876.872792169,
+                    "z": 4141531.615474558
+                },
+                "heading": 3.14159,
+                "pitch": -0.523599,
+                "roll": 0
+            },
+            "id": 0,
+            "content": "This an example of a chapter. Add as many chapters as you like.",
+            "address": "Put your address here",
+            "dateTime": "Date and time",
+            "imageCredit": "video credit goes here",
+            "imageUrl": "youtube.com"
+        }
+    ]
+}
