@@ -126,8 +126,11 @@ export function addChapterToStory(chapter) {
   // Update details navigation
   updateDetailsNavigation();
 
-  
-  const docRef =  addDoc(collection(db, "storytelling-collection"), JSON.stringify(story)); 
+  data ={
+    imageUrl: story.imageUrl
+  }
+
+  const docRef =  addDoc(collection(db, "storytelling-collection"), data); 
   console.log("Camera settings saved with ID: ", docRef.id);
   // Save updated object back to local storage
   localStorage.setItem("story", JSON.stringify(story));
