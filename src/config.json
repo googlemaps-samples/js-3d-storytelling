@@ -1,106 +1,50 @@
 {
   "properties": {
-    "imageUrl": "https://storage.googleapis.com/gmp-3d-tiles-storytelling/assets/images/317-300x160.jpg",
-    "title": "Summer of Love",
-    "date": "1967",
-    "description": "The Summer of Love was a social phenomenon that occurred during the summer of 1967 when as many as 100,000 people, mostly young people sporting hippie fashions, converged in San Francisco's neighborhood of Haight-Ashbury.",
-    "createdBy": "Hunter S. Thompson",
-    "imageCredit": "Hunter",
-    "cameraOptions": {
-      "position": {
-        "x": -2708127.031960028,
-        "y": -4260747.583520751,
-        "z": 3886346.825328216
-      },
-      "heading": -1.5708,
-      "pitch": -0.785398,
-      "roll": 0
-    }
+      "imageUrl": "https://media.tacdn.com/media/attractions-splice-spp-674x446/0b/27/86/14.jpg",
+      "title": "This is the storytelling cover  page",
+      "date": "Year when this story took place",
+      "description": "This is how the overview page of a story looks like",
+      "createdBy": "Here you put the Author name",
+      "imageCredit": "Google",
+      "cameraOptions": {
+          "position": {
+              "x": 1333606.4655688345,
+              "y": -4651876.872792171,
+              "z": 4141531.615474558
+          },
+          "heading": 3.14159,
+          "pitch": -0.5235989999999999,
+          "roll": 6.283185307179586
+      }
   },
   "chapters": [
-    {
-      "title": "The Jimmy Hendrix Experience",
-      "id": 4,
-      "imageUrl": "https://storage.googleapis.com/gmp-3d-tiles-storytelling/assets/images/401-300x160.jpg",
-      "imageCredit": "Hunter",
-      "content": "On June 21, 1967, a large crowd gathered at Golden Gate Park for a summer solstice celebration to mark the official start of the season.  Bands that played included The Grateful Dead, Jefferson Airplane, The Who, Janis Joplin, among other legendary music icons from the Summer of Love.  The enormous crowd kept a large ball, painted to represent a world globe, in the air.",
-      "dateTime": "Aug 10-12 1967",
-      "coords": {
-        "lat": 37.7749,
-        "lng": -122.4194
-      },
-      "address": "The Filmore | 1805 Geary Blvd",
-      "cameraOptions": {
-        "position": {
-          "x": -2706472.5713478313,
-          "y": -4261528.277488908,
-          "z": 3885143.750529967
-        },
-        "heading": 0,
-        "pitch": 0,
-        "roll": 0
-      },
-      "focusOptions": {
-        "focusRadius": 3000,
-        "showFocus": false,
-        "showLocationMarker": true
+      {
+          "focusOptions": {
+              "focusRadius": null,
+              "showFocus": false,
+              "showLocationMarker": true
+          },
+          "title": "111 8th Avenue, New York, NY, USA",
+          "coords": {
+              "lat": 40.7414911,
+              "lng": -74.00338889999999
+          },
+          "cameraOptions": {
+              "position": {
+                  "x": 1333606.4655688372,
+                  "y": -4651876.872792169,
+                  "z": 4141531.615474558
+              },
+              "heading": 3.14159,
+              "pitch": -0.523599,
+              "roll": 0
+          },
+          "id": 0,
+          "content": "This an example of a chapter. Add as many chapters as you like.",
+          "address": "Put your address here",
+          "dateTime": "Date and time",
+          "imageCredit": "video credit goes here",
+          "imageUrl": "youtube.com"
       }
-    },
-    {
-      "title": "Summer of Love Solstice Celebration",
-      "id": 1,
-      "imageUrl": "https://storage.googleapis.com/gmp-3d-tiles-storytelling/assets/images/478-300x160.jpg",
-      "imageCredit": "Hunter",
-      "content": "On June 21, 1967, a large crowd gathered at Golden Gate Park for a summer solstice celebration to mark the official start of the season.  Bands that played included The Grateful Dead, Jefferson Airplane, The Who, Janis Joplin, among other legendary music icons from the Summer of Love.  The enormous crowd kept a large ball, painted to represent a world globe, in the air.",
-      "dateTime": "Jun 21-23 1967",
-      "coords": {
-        "lat": 37.76945466064783,
-        "lng": -122.48590266131599
-      },
-      "address": "Golden Gate Park Polo Fields",
-      "cameraOptions": {
-        "position": {
-          "x": -2711640.650566521,
-          "y": -4258735.18508072,
-          "z": 3884701.711825666
-        },
-        "heading": 0,
-        "pitch": 0,
-        "roll": 0
-      },
-      "focusOptions": {
-        "focusRadius": 250,
-        "showFocus": true,
-        "showLocationMarker": true
-      }
-    },
-    {
-      "title": "Janis Joplin moves to the Haight-Ashbury neighborhood.",
-      "id": 2,
-      "imageUrl": "https://storage.googleapis.com/gmp-3d-tiles-storytelling/assets/images/925-300x160.jpg",
-      "imageCredit": "Hunter",
-      "content": "A four-story pink Victorian that was once the home of singer Janis Joplin. The house was built in 1905 and is located in the Haight-Ashbury neighborhood. It was one of several residences Joplin had in the Haight.  The house has a pink facade and is located just off the corner of Haight and Ashbury. It's a well-maintained 8-unit apartment building.",
-      "dateTime": "Spring 1967",
-      "coords": {
-        "lat": 37.76850946954582,
-        "lng": -122.44710431539364
-      },
-      "address": "635 Ashbury St, San Francisco",
-      "cameraOptions": {
-        "position": {
-          "x": -2708816.441862877,
-          "y": -4260665.191511936,
-          "z": 3884656.008266213
-        },
-        "heading": 0,
-        "pitch": 0,
-        "roll": 0
-      },
-      "focusOptions": {
-        "focusRadius": 4500,
-        "showFocus": true,
-        "showLocationMarker": false
-      }
-    }
   ]
 }
