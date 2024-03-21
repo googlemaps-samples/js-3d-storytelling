@@ -1,11 +1,11 @@
 {
   "properties": {
-      "imageUrl": "https://media.tacdn.com/media/attractions-splice-spp-674x446/0b/27/86/14.jpg",
+      "imageUrl": "https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg",
       "title": "This is the storytelling cover  page",
       "date": "Year when this story took place",
       "description": "This is how the overview page of a story looks like",
       "createdBy": "Here you put the Author name",
-      "imageCredit": "leohousenyc",
+      "imageCredit": "Google",
       "cameraOptions": {
           "position": {
               "x": 1333606.4655688345,
