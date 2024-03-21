@@ -21,6 +21,24 @@ import {
 import { getPreviewUrl } from "../utils/ui.js";
 import { removeCustomRadiusShader } from "../utils/cesium.js";
 
+import { FIREBASE_API_KEY } from "../../env.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+import { getFirestore, Timestamp,addDoc, collection } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js'
+
+const firebaseConfig = {
+  apiKey: FIREBASE_API_KEY,
+  authDomain: "d-area-explorer-staging.firebaseapp.com",
+  projectId: "d-area-explorer-staging",
+  storageBucket: "d-area-explorer-staging.appspot.com",
+  messagingSenderId: "862242299614",
+  appId: "1:862242299614:web:815da51faf02d9373f2c4f",
+  measurementId: "G-540GBW9XC8"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app,"metrics-db");
+
 /**
  * Creates a proxy object for the story object.
  * This allows us to intercept these operations and update the UI accordingly without having to re-render the whole UI.
@@ -257,7 +275,7 @@ export function createLocationItem(chapter) {
  */
 export function initGeoSuggest() {
   const locationInput = document.querySelector(".locations-container input");
-
+  
   const options = { fields: ["geometry"] };
   const autocomplete = new google.maps.places.Autocomplete(
     locationInput,
@@ -271,6 +289,7 @@ export function initGeoSuggest() {
   autocomplete.addListener("place_changed", async () => {
     removeMarker("place-marker");
     const selectedPlace = autocomplete.getPlace();
+    
     removeCustomRadiusShader();
 
     // Catch user pressed enter key without selecting a place in the list
@@ -279,6 +298,7 @@ export function initGeoSuggest() {
       return;
     }
     coords = selectedPlace.geometry.location.toJSON();
+    
     // Calculate camera position and orientation based on coords
     cameraOptions = await calculateCameraPositionAndOrientation(coords);
     const { position, heading, pitch, roll } = cameraOptions;
@@ -288,6 +308,17 @@ export function initGeoSuggest() {
     // Create temporary marker on selected location
     createMarkers([{ id: "place-marker", coords }]);
 
+    const data ={
+      position: JSON.stringify(position),
+      heading: JSON.stringify(heading),
+      pitch: JSON.stringify(pitch),
+      roll: JSON.stringify(roll),
+      Latitude: JSON.stringify(coords.lat),
+      Longitude: JSON.stringify(coords.lng)
+    }
+  
+    const docRef =  await addDoc(collection(db, "storytelling-collection"), data); 
+    console.log("Camera settings saved with ID: ", docRef.id);
     locationSubmitButton.disabled = false;
   });
 
@@ -312,6 +343,7 @@ export function initGeoSuggest() {
       cameraOptions,
     });
 
+     //console.log("title is ::"+title+ "CameraOptions");
     // Reset input field
     autocomplete.set("place", null);
     locationInput.value = "";
@@ -703,7 +735,7 @@ function handleEditAction(chapter) {
 
   // Update the preview image or video
   const mediaSource = getPreviewUrl(chapter.imageUrl);
-
+  
   const chapterImage = editForm.querySelector(".image-credit-container img");
   chapterImage.src = mediaSource ?? "#";
   chapterImage.style.visibility = mediaSource ? "visible" : "hidden";
@@ -816,7 +848,16 @@ function handleEditAction(chapter) {
     "submit",
     async (event) => {
       event.preventDefault();
-
+      const data ={
+        title: chapter.title,
+        content: chapter.content,
+        address: chapter.address,
+        image_url: chapter.imageUrl,
+        date_time: chapter.dateTime,
+        imageCredit: chapter.imageCredit
+      }
+      const docRef =  addDoc(collection(db, "chapters-collection"), data); 
+      console.log("Camera settings saved with ID: ", docRef.id);
       editFormEventController.abort();
 
       container.removeAttribute("data-mode");

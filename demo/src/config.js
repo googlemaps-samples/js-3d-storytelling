@@ -126,12 +126,7 @@ export function addChapterToStory(chapter) {
   // Update details navigation
   updateDetailsNavigation();
 
-  data ={
-    imageUrl: story.imageUrl
-  }
-
-  const docRef =  addDoc(collection(db, "storytelling-collection"), data); 
-  console.log("Camera settings saved with ID: ", docRef.id);
+  
   // Save updated object back to local storage
   localStorage.setItem("story", JSON.stringify(story));
 }
@@ -320,8 +315,6 @@ export const storyProxyHandler = {
 
       // Update chapter details
       updateChapterContent(target, false);
-
-      // Update location list item
       if (property === "title") {
         updateLocationListItem(target.id, updatedValue);
       }
