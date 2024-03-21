@@ -26,6 +26,8 @@ import {
 } from "../utils/create-markers.js";
 
 import { FIREBASE_API_KEY } from "../../env.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+import { getFirestore, Timestamp,addDoc, collection } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js'
 
 const firebaseConfig = {
   apiKey: FIREBASE_API_KEY,
