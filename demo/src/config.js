@@ -25,6 +25,22 @@ import {
   removeMarker,
 } from "../utils/create-markers.js";
 
+import { FIREBASE_API_KEY } from "../../env.js";
+
+const firebaseConfig = {
+  apiKey: FIREBASE_API_KEY,
+  authDomain: "d-area-explorer-staging.firebaseapp.com",
+  projectId: "d-area-explorer-staging",
+  storageBucket: "d-area-explorer-staging.appspot.com",
+  messagingSenderId: "862242299614",
+  appId: "1:862242299614:web:815da51faf02d9373f2c4f",
+  measurementId: "G-540GBW9XC8"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app,"metrics-db");
+
 // Properties of a chapter that can be edited
 const chapterProperties = [
   "title",
@@ -108,6 +124,9 @@ export function addChapterToStory(chapter) {
   // Update details navigation
   updateDetailsNavigation();
 
+  
+  const docRef =  addDoc(collection(db, "storytelling-collection"), JSON.stringify(story)); 
+  console.log("Camera settings saved with ID: ", docRef.id);
   // Save updated object back to local storage
   localStorage.setItem("story", JSON.stringify(story));
 }
