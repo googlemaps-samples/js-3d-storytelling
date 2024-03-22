@@ -2,7 +2,7 @@
 
 [3D Storytelling video](https://storage.googleapis.com/3d-solutions-assets/storytelling-1080p-overview.gif)
 
-![](readme-images/storytelling-4k.gif)
+![](/src/assets/readme-images/storytelling-4k.gif)
 ## Overview
 The 3D Storytelling solution bridges storytelling and mapping, enabling creators to craft immersive and interactive narratives using Photorealistic 3D Tiles.
 
