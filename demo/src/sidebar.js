@@ -856,11 +856,14 @@ function handleEditAction(chapter) {
         date_time: chapter.dateTime,
         imageCredit: chapter.imageCredit
       }
-      const docRef =  addDoc(collection(db, "chapters-collection"), data); 
-      console.log("Camera settings saved with ID: ", docRef.id);
+      
+      
       editFormEventController.abort();
 
       container.removeAttribute("data-mode");
+
+      const docRef = await addDoc(collection(db, "chapters-collection"), data); 
+      console.log("Camera settings saved with ID: ", docRef.id);
     },
 
     // Remove the event listener after the submit
