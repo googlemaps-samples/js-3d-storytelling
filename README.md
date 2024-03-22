@@ -2,16 +2,17 @@
 
 [3D Storytelling video](https://storage.googleapis.com/3d-solutions-assets/storytelling-1080p-overview.gif)
 
-
+![](readme-images/storytelling-4k.gif)
 ## Overview
-
-You can build your 3D Storytelling solution using the sample app.
 
 Explore the [hosted app](https://js-3d-storytelling-admin-t6a6o7lkja-uc.a.run.app/).
 
 Create a fork and start building your own 3D Storytelling solution.
 
-This repository consists of two parts. The Storytelling app and an Admin app which adds a control panel for settings.
+This repository consists of two parts. The Storytelling app and an Admin app which adds a control panel to create new stories.
+
+You build a story configuration using the Admin UI and then you can download the config.
+The demo app uses this config which is loaded from locally to load the story.
 
 ## Installation
 
@@ -31,12 +32,60 @@ Also, it is always a good idea to add restrictions for specific websites (i.e. `
 
 There are no external dependencies to view and work with the Storytelling Solution and Demo.
 
-1. download the content of the `src` folder
-2. adjust the `config.json` to your needs (see [Configuration](#Configuration))
-3. add your API key to `env.js` (see [env.exmaple.js](src/env.exmaple.js))
-4. serve the files with a static webserver
+If you want to try with the app without any [local installation](#local-development), try our [hosted demo version](https://goo.gle/3d-storytelling-admin).
 
-If you want to play with the demo (with a configuration UI) without a [local installation](#local-development) you can always use our [hosted version](url).
+### Quickstart - Static webserver
+
+1. [Download](https://github.com/googlemaps-samples/js-3d-area-explorer/archive/refs/heads/main.zip) or `git clone` this repository
+2. Extract the contents of the `src` folder
+3. Adjust the `config.json` to your needs - see [Configuration](#Configuration)
+4. Add your Google Maps Platform API key to [env.exmaple.js](src/env.exmaple.js) and rename the file to `env.js`
+5. Serve the files with a static webserver
+
+### Quickstart: Start Admin App using build in bash script
+
+1. Clone this repo to your local machine: `git clone ...`
+2. Run the admin setup script: `cd js-3d-area-explorer && chmod +x build_admin.sh`
+3. Start the server: `./build_admin.sh <YOUR_GMP_API_KEY>`
+    * Note: The script can pick up the API_KEY from envrionment variable `API_KEY` as well.
+
+
+## Build using Node.js
+
+### Demo app
+
+You can  use your own local webserver to show the 3D Area Explorer app like this:
+
+* From the root directory: `npx http-server -p 5500 ./src`
+For the local development you still need the API key for 3D Map Tiles and Google Places/Maps requests.
+
+## Build using Docker
+
+### Build the Demo App with Docker
+
+You need to have docker installed to best work with the **demo-app** locally. 
+
+1. Clone the repository
+2. `docker-compose build demo`
+3. `docker-compose up demo`
+
+### Build the Admin App with Docker
+
+There is a second docker compose service `docker-compose up app` which only serves the admin app. For this you may need to update the `config.json` file to include you data.
+
+### Manually build the Admin app
+Note: You should follow these instructions if you want to create your own admin app in a 
+different language other than bash.
+
+To start the local server as **admin app** do the following:
+
+1. Copy the files in demo/src to demo/
+     * Bash command from `/demo` directory: `cp -r ../demo/src ./demo`
+2. In index.html, at the end of the file, it has reference to main.js. Change it to demo/sidebar.js.
+    * Bash command from `/src` directory: `sed -i'.bak' "s/main.js/demo\/sidebar.js/g" index.html`
+3. Start the node app by running npx
+    * Bash commpand from `src` directory: `http-server -p 5500 ./src`
+
 
 ## Configuration
 
@@ -61,7 +110,6 @@ Most of the cesium setting are located and documented in `/src/utils/cesium.js`.
 
 Here are some highlights:
 
-
 **RADIUS**: The radius from the target point to position the camera.
 **BASE_PITCH_RADIANS**: The base pitch of the camera. Defaults to -30 degrees in radians.
 **BASE_HEADING_RADIANS**: The base heading of the camera. Defaults to 180 degrees in radians.
@@ -71,39 +119,6 @@ Here are some highlights:
 
 For the local development you still need the API key for 3D Map Tiles and Google Places/Maps requests.
 
-### NodeJS server
-
-You can  use your own local web server to show the Storytelling app:
-
-- Copy the env.example.js to env.js and update the APIKEY variable
-
-- `npx http-server -p 5500 ./src`
-
-To start the local server in admin mode do the following: 
-
-- Copy the files in demo/src to demo/
-
-Bash command for above step is `cp -r ../demo/src ./demo` 
-
-- In index.html, at the end of the file, it has reference to main.js. Change it to demo/sidebar.js.
-
-Bash command for above `sed -i "s/main.js/demo\/sidebar.js/g" index.html` 
-
-And then you can start the node app by running `npx http-server -p 5500 ./src`
-
-### Docker
-
-You need to have docker installed to best work with the **demo-app** locally. If you want to play with the demo without a local installation you can always use our [hosted version](url)
-
-1. Clone the repository
-2. `docker-compose build demo`
-3. `docker-compose up demo`
-
-There is a second docker compose service `docker-compose up app` which  serves the admin app. For this you may need to update the `config.json` file to include your data.
-
-### IDEs
-
-Most IDEs include some kind of server for static files. Just point it to the `./src` directory and set the right port.
 
 ## Deployment
 
