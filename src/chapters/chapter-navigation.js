@@ -228,7 +228,9 @@ export function updateChapter(chapterIndex) {
   activateNavigationElement("details"); // Activate the details navigation
 
   // Check if the current chapter has a focus and create or remove the custom radius shader accordingly
-  const hasFocus = story.chapters[chapterIndex].focusOptions?.showFocus;
+  const hasFocus = Boolean(
+    story.chapters[chapterIndex]?.focusOptions?.showFocus
+  );
 
   if (hasFocus) {
     const radius = story.chapters[chapterIndex].focusOptions.focusRadius;
